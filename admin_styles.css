@@ -1,0 +1,179 @@
+:root {
+    --moya-primary: #008080;
+    --moya-light: #f8f9fa;      /* Switched to a standard light gray for better contrast */
+    --moya-dark-text: #34495e;
+    --sidebar-width: 260px;
+    --sidebar-bg: #ffffff;
+    --border-color: #dee2e6;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--moya-light);
+    color: var(--moya-dark-text);
+}
+
+/* --- Sidebar Layout & Style --- */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh; /* Use viewport height to ensure it fills the screen */
+    width: var(--sidebar-width);
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    z-index: 1000;
+    
+    /* FIX: Use Flexbox to structure the sidebar vertically */
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 0; /* Vertical padding */
+}
+
+.sidebar-header {
+    color: var(--moya-primary);
+    text-align: center;
+    margin-top:1.1rem;
+    margin-bottom: .5rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 0 1rem; /* Add horizontal padding */
+}
+
+.sidebar-paragraph {
+    color: var(--moya-dark-text);
+    text-align: center;
+    margin-top:.3rem;
+    margin-bottom: 1.8rem;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 0 1rem; /* Add horizontal padding */
+}
+
+/* Wrapper for the main navigation links */
+.sidebar-nav {
+    flex-grow: 1; /* Allows this element to grow and push the logout link down */
+}
+
+.sidebar .nav-link {
+    color: var(--moya-dark-text);
+    font-weight: 500;
+    padding: 12px 25px;
+    margin: 6px 17px;
+    border-radius: 10px; /* A more subtle, modern radius */
+    transition: all 0.5s ease-in-out;
+}
+
+.sidebar .nav-link i {
+    margin-right: 15px;
+    font-size: .9 rem;
+    width: 21px;
+    text-align: center;
+    color: #8895a7;
+    transition: color 0.2s ease-in-out;
+}
+
+.sidebar .nav-link:hover {
+    background-color: var(--moya-light);
+    color: var(--moya-primary);
+}
+
+.sidebar .nav-link:hover i {
+    color: var(--moya-primary);
+}
+
+.sidebar .nav-link.active {
+    background-color: var(--moya-primary);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.sidebar .nav-link.active i {
+    color: #fff;
+}
+
+/* FIX: This pushes the logout link to the bottom */
+.sidebar .logout-section {
+    margin-top: 130px;
+}
+
+
+/* --- Main Content Area --- */
+/* FIX: This is the critical fix for the overlap */
+.main-content {
+    margin-left: var(--sidebar-width);
+    padding: 2rem; /* Consistent padding */
+    width: calc(100% - var(--sidebar-width)); /* Ensure it takes up the remaining space */
+}
+
+.page-header {
+    font-weight: 700;
+    font-size: 2rem;
+    color: var(--moya-dark-text);
+    border-bottom: none;
+    padding-bottom: 10px;
+    margin-bottom: 2rem;
+}
+
+/* --- Card Styling --- */
+.card {
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    box-shadow: #dad1ff; /* Cleaner look, relying on border */
+    margin-bottom: 3.5rem;
+    background-color: #fff;
+    height: 100%; /* FIX: Ensures cards in a row are the same height */
+}
+
+.cardy {
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    box-shadow: #dad1ff; /* Cleaner look, relying on border */
+    margin-top:1.9rem;
+    margin-bottom: 3.5rem;
+    background-color: #fff;
+    height: 100%; /* FIX: Ensures cards in a row are the same height */
+}
+
+.card-header {
+    font-weight: 600;
+    font-size: 1.1rem;
+    accent-color:var(--moya-dark-text);
+    background-color: #fff;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.25rem 1.5rem;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* --- Dashboard Stats Cards --- */
+.stat-card .card-header {
+    border: none;
+    padding-bottom: 0;
+}
+
+.stat-card .card-body h5.card-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--moya-primary);
+}
+
+/* --- Table Styling --- */
+.table {
+    border-color: var(--border-color);
+}
+.table thead th {
+    font-weight: 600;
+    color: var(--moya-dark-text);
+    background-color: #f8f9fa;
+    border-bottom-width: 2px;
+}
+
+.table tbody tr td {
+    vertical-align: middle;
+}
+.table-hover tbody tr:hover {
+    background-color: var(--moya-light);
+}

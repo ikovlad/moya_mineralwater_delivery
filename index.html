@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Moya: Premium Mineral Water Delivery - Rosario, La Union</title>
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2ntuNlWwwR0z5jD9Dq0a9G" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+    <style>
+        /* --- Moya Custom CSS Theme --- */
+        :root {
+            /* Define Moya Colors (Teal/Aqua based) */
+            --moya-primary: #008080;
+            /* Dark Teal */
+            --moya-secondary: #00bfff;
+            /* Deep Sky Blue/Aqua */
+            --moya-cta: #ff9900;
+            /* Warm Orange/Gold */
+            --moya-bg: #f5fcfc;
+            /* Very light teal background */
+            --bs-primary: var(--moya-primary);
+            --bs-primary-rgb: 0, 128, 128;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--moya-bg);
+            color: #1f2937;
+        }
+
+        /* Custom Background Gradient for Hero */
+        .hero-bg {
+            background-image: linear-gradient(to bottom right, #ffffff, var(--moya-bg));
+        }
+
+        /* Bootstrap Overrides */
+        .bg-primary {
+            background-color: var(--moya-primary) !important;
+        }
+
+        .text-primary {
+            color: var(--moya-primary) !important;
+        }
+
+        .border-primary {
+            border-color: var(--moya-primary) !important;
+        }
+
+        /* CTA Button (Orange/Gold) */
+        .btn-cta {
+            background-color: #007bff; /* Primary Blue */
+            border-color: #007bff;
+            color: #fff !important;
+            font-weight: 700;
+            padding: .75rem 2rem;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-cta:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+            border-color: #0056b3;
+            color: #fff !important; /* Keep text white on hover */
+            box-shadow: 0 10px 20px rgba(0, 123, 255, 0.5) !important;
+            transform: translateY(-2px);
+        }
+
+
+
+        .card-shadow {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 15px rgba(0, 0, 0, 0.03);
+        }
+
+        .product-img {
+            max-width: 100%;
+            height: 250px;
+            object-fit: contain;
+        }
+
+        .hover-border-primary:hover {
+            border-color: var(--moya-primary) !important;
+        }
+
+        /* Map Placeholder Style */
+        .map-placeholder {
+            min-height: 350px;
+            background-color: #e3f2fd;
+            border: 2px solid #90caf9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border-radius: 0.75rem;
+        }
+        .modal-header {
+            justify-content: center;
+            position: relative;
+        }
+
+        .modal-header .btn-close {
+            position: absolute;
+            right: 1rem;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+        <div class="container py-2">
+            <!-- Logo: Moya -->
+            <a class="navbar-brand text-2xl fw-bold text-primary d-flex align-items-center fs-3" href="#">
+                <!-- Water Drop Icon (Inline SVG) -->
+                <svg class="me-2 text-info" width="28" height="28" fill="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 2C6.477 2 2 6.477 2 12c0 3.924 2.222 7.375 5.508 9.062a1 1 0 001.037-.091l1.545-1.545a1 1 0 00-.091-1.037C7.545 17.022 6 14.73 6 12c0-3.314 2.686-6 6-6s6 2.686 6 6c0 2.73-.545 5.022-2.991 7.429a1 1 0 00-.091 1.037l1.545 1.545a1 1 0 001.037.091C19.778 19.375 22 15.924 22 12 22 6.477 17.523 2 12 2zM12 18a6 6 0 100-12 6 6 0 000 12zM12 8a4 4 0 110 8 4 4 0 010-8z" />
+                </svg>
+                Moya
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-semibold">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#hero">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#products">Containers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#process">Delivery</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#location">Area</a>
+                    </li>
+                </ul>
+                <!-- Login CTA in Nav -->
+                <button onclick="openLoginModal('nav')" class="btn btn-primary rounded-pill fw-semibold ms-lg-3 px-4">
+                    Get Started
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero-bg py-5 py-xl-10">
+        <div class="container">
+            <div class="row align-items-center gx-5">
+                <!-- Text Content -->
+                <div class="col-md-7 order-md-1 order-2 text-center text-md-start pt-5">
+                    <h1 class="display-4 fw-bolder lh-1 mb-3 text-gray-800">
+                        Share Life, Share Moya, <span class="text-primary d-block d-sm-inline">The Taste of Purity.</span>
+                    </h1>
+                    <p class="lead text-secondary mb-4 mx-auto mx-md-0 text-black" style="max-width: 600px;">
+                        Premium mineral water delivered fast in <b>Rosario, La Union</b> (Barangay Cataguingtingan &
+                        In-Town). Order now and expect delivery in <b>1-2 hours</b>!
+                    </p>
+                    <div class="d-grid d-sm-flex gap-3 justify-content-center justify-content-md-start">
+                        <!-- Primary CTA: Must require login first -->
+                        <button onclick="openLoginModal('hero')" class="btn btn-cta btn-lg rounded-pill shadow-lg">
+                            Place Your Order Now
+                        </button>
+                        <!-- Secondary CTA -->
+                        <a href="#products" class="btn btn-outline-primary btn-lg rounded-pill fw-bold"
+                            style="border-width: 2px;">
+                            View Pricing
+                        </a>
+                    </div>
+                </div>
+                <!-- Image/Placeholder -->
+                <div class="col-md-5 order-md-2 order-1 text-center">
+                    <img src="img/delivery.png"
+                        class="img-fluid rounded-4 shadow-lg"
+                        alt="Moya Water Delivery service van or illustration"
+                        onerror="this.src='https://placehold.co/400x400/008080/ffffff?text=Moya+Water'">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Showcase Section -->
+    <section id="products" class="py-5 py-xl-10 bg-white">
+        <div class="container">
+            <h2 class="display-6 fw-bold text-center mb-2" style="color: var(--moya-primary) !important;">Our Gallon Options</h2>
+            <p class="text-center text-secondary mb-5 mx-auto text-black" style="max-width: 700px;">
+                Choose the container that fits your home. Remember, you must <b>log in or sign up</b> to place an order.
+            </p>
+
+            <div class="row g-4 justify-content-center">
+
+                <!-- Product 1: Standard Round Gallon -->
+                <div class="col-md-5">
+                    <div
+                        class="card p-4 rounded-4 card-shadow text-center h-100 border-2 border-transparent transition duration-300 hover-border-primary">
+                        <img src="img/round-water-jug.png"
+                            alt="Standard Round water jug" class="mx-auto mb-3 product-img" style="max-width: 180px;">
+                        <h3 class="h4 fw-semibold mb-2 text-gray-800">Standard Round Container</h3>
+                        <p class="text-muted mb-3">The traditional and robust 5-gallon container.</p>
+
+                        <div class="bg-light rounded-3 p-3 mb-3">
+                            <p class="mb-1 fw-bold text-primary">REFILL PRICE:</p>
+                            <p class="display-6 fw-bold text-primary mb-0">₱20.00</p>
+                        </div>
+
+                        <p class="text-success fw-bold p-2 border-dashed border-success rounded-3 small">
+                            PROMO: Buy 5 Refills, Get 1 Refill for only ₱100!
+                        </p>
+
+                        <div class="mt-3">
+                            <p class="fw-semibold text-secondary mb-1">Buy New Container Option:</p>
+                            <p class="h5 fw-bold text-dark">₱120.00 (Includes container + First Refill)</p>
+                        </div>
+
+
+                        <button onclick="openLoginModal('Round Gallon')"
+                            class="btn btn-primary rounded-pill fw-semibold shadow-sm w-100 mt-4">
+                            Order Refill or New Container
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 2: Slim w/ Faucet Gallon -->
+                <div class="col-md-5">
+                    <div
+                        class="card p-4 rounded-4 card-shadow text-center h-100 border-2 border-transparent transition duration-300 hover-border-primary">
+                        <img src="img/slim-water-gallon.jpg"
+                            alt="Slim water container with built-in faucet" class="mx-auto mb-3 product-img"
+                            style="max-width: 180px;">
+                        <h3 class="h4 fw-semibold mb-2 text-gray-800">Slim Container with Faucet</h3>
+                        <p class="text-muted mb-3">Space-saving container with a convenient dispensing faucet.</p>
+
+                        <div class="bg-light rounded-3 p-3 mb-3">
+                            <p class="mb-1 fw-bold text-primary">REFILL PRICE:</p>
+                            <p class="display-6 fw-bold text-primary mb-0">₱20.00</p>
+                        </div>
+
+                        <p class="text-success fw-bold p-2 border-dashed border-success rounded-3 small">
+                            PROMO: Buy 5 Refills, Get 1 Refill for only ₱100!
+                        </p>
+
+                        <div class="mt-3">
+                            <p class="fw-semibold text-secondary mb-1">Buy New Container Option:</p>
+                            <p class="h5 fw-bold text-dark">₱120.00 (Includes container + First Refill)</p>
+                        </div>
+
+                        <button onclick="openLoginModal('Slim Gallon')"
+                            class="btn btn-primary rounded-pill fw-semibold shadow-sm w-100 mt-4">
+                            Order Refill or New Container
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Delivery Process & Schedule Section -->
+    <section id="process" class="py-5 py-xl-10" style="background-color: #e9f2ff;">
+        <div class="container">
+            <h2 class="display-6 fw-bold text-center mb-5" style="color: var(--moya-primary) !important;">Delivery Promise & Schedule</h2>
+            <div class="row g-4 text-center">
+
+                <!-- Step 1: Schedule -->
+                <div class="col-md-4">
+                    <div class="p-4 bg-white rounded-4 card-shadow h-100">
+                        <svg class="mb-3 text-primary" width="48" height="48" fill="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 15h2v2h-2zm0-8h2v6h-2z" />
+                        </svg>
+                        <h3 class="h5 fw-bold text-gray-800">Operating Hours</h3>
+                        <p class="text-secondary mb-0">
+                            <b>8:00 AM - 4:00 PM</b> daily. <br>
+                            <b>Last orders accepted at 4:00 PM.</b>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2: Delivery Speed -->
+                <div class="col-md-4">
+                    <div class="p-4 bg-white rounded-4 card-shadow h-100">
+                        <svg class="mb-3 text-cta" width="48" height="48" fill="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M21 13v-2h-3V8h-2v3h-2v-3h-2v3h-2v-3H8v5h2v-3h2v3h2v-3h2v3h3zm-8-5h2V6h-2v2zm-4 0h2V6H9v2zm8 0h2V6h-2v2z" />
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                        </svg>
+                        <h3 class="h5 fw-bold text-gray-800">Guaranteed Fast Delivery</h3>
+                        <p class="text-secondary mb-0">
+                            Delivery is <b>within the day</b>, typically arriving <b>1-2 hours</b> after your order is
+                            confirmed. <br>
+                            <b>Last delivery run ends at 5:00 PM.</b>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 3: Payment -->
+                <div class="col-md-4">
+                    <div class="p-4 bg-white rounded-4 card-shadow h-100">
+                        <svg class="mb-3 text-success" width="48" height="48" fill="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H3V8h18v8zm-5-3c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+                        </svg>
+                        <h3 class="h5 fw-bold text-gray-800">Payment Method</h3>
+                        <p class="text-secondary mb-0">
+                            We accept <b>Cash on Delivery (COD)</b> only. Please prepare the exact amount for a smooth
+                            transaction.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Area Section (Map Integration Placeholder) -->
+    <section id="location" class="py-5 py-xl-10">
+        <div class="container">
+            <div class="row align-items-center gx-5">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <h2 class="display-6 fw-bold mb-3">Service Area: Rosario, La Union</h2>
+                    <p class="lead text-secondary mb-4">
+                        We proudly serve our local community in <b>Barangay Cataguingtingan</b> and surrounding <b>In-Town
+                        areas</b> only. Check the map for our specific delivery locations.
+                    </p>
+                    <button onclick="openLocationCheckModal()" class="btn btn-primary rounded-pill fw-semibold">
+                        Confirm My Delivery Address
+                    </button>
+                </div>
+                <div class="col-lg-6 h-100">
+                    <div id="main-page-map" class="map-placeholder rounded-4 card-shadow" style="height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <div class="modal fade" id="locationCheckModal" tabindex="-1" aria-labelledby="locationCheckModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="locationCheckModalLabel">Checking Your Delivery Location</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted">This feature is only available for registered users. Please login first.
+                       The <span class="text-success fw-bold">green pin</span> is your barangay, and the <span class="text-primary fw-bold">blue pins</span> are our delivery points.
+                    </p>
+                    <div id="location-check-map" class="mb-3"></div>
+                    <div id="locationStatus" class="mt-3 text-center fw-bold"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-4 mt-auto">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2024 Moya - Mineral Water Delivery. All rights reserved. | Rosario, La Union.</p>
+        </div>
+    </footer>
+
+    <!-- Authentication Modal (Login/Signup Pop-up) - REQUIRED TO ORDER -->
+    <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content rounded-4 card-shadow">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold text-gray-800 fs-3" id="authModalLabel" style="color: var(--moya-primary) !important;">Welcome to Moya!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Tab Navigation -->
+                    <ul class="nav nav-tabs mb-3" id="authTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active fw-semibold" id="login-tab" data-bs-toggle="tab"
+                                data-bs-target="#login-pane" type="button" role="tab" aria-controls="login-pane"
+                                aria-selected="true">Login</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link fw-semibold" id="signup-tab" data-bs-toggle="tab"
+                                data-bs-target="#signup-pane" type="button" role="tab" aria-controls="signup-pane"
+                                aria-selected="false">Sign Up</button>
+                        </li>
+                    </ul>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content">
+
+                        <!-- Login Form -->
+                        <div class="tab-pane fade show active" id="login-pane" role="tabpanel"
+                            aria-labelledby="login-tab" tabindex="0">
+                            <!-- NOTE: Action will point to login.php in the next step -->
+                            <form action="login.php" method="POST" onsubmit="return mockLogin(event)">
+                                <div class="mb-3">
+                                    <label for="loginEmail"
+                                        class="form-label small fw-semibold text-secondary text-black">Email</label>
+                                    <input type="email" class="form-control rounded-3 p-3" id="loginEmail" name="email"
+                                        placeholder="johndoe@email.com" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="loginPassword"
+                                        class="form-label small fw-semibold text-secondary text-black">Password</label>
+                                    <input type="password" class="form-control rounded-3 p-3" id="loginPassword"
+                                        name="password" placeholder="********" required>
+                                </div>
+                                <button type="submit" class="btn btn-cta rounded-pill shadow-sm w-100 mt-3">
+                                    Log In
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Sign Up Form (Updated to include full user data) -->
+                        <div class="tab-pane fade" id="signup-pane" role="tabpanel" aria-labelledby="signup-tab"
+                            tabindex="0">
+                            <form action="signup.php" method="POST" class="needs-validation" novalidate>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="signupName" class="form-label small fw-semibold text-secondary text-black">Full Name</label>
+                                        <input type="text" class="form-control rounded-3 p-3" id="signupName" name="full_name"
+                                            pattern="^[A-Za-z\s]{2,}$"
+                                            title="Name should only contain letters and spaces." placeholder="John Doe" required>
+                                        <div class="invalid-feedback">Please enter your full name (letters only).</div>
+                                        <div class="valid-feedback">Looks good!</div>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="signupPhone" class="form-label small fw-semibold text-secondary text-black">Phone Number</label>
+                                        <input type="tel" class="form-control rounded-3 p-3" id="signupPhone" name="phone_number"
+                                            pattern="^09\d{9}$" 
+                                            title="Enter a valid Philippine phone number (e.g., 09123456789)"
+                                            placeholder="09123456789" required>
+                                        <div class="invalid-feedback">Enter a valid 11-digit number starting with 09.</div>
+                                        <div class="valid-feedback">Valid phone number!</div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="signupEmail" class="form-label small fw-semibold text-secondary text-black">Email Address</label>
+                                        <input type="email" class="form-control rounded-3 p-3" id="signupEmail" name="email" placeholder="johndoe@gmail.com" required>
+                                        <div class="invalid-feedback">Please enter a valid email address.</div>
+                                        <div class="valid-feedback">Valid email!</div>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="signupPassword" class="form-label small fw-semibold text-secondary text-black">Password</label>
+                                        <input type="password" class="form-control rounded-3 p-3" id="signupPassword" name="password"
+                                            minlength="8" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+                                            title="Password must be at least 8 characters and contain at least one number." placeholder="●●●●●●●●"
+                                            required>
+                                        <div class="invalid-feedback">Must be 8+ chars with at least one number.</div>
+                                        <div class="valid-feedback">Strong password!</div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="signupBarangay" class="form-label small fw-semibold text-secondary text-black">
+                                        Delivery Barangay (In-Town Service Area)
+                                    </label>
+                                    <select class="form-select rounded-3 p-3" id="signupBarangay" name="address_barangay" required>
+                                        <option value="" disabled selected>Select your delivery area...</option>
+                                        <option value="Alipang">Alipang</option>
+                                        <option value="Ambangonan">Ambangonan</option>
+                                        <option value="Bacani">Bacani</option>
+                                        <option value="Bangar">Bangar</option>
+                                        <option value="Bani">Bani</option>
+                                        <option value="Benteng-Sapilang">Benteng-Sapilang</option>
+                                        <option value="Cadumanian">Cadumanian</option>
+                                        <option value="Camp One">Camp One</option>
+                                        <option value="Carunuan East">Carunuan East</option>
+                                        <option value="Carunuan West">Carunuan West</option>
+                                        <option value="Casilagan">Casilagan</option>
+                                        <option value="Cataguingtingan">Cataguingtingan</option>
+                                        <option value="Concepcion">Concepcion</option>
+                                        <option value="Damortis">Damortis</option>
+                                        <option value="Gumot-Nagcolaran">Gumot-Nagcolaran</option>
+                                        <option value="Inabaan Norte">Inabaan Norte</option>
+                                        <option value="Inabaan Sur">Inabaan Sur</option>
+                                        <option value="Marcos">Marcos</option>
+                                        <option value="Nagtagaan">Nagtagaan</option>
+                                        <option value="Nangcamotian">Nangcamotian</option>
+                                        <option value="Parasapas">Parasapas</option>
+                                        <option value="Poblacion East">Poblacion East</option>
+                                        <option value="Poblacion West">Poblacion West</option>
+                                        <option value="Puzon">Puzon</option>
+                                        <option value="Rabon">Rabon</option>
+                                        <option value="San Jose">San Jose</option>
+                                        <option value="Subusub">Subusub</option>
+                                        <option value="Tabtabungao">Tabtabungao</option>
+                                        <option value="Tanglag">Tanglag</option>
+                                        <option value="Tay-ac">Tay-ac</option>
+                                        <option value="Udiao">Udiao</option>
+                                        <option value="Vila">Vila</option>                                                                              
+                                    </select>
+                                    <div class="invalid-feedback">Please select your delivery barangay.</div>
+                                    <div class="valid-feedback">Selected!</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="signupAddressDetail" class="form-label small fw-semibold text-secondary text-black">
+                                        House/Street/Landmark Details
+                                    </label>
+                                    <input type="text" class="form-control rounded-3 p-3" id="signupAddressDetail" name="address_detail" required>
+                                    <div class="invalid-feedback">Please provide your house or street details.</div>
+                                    <div class="valid-feedback">Looks good!</div>
+                                </div>
+
+                                <button type="submit" class="btn btn-cta rounded-pill shadow-sm w-100 mt-3">Create Account</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Message container for server feedback -->
+                    <div id="authMessage" class="alert mt-4 d-none small" role="alert"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (required for modals and responsiveness) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <script>
+        // --- GLOBAL VARIABLES ---
+        
+        // This is your complete list of 28 delivery points (the BLUE pins).
+        const serviceAreaPoints = [
+            [16.219468, 120.493981], [16.213475, 120.501831], [16.225049, 120.503922],
+            [16.246571, 120.487866], [16.239948, 120.468656], [16.228787, 120.459740],
+            [16.238981, 120.455706], [16.248206, 120.453848], [16.255083, 120.469280],
+            [16.265017, 120.445564], [16.224417, 120.450107], [16.220696, 120.468793],
+            [16.214975, 120.468423], [16.214365, 120.491307], [16.211052, 120.484091],
+            [16.236634, 120.431094], [16.234697, 120.421645], [16.232188, 120.407840],
+            [16.220671, 120.412298], [16.242430, 120.404603], [16.250993, 120.429892],
+            [16.266720, 120.408259], [16.281248, 120.443265], [16.268898, 120.475935],
+            [16.249906, 120.495360], [16.277226, 120.489522], [16.281798, 120.488149],
+            [16.214498, 120.429782]
+        ];
+
+        // --- BARANGAY COORDINATE LOOKUP TABLE ---
+        // You need to fill this with actual coordinates from your serviceAreaPoints
+        const barangayCoordinateLookup = {
+            // Example coordinates - REPLACE THESE WITH ACTUAL COORDINATES FROM YOUR serviceAreaPoints
+            "Cataguingtingan": [16.239948, 120.468656],
+            "Poblacion East": [16.213475, 120.501831],
+            "Poblacion West": [16.225049, 120.503922],
+            "Bani": [16.246571, 120.487866],
+            // Add more barangays as needed...
+        };
+
+        // Default user barangay for demo purposes
+        // In a real implementation, this would come from your PHP backend
+        const USER_BARANGAY_NAME = "Cataguingtingan";
+
+        let modalMap; // To hold the map instance for the modal
+        let userMarker; // To hold the user's location marker
+
+        // --- INITIALIZE MAIN PAGE MAP ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const mainMap = L.map('main-page-map').setView([16.245, 120.47], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(mainMap);
+
+            serviceAreaPoints.forEach(coords => {
+                L.marker(coords).addTo(mainMap).bindPopup('This is within our delivery area. We can deliver here!');
+            });
+        });
+
+        // --- MODAL AND LOCATION CHECKING LOGIC ---
+        const locationModalElement = document.getElementById('locationCheckModal');
+        const locationModal = new bootstrap.Modal(locationModalElement);
+        
+        // This function is called by the "Confirm My Delivery Address" button
+        function openLocationCheckModal() {
+            locationModal.show();
+        }
+        
+        // Initialize map AND run check ONLY after the modal has been shown
+        locationModalElement.addEventListener('shown.bs.modal', function() {
+            if (!modalMap) { // Initialize map only once
+                modalMap = L.map('location-check-map').setView([16.245, 120.47], 13);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(modalMap);
+                
+                // Add all BLUE service area markers to the modal map
+                serviceAreaPoints.forEach(coords => {
+                    L.marker(coords).addTo(modalMap);
+                });
+            }
+            modalMap.invalidateSize(); // Fixes map sizing
+            
+            // --- Automatically check the user's profile barangay ---
+            checkProfileBarangay();
+        });
+
+        function checkProfileBarangay() {
+            const statusDiv = document.getElementById('locationStatus');
+            statusDiv.className = 'mt-3 text-center fw-bold'; // Reset class
+            statusDiv.innerHTML = ""; // Clear old text
+
+            // 1. Find the coordinates for the user's registered barangay
+            const userCoords = barangayCoordinateLookup[USER_BARANGAY_NAME];
+
+            if (userCoords) {
+                // 2. We found the barangay in our lookup table.
+                
+                // Add or move the user's GREEN marker
+                if (!userMarker) {
+                     userMarker = L.marker(userCoords, {
+                        icon: L.icon({
+                            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+                            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                            iconSize: [25, 41],
+                            iconAnchor: [12, 41],
+                            popupAnchor: [1, -34],
+                            shadowSize: [41, 41]
+                        })
+                    }).addTo(modalMap);
+                } else {
+                    userMarker.setLatLng(userCoords);
+                }
+                
+                modalMap.setView(userCoords, 15); // Center map on user's barangay
+                userMarker.bindPopup('<b>Your Registered Barangay:</b><br>' + USER_BARANGAY_NAME).openPopup();
+
+                // 3. Check if these coordinates are in our delivery zone
+                if (isInsideDeliveryZone(userCoords)) {
+                    statusDiv.innerHTML = '<span class="text-danger">This feature is only available for registered users. Please login first.</span>';
+                } else {
+                    statusDiv.innerHTML = '<span class="text-danger">This feature is only available for registered users. Please login first.</span>';
+                }
+
+            } else {
+                // 4. We could not find the barangay name in our lookup table.
+                statusDiv.innerHTML = '<span class="text-danger">Sorry, we could not find your barangay "' + USER_BARANGAY_NAME + '" in our system. Please check your profile address.</span>';
+            }
+        }
+
+        // This function checks if the user's coords are "close enough" to any service point
+        function isInsideDeliveryZone(userCoords) {
+            // This checks if the user's coordinates are *exactly* one of the service points.
+            // This is safer than a radius check.
+            for (const point of serviceAreaPoints) {
+                if (point[0] === userCoords[0] && point[1] === userCoords[1]) {
+                    return true; // The user's barangay is one of the service points
+                }
+            }
+            return false; // Not found in the list
+        }
+
+        // --- Modal Control Functions ---
+        const authModalElement = document.getElementById('authModal');
+        const myAuthModal = new bootstrap.Modal(authModalElement);
+
+        // This is now purely for showing/hiding the modal, as form submission will be handled by PHP redirect.
+        function openLoginModal(context) {
+            console.log(`Attempting to order: ${context}. Authentication required.`);
+            myAuthModal.show();
+        }
+
+        // Mock login function now returns false to prevent actual form submission
+        function mockLogin(event) {
+            // In a real application, you might use AJAX here, but for simple PHP POST/Redirect, we disable the mock
+            alert('Form submitted to login.php. Check your browser console or network tab for the request.');
+            return true; // Allows the form to submit to login.php
+        }
+
+        // Form validation
+        (function () {
+            'use strict';
+            const forms = document.querySelectorAll('.needs-validation');
+            
+            Array.from(forms).forEach(form => {
+                const inputs = form.querySelectorAll('input, select');
+
+                // Prevent submission if invalid
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+
+                // Real-time validation while typing or changing
+                inputs.forEach(input => {
+                    input.addEventListener('input', () => {
+                        if (input.checkValidity()) {
+                            input.classList.remove('is-invalid');
+                            input.classList.add('is-valid');
+                        } else {
+                            input.classList.remove('is-valid');
+                            input.classList.add('is-invalid');
+                        }
+                    });
+
+                    input.addEventListener('blur', () => {
+                        if (input.value.trim() !== '') {
+                            if (input.checkValidity()) {
+                                input.classList.add('is-valid');
+                                input.classList.remove('is-invalid');
+                            } else {
+                                input.classList.add('is-invalid');
+                                input.classList.remove('is-valid');
+                            }
+                        }
+                    });
+                });
+            });
+        })();
+    </script>
+
+</body>
+
+</html>
