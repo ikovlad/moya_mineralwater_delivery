@@ -21,12 +21,19 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
 // --- 1. Fetch Product Data (ID and Price) from Database ---
 $product_data = [];
 $product_names = [
-    'Standard Round Refill', 
-    'Slim Container Refill', 
-    'New Standard Round', 
+    'Standard Round Refill',
+    'Slim Container Refill',
+    'New Standard Round',
     'New Slim Container'
 ];
+// Ensure $conn is available before using it in array_map if config.php doesn't guarantee it globally
+if (!isset($conn) || !$conn) {
+     // Re-establish connection if necessary, though config.php should handle this
+    $conn = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
+    if($conn === false){ die("ERROR: Could not connect. " . mysqli_connect_error()); }
+}
 $product_names_str = "'" . implode("','", array_map([$conn, 'real_escape_string'], $product_names)) . "'";
+
 
 $sql_prices = "SELECT id, name, price FROM products WHERE name IN ($product_names_str)";
 $result_prices = mysqli_query($conn, $sql_prices);
@@ -39,17 +46,28 @@ if ($result_prices) {
         ];
     }
     mysqli_free_result($result_prices);
+} else {
+    // Handle potential query error if needed
+    error_log("Failed to fetch product prices: " . mysqli_error($conn));
 }
 
-$price_refill = $product_data['Standard Round Refill']['price'] ?? 40.00;
-$price_new_container = $product_data['New Standard Round']['price'] ?? 250.00;
+
+// Use specific keys and provide fallbacks
+$price_refill = $product_data['Standard Round Refill']['price'] ?? 20.00; // Example fallback price
+$price_refill_slim = $product_data['Slim Container Refill']['price'] ?? $price_refill; // Fallback to round price if specific not found
+$price_new_container = $product_data['New Standard Round']['price'] ?? 120.00; // Example fallback price
+$price_new_container_slim = $product_data['New Slim Container']['price'] ?? $price_new_container; // Fallback to round price if specific not found
+
 
 $id_refill_round = $product_data['Standard Round Refill']['id'] ?? 0;
 $id_refill_slim = $product_data['Slim Container Refill']['id'] ?? 0;
 $id_new_round = $product_data['New Standard Round']['id'] ?? 0;
 $id_new_slim = $product_data['New Slim Container']['id'] ?? 0;
 
-mysqli_close($conn);
+// Close connection only if it's open
+if (isset($conn) && $conn) {
+    mysqli_close($conn);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -57,17 +75,18 @@ mysqli_close($conn);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Place Your Order | Moya Water Delivery</title>
-    
-    <!-- Fonts -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
-    
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+
     <style>
-        :root { 
+        :root {
             --moya-primary: #008080;
             --moya-secondary: #00bfff;
             --moya-light: #f5fcfc;
@@ -75,48 +94,48 @@ mysqli_close($conn);
             --bs-primary: var(--moya-primary);
             --bs-primary-rgb: 0, 128, 128;
         }
-        
-        body { 
-            font-family: 'Lato', sans-serif; 
+
+        body {
+            font-family: 'Lato', sans-serif;
             background-image: url(img/bg.svg);
             background-color: var(--moya-light);
             color: #1f2937;
         }
-        
+
         h1, h2, h3 {
             font-family: 'Bricolage Grotesque', sans-serif;
         }
-        
+
         /* Navbar Styles */
         .navbar {
             background-color: #fff !important;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        
+
         .navbar-brand {
             font-weight: 700;
             font-size: 1.5rem;
         }
-        
+
         .nav-link {
             font-weight: 500;
             transition: color 0.3s ease;
         }
-        
+
         .nav-link:hover {
             color: var(--moya-primary) !important;
         }
-        
+
         #profileDropdown {
             background-color: var(--moya-primary) !important;
             border-color: var(--moya-primary) !important;
         }
-        
+
         #profileDropdown:hover {
             background-color: #006666 !important;
             border-color: #006666 !important;
         }
-        
+
         /* Page Header */
         .page-header {
             background: linear-gradient(135deg, var(--moya-primary) 0%, var(--moya-secondary) 100%);
@@ -125,43 +144,43 @@ mysqli_close($conn);
             margin-bottom: 2rem;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        
+
         .page-header h1 {
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
         }
-        
+
         .page-header .lead {
             font-size: 1.1rem;
             opacity: 0.95;
         }
-        
+
         /* Product Cards */
-        .product-card { 
-            transition: all 0.3s ease; 
+        .product-card {
+            transition: all 0.3s ease;
             border: 2px solid #e5e7eb;
             background-color: #fff;
             height: 100%;
         }
-        
-        .product-card:hover { 
-            transform: translateY(-5px); 
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); 
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
-        
+
         .product-card.active-primary {
             border-color: var(--moya-primary);
             box-shadow: 0 6px 15px rgba(0, 128, 128, 0.25);
             background-color: #f0fffe;
         }
-        
+
         .product-card.active-secondary {
             border-color: var(--moya-secondary);
             box-shadow: 0 6px 15px rgba(0, 191, 255, 0.25);
             background-color: #f0f9ff;
         }
-        
+
         .section-title {
             font-size: 1.75rem;
             font-weight: 700;
@@ -171,31 +190,31 @@ mysqli_close($conn);
             border-bottom: 3px solid var(--moya-primary);
             display: inline-block;
         }
-        
+
         .price-badge {
             font-size: 1.5rem;
             padding: 0.5rem 1rem;
         }
-        
+
         .qty-controls {
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
-        
-        .qty-input { 
-            width: 70px; 
-            text-align: center; 
+
+        .qty-input {
+            width: 70px;
+            text-align: center;
             border: 2px solid #e5e7eb;
             font-weight: 600;
             font-size: 1.1rem;
         }
-        
+
         .qty-input:focus {
             box-shadow: none;
             border-color: var(--moya-primary);
         }
-        
+
         .btn-qty {
             width: 36px;
             height: 36px;
@@ -207,36 +226,37 @@ mysqli_close($conn);
             font-weight: 700;
             border-width: 2px;
         }
-        
+
         /* Summary Card */
         .summary-card {
             background-color: #fff;
             border: none;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             position: sticky;
-            top: 100px;
+            top: 100px; /* Adjust based on your navbar height */
         }
-        
+
         .summary-header {
             background: linear-gradient(135deg, var(--moya-primary) 0%, var(--moya-secondary) 100%);
             color: white;
             padding: 1rem 1.5rem;
-            border-radius: 1rem 1rem 0 0;
-            margin: -1rem -1rem 1rem -1rem;
+            border-radius: 1rem 1rem 0 0; /* Match card radius if needed */
+            margin: -1rem -1rem 1rem -1rem; /* Adjust based on card padding */
         }
-        
+
+
         .summary-item {
             padding: 0.75rem 0;
             border-bottom: 1px solid #e5e7eb;
         }
-        
+
         .summary-total {
             background-color: #f9fafb;
             padding: 1rem;
             border-radius: 0.5rem;
             margin-top: 1rem;
         }
-        
+
         .btn-place-order {
             background: linear-gradient(135deg, var(--moya-primary) 0%, var(--moya-secondary) 100%);
             border: none;
@@ -247,36 +267,59 @@ mysqli_close($conn);
             box-shadow: 0 4px 12px rgba(0, 128, 128, 0.3);
             transition: all 0.3s ease;
         }
-        
+
         .btn-place-order:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 128, 128, 0.4);
             background: linear-gradient(135deg, #006666 0%, #0099cc 100%);
         }
-        
+
         .btn-place-order:disabled {
-            background: #cbd5e1;
+            background: #cbd5e1; /* Use a Bootstrap gray or custom gray */
             cursor: not-allowed;
+            box-shadow: none; /* Remove shadow when disabled */
         }
-        
-        .card-shadow { 
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); 
+
+
+        .card-shadow {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
-        
+
+        /* <<< ADDED: Policy Box Style >>> */
+        #policy-box {
+            height: 150px; /* Adjust height as needed */
+            overflow-y: scroll;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            margin-top: 1rem; /* Space above policy */
+            margin-bottom: 1rem; /* Space below policy */
+            background-color: #f8f9fa;
+            font-size: 0.85rem; /* Smaller font for policy */
+            border-radius: 0.375rem;
+        }
+        #policy-box ul {
+            padding-left: 1.2rem;
+            margin-bottom: 0;
+        }
+        #policy-box li {
+             margin-bottom: 0.5rem;
+        }
+        /* <<< END ADDED Style >>> */
+
+
         @media (max-width: 768px) {
             .page-header h1 {
                 font-size: 2rem;
             }
-            
+
             .summary-card {
-                position: static;
+                position: static; /* Unstick summary card on smaller screens */
             }
         }
     </style>
 </head>
 <body>
 
-<!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-light sticky-top">
     <div class="container py-2">
         <a class="navbar-brand d-flex align-items-center gap-2" href="home.php">
@@ -316,7 +359,6 @@ mysqli_close($conn);
     </div>
 </nav>
 
-<!-- Page Header -->
 <div class="page-header">
     <div class="container">
         <h1>Place Your Order</h1>
@@ -326,20 +368,17 @@ mysqli_close($conn);
 
 <div class="container pb-5">
     <div class="row">
-        <!-- Products Column -->
         <div class="col-lg-8 mb-4">
             <form id="orderForm" action="place_order.php" method="POST">
-                
-                <!-- Hidden inputs for product IDs -->
+
                 <input type="hidden" name="product_ids[<?php echo $id_refill_round; ?>]" value="refill_round_qty">
                 <input type="hidden" name="product_ids[<?php echo $id_refill_slim; ?>]" value="refill_slim_qty">
                 <input type="hidden" name="product_ids[<?php echo $id_new_round; ?>]" value="new_round_qty">
                 <input type="hidden" name="product_ids[<?php echo $id_new_slim; ?>]" value="new_slim_qty">
 
-                <!-- Water Refills Section -->
                 <div class="mb-5">
                     <h3 class="section-title">Water Refills</h3>
-                    
+
                     <div class="row g-4">
                         <div class="col-md-6">
                             <div class="card p-4 rounded-4 product-card card-shadow" id="cardRefillRound">
@@ -350,7 +389,7 @@ mysqli_close($conn);
                                     </div>
                                     <span class="badge bg-primary price-badge">₱<?php echo number_format($price_refill, 2); ?></span>
                                 </div>
-                                
+
                                 <div class="qty-controls mt-auto">
                                     <button class="btn btn-outline-primary btn-qty btn-minus" type="button" data-target="refill_round_qty">−</button>
                                     <input type="number" class="form-control qty-input" name="refill_round_qty" id="refill_round_qty" value="0" min="0" readonly>
@@ -366,9 +405,9 @@ mysqli_close($conn);
                                         <h4 class="h5 fw-bold mb-1">Slim Container Refill</h4>
                                         <p class="text-muted small mb-0">For slim containers with faucet</p>
                                     </div>
-                                    <span class="badge bg-primary price-badge">₱<?php echo number_format($price_refill, 2); ?></span>
+                                    <span class="badge bg-primary price-badge">₱<?php echo number_format($price_refill_slim, 2); ?></span>
                                 </div>
-                                
+
                                 <div class="qty-controls mt-auto">
                                     <button class="btn btn-outline-primary btn-qty btn-minus" type="button" data-target="refill_slim_qty">−</button>
                                     <input type="number" class="form-control qty-input" name="refill_slim_qty" id="refill_slim_qty" value="0" min="0" readonly>
@@ -379,10 +418,9 @@ mysqli_close($conn);
                     </div>
                 </div>
 
-                <!-- New Containers Section -->
                 <div class="mb-4">
                     <h3 class="section-title" style="border-bottom-color: var(--moya-secondary);">New Containers</h3>
-                    
+
                     <div class="row g-4">
                         <div class="col-md-6">
                             <div class="card p-4 rounded-4 product-card card-shadow" id="cardNewRound">
@@ -393,7 +431,7 @@ mysqli_close($conn);
                                     </div>
                                     <span class="badge bg-secondary price-badge">₱<?php echo number_format($price_new_container, 2); ?></span>
                                 </div>
-                                
+
                                 <div class="qty-controls mt-auto">
                                     <button class="btn btn-outline-secondary btn-qty btn-minus" type="button" data-target="new_round_qty">−</button>
                                     <input type="number" class="form-control qty-input" name="new_round_qty" id="new_round_qty" value="0" min="0" readonly>
@@ -409,9 +447,9 @@ mysqli_close($conn);
                                         <h4 class="h5 fw-bold mb-1">New Slim Container</h4>
                                         <p class="text-muted small mb-0">Container + first refill included</p>
                                     </div>
-                                    <span class="badge bg-secondary price-badge">₱<?php echo number_format($price_new_container, 2); ?></span>
+                                    <span class="badge bg-secondary price-badge">₱<?php echo number_format($price_new_container_slim, 2); ?></span>
                                 </div>
-                                
+
                                 <div class="qty-controls mt-auto">
                                     <button class="btn btn-outline-secondary btn-qty btn-minus" type="button" data-target="new_slim_qty">−</button>
                                     <input type="number" class="form-control qty-input" name="new_slim_qty" id="new_slim_qty" value="0" min="0" readonly>
@@ -424,18 +462,46 @@ mysqli_close($conn);
             </form>
         </div>
 
-        <!-- Order Summary Column -->
         <div class="col-lg-4">
             <div class="card p-4 rounded-4 summary-card">
                 <div class="summary-header">
                     <h3 class="h5 fw-bold mb-0">Order Summary</h3>
                 </div>
-                
+
                 <div id="summary-items" class="mb-3">
                     <p class="text-muted text-center py-4">No items selected</p>
                 </div>
 
-                <div class="summary-total">
+                 <hr>
+                <h4 class="h6 fw-bold mb-2 text-primary"><i class="bi bi-info-circle-fill me-1"></i> Order Policy</h4>
+                <div id="policy-box">
+                    <ul>
+                        <li><b>Products:</b> We offer 4 product types: Refill for Standard Round Gallon, Refill for Slim Container w/ Faucet, New Standard Round Gallon (includes 1st refill), and New Slim Container w/ Faucet (includes 1st refill).</li>
+                        <li><b>Cancellation:</b> Once your order is confirmed via phone call by our team, it cannot be cancelled through the website. Admins reserve the right to cancel orders due to unforeseen circumstances.</li>
+                        <li><b>Payment:</b> We accept <strong>Cash on Delivery (COD)</strong> only. Please prepare the exact amount.</li>
+                        <li><b>Refunds:</b> No refunds will be processed through this application. If you encounter any issues with your order or water quality, please contact our Customer Service directly for assistance and potential refunds.</li>
+                        <li><b>Quality Guarantee:</b> We ensure that all water delivered meets high quality standards.</li>
+                        <li><b>Buy 5, Get 1 Free Promo:</b>
+                            <ul>
+                                <li>Purchase 5 refills of the *exact same container type* (either 5 Standard Round Refills OR 5 Slim Container Refills) in a single order to qualify.</li>
+                                <li>The free item is one (1) refill for the same container type.</li>
+                                <li>You must provide your own empty container for the free refill.</li>
+                                <li>Mixing container types (e.g., 3 Round, 2 Slim) does not qualify for the promo.</li>
+                                <li>The promo applies only to refill orders, not purchases of new containers.</li>
+                            </ul>
+                        </li>
+                         <li><b>General:</b> Please ensure someone is available to receive the delivery and make the payment during our operating hours. Delivery is expected within 1-2 hours after confirmation.</li>
+                    </ul>
+                    <p class="text-center small fw-bold mt-2">--- End of Policy ---</p>
+                </div>
+                 <div class="form-check mt-1">
+                    <input class="form-check-input" type="checkbox" value="" id="policyCheckbox" disabled>
+                    <label class="form-check-label small" for="policyCheckbox">
+                        I have read and agree to the Order Policy.
+                    </label>
+                </div>
+                <hr>
+                 <div class="summary-total">
                     <div class="d-flex justify-content-between align-items-center">
                         <span class="h5 fw-bold mb-0">Total</span>
                         <span id="grandTotal" class="h4 fw-bold text-primary mb-0">₱0.00</span>
@@ -445,7 +511,7 @@ mysqli_close($conn);
                 <button type="submit" form="orderForm" id="placeOrderBtn" class="btn btn-place-order w-100 rounded-pill mt-3" disabled>
                     Select Items to Continue
                 </button>
-                
+
                 <p class="text-muted small text-center mt-3 mb-0">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-truck" viewBox="0 0 16 16">
                         <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/>
@@ -457,23 +523,22 @@ mysqli_close($conn);
     </div>
 </div>
 
-<!-- Footer -->
 <footer class="bg-primary text-white py-4 mt-auto">
     <div class="container text-center">
-        <p class="mb-0">&copy; 2024 Moya - Mineral Water Delivery. All rights reserved. | Rosario, La Union</p>
-    </div>
+        <p class="mb-0">&copy; <?php echo date("Y"); ?> Moya - Mineral Water Delivery. All rights reserved. | Rosario, La Union</p> </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+    // <<< Use specific prices fetched from PHP >>>
     const PRICES = {
         refill_round_qty: <?php echo $price_refill; ?>,
-        refill_slim_qty: <?php echo $price_refill; ?>,
+        refill_slim_qty: <?php echo $price_refill_slim; ?>,
         new_round_qty: <?php echo $price_new_container; ?>,
-        new_slim_qty: <?php echo $price_new_container; ?>
+        new_slim_qty: <?php echo $price_new_container_slim; ?>
     };
-    
+
     const PRODUCT_NAMES = {
         refill_round_qty: "Standard Round Refill",
         refill_slim_qty: "Slim Container Refill",
@@ -489,74 +554,143 @@ mysqli_close($conn);
     };
 
     const placeOrderBtn = document.getElementById('placeOrderBtn');
+    // <<< ADDED: Get policy elements >>>
+    const policyBox = document.getElementById('policy-box');
+    const policyCheckbox = document.getElementById('policyCheckbox');
+    let totalItems = 0; // Make totalItems global
+
+    // <<< ADDED: Function to check button state >>>
+    function updatePlaceOrderButtonState() {
+        const grandTotalText = document.getElementById('grandTotal').textContent; // Get current total text
+
+        // Conditions to enable the button: items selected AND checkbox checked
+        if (totalItems > 0 && policyCheckbox.checked) {
+             placeOrderBtn.disabled = false;
+             placeOrderBtn.textContent = `Place Order (${totalItems} item${totalItems > 1 ? 's' : ''}) - ${grandTotalText}`;
+        }
+        // Conditions to disable the button
+        else if (totalItems <= 0) {
+             placeOrderBtn.disabled = true;
+             placeOrderBtn.textContent = 'Select Items to Continue';
+        } else if (!policyCheckbox.checked) {
+             placeOrderBtn.disabled = true;
+             placeOrderBtn.textContent = 'Please Agree to Policy';
+        }
+    }
+
 
     function updateCalculation() {
         let grandTotal = 0;
-        let totalItems = 0;
+        totalItems = 0; // Reset global totalItems
         let summaryHtml = '';
 
         for (const qtyId in PRICES) {
             const input = document.getElementById(qtyId);
+             // Ensure input exists before accessing value
+            if (!input) {
+                console.error(`Input element with ID ${qtyId} not found.`);
+                continue; // Skip this iteration if input not found
+            }
             const quantity = parseInt(input.value) || 0;
-            
+
             if (quantity > 0) {
                 const price = PRICES[qtyId];
+                if (typeof price === 'undefined') {
+                     console.error(`Price for ${qtyId} is undefined.`);
+                     continue; // Skip if price is missing
+                }
                 const subtotal = quantity * price;
                 grandTotal += subtotal;
-                totalItems += quantity;
+                totalItems += quantity; // Update global totalItems
 
                 summaryHtml += `
                     <div class="summary-item d-flex justify-content-between">
-                        <span class="text-muted">${PRODUCT_NAMES[qtyId]} <span class="fw-semibold">×${quantity}</span></span>
+                        <span class="text-muted">${PRODUCT_NAMES[qtyId] || qtyId} <span class="fw-semibold">×${quantity}</span></span>
                         <span class="fw-semibold">₱${subtotal.toFixed(2)}</span>
                     </div>`;
 
-                const cardType = qtyId.includes('refill') ? 'active-primary' : 'active-secondary';
-                cards[qtyId].classList.add(cardType);
+                const card = cards[qtyId];
+                if (card) { // Check if card element exists
+                    const cardType = qtyId.includes('refill') ? 'active-primary' : 'active-secondary';
+                    card.classList.add(cardType);
+                }
             } else {
-                cards[qtyId].classList.remove('active-primary', 'active-secondary');
+                const card = cards[qtyId];
+                 if (card) { // Check if card element exists
+                    card.classList.remove('active-primary', 'active-secondary');
+                 }
             }
         }
 
         const summaryContainer = document.getElementById('summary-items');
-        if (summaryHtml) {
-            summaryContainer.innerHTML = summaryHtml;
-        } else {
-            summaryContainer.innerHTML = '<p class="text-muted text-center py-4 mb-0">No items selected</p>';
+        if (summaryContainer) { // Check if container exists
+            if (summaryHtml) {
+                summaryContainer.innerHTML = summaryHtml;
+            } else {
+                summaryContainer.innerHTML = '<p class="text-muted text-center py-4 mb-0">No items selected</p>';
+            }
         }
-        
-        document.getElementById('grandTotal').textContent = `₱${grandTotal.toFixed(2)}`;
 
-        if (totalItems > 0) {
-            placeOrderBtn.disabled = false;
-            placeOrderBtn.textContent = `Place Order (${totalItems} item${totalItems > 1 ? 's' : ''}) - ₱${grandTotal.toFixed(2)}`;
-        } else {
-            placeOrderBtn.disabled = true;
-            placeOrderBtn.textContent = 'Select Items to Continue';
+        const grandTotalElement = document.getElementById('grandTotal');
+        if (grandTotalElement) { // Check if element exists
+            grandTotalElement.textContent = `₱${grandTotal.toFixed(2)}`;
         }
+
+
+        // <<< MODIFIED: Call the button state update function >>>
+        // Ensure checkbox state is considered immediately
+        updatePlaceOrderButtonState();
     }
 
+    // --- Event Listeners ---
+
+    // Quantity buttons
     document.querySelectorAll('.btn-plus, .btn-minus').forEach(button => {
         button.addEventListener('click', function() {
             const targetInputId = this.getAttribute('data-target');
             const input = document.getElementById(targetInputId);
-            
             if (!input) return;
-
             let qty = parseInt(input.value) || 0;
-
             if (this.classList.contains('btn-plus')) {
                 qty++;
             } else if (qty > 0) {
                 qty--;
             }
-            
             input.value = qty;
-            updateCalculation();
+            updateCalculation(); // This recalculates total and updates button state
         });
     });
-    
-    updateCalculation();
+
+    // <<< ADDED: Policy Box Scroll Listener >>>
+    // Ensure policyBox exists before adding listener
+    if (policyBox) {
+        policyBox.addEventListener('scroll', function() {
+            // Check if scrolled near the bottom (allow a small buffer like 10px)
+            const buffer = 10;
+            if (this.scrollHeight - this.scrollTop <= this.clientHeight + buffer) {
+                if (policyCheckbox) { // Check if checkbox exists
+                    policyCheckbox.disabled = false; // Enable the checkbox
+                }
+            }
+        });
+    }
+
+
+    // <<< ADDED: Policy Checkbox Change Listener >>>
+    // Ensure policyCheckbox exists before adding listener
+    if (policyCheckbox) {
+        policyCheckbox.addEventListener('change', function() {
+            updatePlaceOrderButtonState(); // Update button state when checkbox changes
+        });
+    }
+
+
+    // Initial calculation on page load
+    // Ensure the DOM is fully loaded before running calculation
+    document.addEventListener('DOMContentLoaded', function() {
+         updateCalculation();
+    });
+
 </script>
 </body>
 </html>

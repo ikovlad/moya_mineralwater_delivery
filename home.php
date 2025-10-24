@@ -383,7 +383,7 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
         let modalMap;
         let userMarker;
         let geocoder = L.Control.Geocoder.nominatim();
-        const DELIVERY_RADIUS_METERS = 3000;
+        const DELIVERY_RADIUS_METERS = 2000;
 
         document.addEventListener('DOMContentLoaded', function() {
             const mainMap = L.map('main-page-map').setView([16.245, 120.47], 13);
