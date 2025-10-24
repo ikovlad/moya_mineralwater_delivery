@@ -1,0 +1,180 @@
+/* --- Moya Custom CSS Theme --- */
+:root {
+    /* Define Moya Colors (Teal/Aqua based) */
+    --moya-primary: #008080;
+    /* Dark Teal */
+    --moya-secondary: #00bfff;
+    /* Deep Sky Blue/Aqua */
+    --moya-cta: #ff9900;
+    /* Warm Orange/Gold */
+    --moya-bg: #f5fcfc;
+    /* Very light teal background */
+    --bs-primary: var(--moya-primary);
+    --bs-primary-rgb: 0, 128, 128;
+}
+
+body {
+    font-family: Lato, sans-serif;
+    background-image: url(img/bg.svg);
+    color: #1f2937;
+    font-size: 1.5em;
+}
+
+h2 {
+    font-family: Bricolage Grotesque, sans-serif;
+    font-size: 5rem;
+}
+
+#options {
+    font-family: Bricolage Grotesque, sans-serif;
+    font-size: 4rem;
+}
+
+/* Custom Background Gradient for Hero */
+.hero-bg {
+    background-image: url(img/bg.svg);
+}
+
+#hero .col-md-5 {
+    display: flex;
+    align-items: flex-end;
+    position: relative;
+    min-height: 500px;
+}
+
+#hero .col-md-5 img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    transform: scale(1.3);
+    transform-origin: bottom center;
+    position: absolute;
+    bottom: 0;
+}
+
+/* Bootstrap Overrides */
+.bg-primary {
+    background-color: var(--moya-primary) !important;
+}
+
+.text-primary {
+    color: var(--moya-primary) !important;
+}
+
+.border-primary {
+    border-color: var(--moya-primary) !important;
+}
+
+/* CTA Button (Orange/Gold) */
+.btn-cta {
+    background-color: #007bff;
+    /* Primary Blue */
+    border-color: #007bff;
+    color: #fff !important;
+    font-weight: 700;
+    padding: .75rem 2rem;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.btn-cta:hover {
+    background-color: #0056b3;
+    /* Darker blue on hover */
+    border-color: #0056b3;
+    color: #fff !important;
+    /* Keep text white on hover */
+    box-shadow: 0 10px 20px rgba(0, 123, 255, 0.5) !important;
+    transform: translateY(-2px);
+}
+
+#sched {
+    font-size: 1.2rem;
+}
+
+#delivery {
+    font-size: 1.2rem;
+}
+
+#payment {
+    font-size: 1.2rem;
+}
+
+#tagline {
+    font-family: Bricolage Grotesque, sans-serif;
+    font-size: 5rem;
+}
+
+
+.card-shadow {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 15px rgba(0, 0, 0, 0.03);
+}
+
+.product-img {
+    max-width: 100%;
+    height: 250px;
+    object-fit: contain;
+}
+
+.hover-border-primary:hover {
+    border-color: var(--moya-primary) !important;
+}
+
+/* View Pricing Button - Keep text visible on hover */
+.view-pricing-btn {
+    color: var(--moya-primary) !important;
+}
+
+.view-pricing-btn:hover {
+    background-color: white !important;
+    color: var(--moya-primary) !important;
+    border-color: var(--moya-primary) !important;
+}
+
+/* Map Placeholder Style */
+.map-placeholder {
+    min-height: 350px;
+    background-color: #e3f2fd;
+    border: 2px solid #90caf9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 0.75rem;
+}
+
+.modal-header {
+    justify-content: center;
+    position: relative;
+}
+
+.modal-header .btn-close {
+    position: absolute;
+    right: 1rem;
+}
+
+#promo-banner {
+    background: linear-gradient(to right, #4fc3f7, #29b6f6);
+    color: white;
+    letter-spacing: 0.5px;
+    font-size: 1.2rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+#dands {
+    font-family: Bricolage Grotesque, sans-serif;
+    font-size: 4rem;
+}
+
+#descript {
+    font-size: 1.5rem;
+    font-family: Lato, sans-serif;
+    font-weight: 350;
+}
+
+#service-desc {
+    font-weight: 400;
+}
+
+#footer-text {
+    font-size: 1rem;
+}

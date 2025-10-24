@@ -12,106 +12,13 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2ntuNlWwwR0z5jD9Dq0a9G" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
 
-    <style>
-        /* --- Moya Custom CSS Theme --- */
-        :root {
-            /* Define Moya Colors (Teal/Aqua based) */
-            --moya-primary: #008080;
-            /* Dark Teal */
-            --moya-secondary: #00bfff;
-            /* Deep Sky Blue/Aqua */
-            --moya-cta: #ff9900;
-            /* Warm Orange/Gold */
-            --moya-bg: #f5fcfc;
-            /* Very light teal background */
-            --bs-primary: var(--moya-primary);
-            --bs-primary-rgb: 0, 128, 128;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--moya-bg);
-            color: #1f2937;
-        }
-
-        /* Custom Background Gradient for Hero */
-        .hero-bg {
-            background-image: linear-gradient(to bottom right, #ffffff, var(--moya-bg));
-        }
-
-        /* Bootstrap Overrides */
-        .bg-primary {
-            background-color: var(--moya-primary) !important;
-        }
-
-        .text-primary {
-            color: var(--moya-primary) !important;
-        }
-
-        .border-primary {
-            border-color: var(--moya-primary) !important;
-        }
-
-        /* CTA Button (Orange/Gold) */
-        .btn-cta {
-            background-color: #007bff; /* Primary Blue */
-            border-color: #007bff;
-            color: #fff !important;
-            font-weight: 700;
-            padding: .75rem 2rem;
-            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .btn-cta:hover {
-            background-color: #0056b3; /* Darker blue on hover */
-            border-color: #0056b3;
-            color: #fff !important; /* Keep text white on hover */
-            box-shadow: 0 10px 20px rgba(0, 123, 255, 0.5) !important;
-            transform: translateY(-2px);
-        }
-
-
-
-        .card-shadow {
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 15px rgba(0, 0, 0, 0.03);
-        }
-
-        .product-img {
-            max-width: 100%;
-            height: 250px;
-            object-fit: contain;
-        }
-
-        .hover-border-primary:hover {
-            border-color: var(--moya-primary) !important;
-        }
-
-        /* Map Placeholder Style */
-        .map-placeholder {
-            min-height: 350px;
-            background-color: #e3f2fd;
-            border: 2px solid #90caf9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            border-radius: 0.75rem;
-        }
-        .modal-header {
-            justify-content: center;
-            position: relative;
-        }
-
-        .modal-header .btn-close {
-            position: absolute;
-            right: 1rem;
-        }
-
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -120,13 +27,9 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
         <div class="container py-2">
             <!-- Logo: Moya -->
-            <a class="navbar-brand text-2xl fw-bold text-primary d-flex align-items-center fs-3" href="#">
-                <!-- Water Drop Icon (Inline SVG) -->
-                <svg class="me-2 text-info" width="28" height="28" fill="currentColor" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M12 2C6.477 2 2 6.477 2 12c0 3.924 2.222 7.375 5.508 9.062a1 1 0 001.037-.091l1.545-1.545a1 1 0 00-.091-1.037C7.545 17.022 6 14.73 6 12c0-3.314 2.686-6 6-6s6 2.686 6 6c0 2.73-.545 5.022-2.991 7.429a1 1 0 00-.091 1.037l1.545 1.545a1 1 0 001.037.091C19.778 19.375 22 15.924 22 12 22 6.477 17.523 2 12 2zM12 18a6 6 0 100-12 6 6 0 000 12zM12 8a4 4 0 110 8 4 4 0 010-8z" />
-                </svg>
+            <a class="navbar-brand fw-bold text-primary d-flex align-items-center fs-3 gap-2" href="index.html">
+                <!-- Water Drop Icon -->
+                <img src="img/moya_logo.png" alt="moya_logo" style="height: 50px; width: auto; object-fit: contain;">
                 Moya
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -134,7 +37,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-semibold">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-semibold fs-5">
                     <li class="nav-item">
                         <a class="nav-link" href="#hero">Home</a>
                     </li>
@@ -149,12 +52,14 @@
                     </li>
                 </ul>
                 <!-- Login CTA in Nav -->
-                <button onclick="openLoginModal('nav')" class="btn btn-primary rounded-pill fw-semibold ms-lg-3 px-4">
+                <button onclick="openLoginModal('nav')"
+                    class="btn btn-primary rounded-pill fw-semibold ms-lg-3 px-4 btn-md">
                     Get Started
                 </button>
             </div>
         </div>
     </nav>
+
 
     <!-- Hero Section -->
     <section id="hero" class="hero-bg py-5 py-xl-10">
@@ -162,10 +67,11 @@
             <div class="row align-items-center gx-5">
                 <!-- Text Content -->
                 <div class="col-md-7 order-md-1 order-2 text-center text-md-start pt-5">
-                    <h1 class="display-4 fw-bolder lh-1 mb-3 text-gray-800">
-                        Share Life, Share Moya, <span class="text-primary d-block d-sm-inline">The Taste of Purity.</span>
+                    <h1 class="display-4 fw-bolder lh-1 mb-3 text-gray-800" id="tagline">
+                        Refill the Chill <br><span class="text-primary d-block d-sm-inline">Anytime, Anywhere</span>
                     </h1>
-                    <p class="lead text-secondary mb-4 mx-auto mx-md-0 text-black" style="max-width: 600px;">
+                    <p class="lead text-secondary mb-4 mx-auto mx-md-0 text-black" id="descript"
+                        style="max-width: 600px;">
                         Premium mineral water delivered fast in <b>Rosario, La Union</b> (Barangay Cataguingtingan &
                         In-Town). Order now and expect delivery in <b>1-2 hours</b>!
                     </p>
@@ -175,18 +81,21 @@
                             Place Your Order Now
                         </button>
                         <!-- Secondary CTA -->
-                        <a href="#products" class="btn btn-outline-primary btn-lg rounded-pill fw-bold"
-                            style="border-width: 2px;">
+                        <a href="#products"
+                            class="btn btn-outline-primary btn-lg rounded-pill fw-bold d-inline-flex align-items-center justify-content-center view-pricing-btn"
+                            style="border-width: 2px; text-decoration: none; background-color: var(--moya-bg);">
                             View Pricing
                         </a>
                     </div>
                 </div>
+
                 <!-- Image/Placeholder -->
-                <div class="col-md-5 order-md-2 order-1 text-center">
-                    <img src="img/delivery.png"
-                        class="img-fluid rounded-4 shadow-lg"
+                <div class="col-md-5 order-md-2 order-1 text-center d-flex align-items-center justify-content-center"
+                    style="min-height: 500px;">
+                    <img src="img/front_img.png" class="img-fluid w-100"
                         alt="Moya Water Delivery service van or illustration"
-                        onerror="this.src='https://placehold.co/400x400/008080/ffffff?text=Moya+Water'">
+                        style="max-height: 600px; object-fit: contain;"
+                        onerror="this.src='https://placehold.co/600x600/008080/ffffff?text=Moya+Water'">
                 </div>
             </div>
         </div>
@@ -195,7 +104,9 @@
     <!-- Product Showcase Section -->
     <section id="products" class="py-5 py-xl-10 bg-white">
         <div class="container">
-            <h2 class="display-6 fw-bold text-center mb-2" style="color: var(--moya-primary) !important;">Our Gallon Options</h2>
+            <h2 class="display-6 fw-bold text-center mb-2" id="options" style="color: var(--moya-primary) !important;">
+                Our Gallon
+                Options</h2>
             <p class="text-center text-secondary mb-5 mx-auto text-black" style="max-width: 700px;">
                 Choose the container that fits your home. Remember, you must <b>log in or sign up</b> to place an order.
             </p>
@@ -206,8 +117,8 @@
                 <div class="col-md-5">
                     <div
                         class="card p-4 rounded-4 card-shadow text-center h-100 border-2 border-transparent transition duration-300 hover-border-primary">
-                        <img src="img/round-water-jug.png"
-                            alt="Standard Round water jug" class="mx-auto mb-3 product-img" style="max-width: 180px;">
+                        <img src="img/round-water-jug.png" alt="Standard Round water jug"
+                            class="mx-auto mb-3 product-img" style="max-width: 180px;">
                         <h3 class="h4 fw-semibold mb-2 text-gray-800">Standard Round Container</h3>
                         <p class="text-muted mb-3">The traditional and robust 5-gallon container.</p>
 
@@ -216,10 +127,6 @@
                             <p class="display-6 fw-bold text-primary mb-0">₱20.00</p>
                         </div>
 
-                        <p class="text-success fw-bold p-2 border-dashed border-success rounded-3 small">
-                            PROMO: Buy 5 Refills, Get 1 Refill for only ₱100!
-                        </p>
-
                         <div class="mt-3">
                             <p class="fw-semibold text-secondary mb-1">Buy New Container Option:</p>
                             <p class="h5 fw-bold text-dark">₱120.00 (Includes container + First Refill)</p>
@@ -227,7 +134,7 @@
 
 
                         <button onclick="openLoginModal('Round Gallon')"
-                            class="btn btn-primary rounded-pill fw-semibold shadow-sm w-100 mt-4">
+                            class="btn btn-primary btn-lg rounded-pill fw-semibold shadow-sm w-100 mt-4">
                             Order Refill or New Container
                         </button>
                     </div>
@@ -237,20 +144,15 @@
                 <div class="col-md-5">
                     <div
                         class="card p-4 rounded-4 card-shadow text-center h-100 border-2 border-transparent transition duration-300 hover-border-primary">
-                        <img src="img/slim-water-gallon.jpg"
-                            alt="Slim water container with built-in faucet" class="mx-auto mb-3 product-img"
-                            style="max-width: 180px;">
+                        <img src="img/slim-water-gallon.jpg" alt="Slim water container with built-in faucet"
+                            class="mx-auto mb-3 product-img" style="max-width: 180px;">
                         <h3 class="h4 fw-semibold mb-2 text-gray-800">Slim Container with Faucet</h3>
-                        <p class="text-muted mb-3">Space-saving container with a convenient dispensing faucet.</p>
+                        <p class="text-muted mb-3">Space-saving with dispensing faucet</p>
 
                         <div class="bg-light rounded-3 p-3 mb-3">
                             <p class="mb-1 fw-bold text-primary">REFILL PRICE:</p>
                             <p class="display-6 fw-bold text-primary mb-0">₱20.00</p>
                         </div>
-
-                        <p class="text-success fw-bold p-2 border-dashed border-success rounded-3 small">
-                            PROMO: Buy 5 Refills, Get 1 Refill for only ₱100!
-                        </p>
 
                         <div class="mt-3">
                             <p class="fw-semibold text-secondary mb-1">Buy New Container Option:</p>
@@ -258,7 +160,7 @@
                         </div>
 
                         <button onclick="openLoginModal('Slim Gallon')"
-                            class="btn btn-primary rounded-pill fw-semibold shadow-sm w-100 mt-4">
+                            class="btn btn-primary btn-lg rounded-pill fw-semibold shadow-sm w-100 mt-4">
                             Order Refill or New Container
                         </button>
                     </div>
@@ -267,10 +169,22 @@
         </div>
     </section>
 
+
+    <!-- Promo Banner -->
+    <section id="promo-banner" class="text-center py-3">
+        <div class="container">
+            <h4 class="m-0 fw-bold">
+                💧 Buy Five, Get One Refill Free! — Stay hydrated and save more! 💧
+            </h4>
+        </div>
+    </section>
+
+
     <!-- Delivery Process & Schedule Section -->
     <section id="process" class="py-5 py-xl-10" style="background-color: #e9f2ff;">
         <div class="container">
-            <h2 class="display-6 fw-bold text-center mb-5" style="color: var(--moya-primary) !important;">Delivery Promise & Schedule</h2>
+            <h2 class="display-6 fw-bold text-center mb-5" id="dands" style="color: var(--moya-primary) !important;">
+                Delivery & Schedule</h2>
             <div class="row g-4 text-center">
 
                 <!-- Step 1: Schedule -->
@@ -282,9 +196,9 @@
                                 d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 15h2v2h-2zm0-8h2v6h-2z" />
                         </svg>
                         <h3 class="h5 fw-bold text-gray-800">Operating Hours</h3>
-                        <p class="text-secondary mb-0">
-                            <b>8:00 AM - 4:00 PM</b> daily. <br>
-                            <b>Last orders accepted at 4:00 PM.</b>
+                        <p class="text-secondary mb-0" id="sched">
+                            <strong>8:00 AM - 4:00 PM</strong> daily. <br>
+                            <small>Last orders accepted at 4:00 PM.</small>
                         </p>
                     </div>
                 </div>
@@ -292,18 +206,16 @@
                 <!-- Step 2: Delivery Speed -->
                 <div class="col-md-4">
                     <div class="p-4 bg-white rounded-4 card-shadow h-100">
-                        <svg class="mb-3 text-cta" width="48" height="48" fill="currentColor" viewBox="0 0 24 24"
+                        <svg class="mb-3 text-primary" width="48" height="48" fill="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">
                             <path
-                                d="M21 13v-2h-3V8h-2v3h-2v-3h-2v3h-2v-3H8v5h2v-3h2v3h2v-3h2v3h3zm-8-5h2V6h-2v2zm-4 0h2V6H9v2zm8 0h2V6h-2v2z" />
-                            <path
-                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                                d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm11 0c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" />
                         </svg>
-                        <h3 class="h5 fw-bold text-gray-800">Guaranteed Fast Delivery</h3>
-                        <p class="text-secondary mb-0">
-                            Delivery is <b>within the day</b>, typically arriving <b>1-2 hours</b> after your order is
-                            confirmed. <br>
-                            <b>Last delivery run ends at 5:00 PM.</b>
+                        <h3 class="h5 fw-bold text-gray-800">Fast Delivery</h3>
+                        <p class="text-secondary mb-0" id="delivery">
+                            Delivery is <strong>within the day</strong>, typically arriving <strong>1-2 hours</strong>
+                            after your order is confirmed. <br>
+                            <small>Last delivery run ends at 5:00 PM.</small>
                         </p>
                     </div>
                 </div>
@@ -317,8 +229,9 @@
                                 d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H3V8h18v8zm-5-3c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
                         </svg>
                         <h3 class="h5 fw-bold text-gray-800">Payment Method</h3>
-                        <p class="text-secondary mb-0">
-                            We accept <b>Cash on Delivery (COD)</b> only. Please prepare the exact amount for a smooth
+                        <p class="text-secondary mb-0" id="payment">
+                            We accept <strong>Cash on Delivery (COD)</strong> only. Please prepare the exact amount for
+                            a smooth
                             transaction.
                         </p>
                     </div>
@@ -333,11 +246,12 @@
             <div class="row align-items-center gx-5">
                 <div class="col-lg-6 mb-4 mb-lg-0">
                     <h2 class="display-6 fw-bold mb-3">Service Area: Rosario, La Union</h2>
-                    <p class="lead text-secondary mb-4">
-                        We proudly serve our local community in <b>Barangay Cataguingtingan</b> and surrounding <b>In-Town
-                        areas</b> only. Check the map for our specific delivery locations.
+                    <p class="lead text-secondary mb-4" id="service-desc">
+                        We proudly serve our local community in <b>Barangay Cataguingtingan</b> and surrounding
+                        <b>In-Town
+                            areas</b> only. Check the map for our specific delivery locations.
                     </p>
-                    <button onclick="openLocationCheckModal()" class="btn btn-primary rounded-pill fw-semibold">
+                    <button onclick="openLocationCheckModal()" class="btn btn-primary btn-lg rounded-pill fw-semibold">
                         Confirm My Delivery Address
                     </button>
                 </div>
@@ -347,8 +261,9 @@
             </div>
         </div>
     </section>
-    
-    <div class="modal fade" id="locationCheckModal" tabindex="-1" aria-labelledby="locationCheckModalLabel" aria-hidden="true">
+
+    <div class="modal fade" id="locationCheckModal" tabindex="-1" aria-labelledby="locationCheckModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -357,7 +272,8 @@
                 </div>
                 <div class="modal-body">
                     <p class="text-muted">This feature is only available for registered users. Please login first.
-                       The <span class="text-success fw-bold">green pin</span> is your barangay, and the <span class="text-primary fw-bold">blue pins</span> are our delivery points.
+                        The <span class="text-success fw-bold">green pin</span> is your barangay, and the <span
+                            class="text-primary fw-bold">blue pins</span> are our delivery points.
                     </p>
                     <div id="location-check-map" class="mb-3"></div>
                     <div id="locationStatus" class="mt-3 text-center fw-bold"></div>
@@ -369,7 +285,8 @@
     <!-- Footer -->
     <footer class="bg-primary text-white py-4 mt-auto">
         <div class="container text-center">
-            <p class="mb-0">&copy; 2024 Moya - Mineral Water Delivery. All rights reserved. | Rosario, La Union.</p>
+            <p class="mb-0" id="footer-text">&copy; 2024 Moya - Mineral Water Delivery. All rights reserved. | Rosario,
+                La Union.</p>
         </div>
     </footer>
 
@@ -378,7 +295,8 @@
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content rounded-4 card-shadow">
                 <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold text-gray-800 fs-3" id="authModalLabel" style="color: var(--moya-primary) !important;">Welcome to Moya!</h5>
+                    <h5 class="modal-title fw-bold text-gray-800 fs-3" id="authModalLabel"
+                        style="color: var(--moya-primary) !important;">Welcome to Moya!</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -428,49 +346,62 @@
                             <form action="signup.php" method="POST" class="needs-validation" novalidate>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label for="signupName" class="form-label small fw-semibold text-secondary text-black">Full Name</label>
-                                        <input type="text" class="form-control rounded-3 p-3" id="signupName" name="full_name"
-                                            pattern="^[A-Za-z\s]{2,}$"
-                                            title="Name should only contain letters and spaces." placeholder="John Doe" required>
+                                        <label for="signupName"
+                                            class="form-label small fw-semibold text-secondary text-black">Full
+                                            Name</label>
+                                        <input type="text" class="form-control rounded-3 p-3" id="signupName"
+                                            name="full_name" pattern="^[A-Za-z\s]{2,}$"
+                                            title="Name should only contain letters and spaces." placeholder="John Doe"
+                                            required>
                                         <div class="invalid-feedback">Please enter your full name (letters only).</div>
                                         <div class="valid-feedback">Looks good!</div>
                                     </div>
 
                                     <div class="col-md-6 mb-3">
-                                        <label for="signupPhone" class="form-label small fw-semibold text-secondary text-black">Phone Number</label>
-                                        <input type="tel" class="form-control rounded-3 p-3" id="signupPhone" name="phone_number"
-                                            pattern="^09\d{9}$" 
+                                        <label for="signupPhone"
+                                            class="form-label small fw-semibold text-secondary text-black">Phone
+                                            Number</label>
+                                        <input type="tel" class="form-control rounded-3 p-3" id="signupPhone"
+                                            name="phone_number" pattern="^09\d{9}$"
                                             title="Enter a valid Philippine phone number (e.g., 09123456789)"
                                             placeholder="09123456789" required>
-                                        <div class="invalid-feedback">Enter a valid 11-digit number starting with 09.</div>
+                                        <div class="invalid-feedback">Enter a valid 11-digit number starting with 09.
+                                        </div>
                                         <div class="valid-feedback">Valid phone number!</div>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label for="signupEmail" class="form-label small fw-semibold text-secondary text-black">Email Address</label>
-                                        <input type="email" class="form-control rounded-3 p-3" id="signupEmail" name="email" placeholder="johndoe@gmail.com" required>
+                                        <label for="signupEmail"
+                                            class="form-label small fw-semibold text-secondary text-black">Email
+                                            Address</label>
+                                        <input type="email" class="form-control rounded-3 p-3" id="signupEmail"
+                                            name="email" placeholder="johndoe@gmail.com" required>
                                         <div class="invalid-feedback">Please enter a valid email address.</div>
                                         <div class="valid-feedback">Valid email!</div>
                                     </div>
 
                                     <div class="col-md-6 mb-3">
-                                        <label for="signupPassword" class="form-label small fw-semibold text-secondary text-black">Password</label>
-                                        <input type="password" class="form-control rounded-3 p-3" id="signupPassword" name="password"
-                                            minlength="8" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
-                                            title="Password must be at least 8 characters and contain at least one number." placeholder="●●●●●●●●"
-                                            required>
+                                        <label for="signupPassword"
+                                            class="form-label small fw-semibold text-secondary text-black">Password</label>
+                                        <input type="password" class="form-control rounded-3 p-3" id="signupPassword"
+                                            name="password" minlength="8"
+                                            pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+                                            title="Password must be at least 8 characters and contain at least one number."
+                                            placeholder="●●●●●●●●" required>
                                         <div class="invalid-feedback">Must be 8+ chars with at least one number.</div>
                                         <div class="valid-feedback">Strong password!</div>
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="signupBarangay" class="form-label small fw-semibold text-secondary text-black">
+                                    <label for="signupBarangay"
+                                        class="form-label small fw-semibold text-secondary text-black">
                                         Delivery Barangay (In-Town Service Area)
                                     </label>
-                                    <select class="form-select rounded-3 p-3" id="signupBarangay" name="address_barangay" required>
+                                    <select class="form-select rounded-3 p-3" id="signupBarangay"
+                                        name="address_barangay" required>
                                         <option value="" disabled selected>Select your delivery area...</option>
                                         <option value="Alipang">Alipang</option>
                                         <option value="Ambangonan">Ambangonan</option>
@@ -503,22 +434,25 @@
                                         <option value="Tanglag">Tanglag</option>
                                         <option value="Tay-ac">Tay-ac</option>
                                         <option value="Udiao">Udiao</option>
-                                        <option value="Vila">Vila</option>                                                                              
+                                        <option value="Vila">Vila</option>
                                     </select>
                                     <div class="invalid-feedback">Please select your delivery barangay.</div>
                                     <div class="valid-feedback">Selected!</div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="signupAddressDetail" class="form-label small fw-semibold text-secondary text-black">
+                                    <label for="signupAddressDetail"
+                                        class="form-label small fw-semibold text-secondary text-black">
                                         House/Street/Landmark Details
                                     </label>
-                                    <input type="text" class="form-control rounded-3 p-3" id="signupAddressDetail" name="address_detail" required>
+                                    <input type="text" class="form-control rounded-3 p-3" id="signupAddressDetail"
+                                        name="address_detail" required>
                                     <div class="invalid-feedback">Please provide your house or street details.</div>
                                     <div class="valid-feedback">Looks good!</div>
                                 </div>
 
-                                <button type="submit" class="btn btn-cta rounded-pill shadow-sm w-100 mt-3">Create Account</button>
+                                <button type="submit" class="btn btn-cta rounded-pill shadow-sm w-100 mt-3">Create
+                                    Account</button>
                             </form>
                         </div>
                     </div>
@@ -535,11 +469,12 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
     <script>
         // --- GLOBAL VARIABLES ---
-        
+
         // This is your complete list of 28 delivery points (the BLUE pins).
         const serviceAreaPoints = [
             [16.219468, 120.493981], [16.213475, 120.501831], [16.225049, 120.503922],
@@ -573,7 +508,7 @@
         let userMarker; // To hold the user's location marker
 
         // --- INITIALIZE MAIN PAGE MAP ---
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const mainMap = L.map('main-page-map').setView([16.245, 120.47], 13);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -587,25 +522,25 @@
         // --- MODAL AND LOCATION CHECKING LOGIC ---
         const locationModalElement = document.getElementById('locationCheckModal');
         const locationModal = new bootstrap.Modal(locationModalElement);
-        
+
         // This function is called by the "Confirm My Delivery Address" button
         function openLocationCheckModal() {
             locationModal.show();
         }
-        
+
         // Initialize map AND run check ONLY after the modal has been shown
-        locationModalElement.addEventListener('shown.bs.modal', function() {
+        locationModalElement.addEventListener('shown.bs.modal', function () {
             if (!modalMap) { // Initialize map only once
                 modalMap = L.map('location-check-map').setView([16.245, 120.47], 13);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(modalMap);
-                
+
                 // Add all BLUE service area markers to the modal map
                 serviceAreaPoints.forEach(coords => {
                     L.marker(coords).addTo(modalMap);
                 });
             }
             modalMap.invalidateSize(); // Fixes map sizing
-            
+
             // --- Automatically check the user's profile barangay ---
             checkProfileBarangay();
         });
@@ -620,10 +555,10 @@
 
             if (userCoords) {
                 // 2. We found the barangay in our lookup table.
-                
+
                 // Add or move the user's GREEN marker
                 if (!userMarker) {
-                     userMarker = L.marker(userCoords, {
+                    userMarker = L.marker(userCoords, {
                         icon: L.icon({
                             iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
                             shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -636,7 +571,7 @@
                 } else {
                     userMarker.setLatLng(userCoords);
                 }
-                
+
                 modalMap.setView(userCoords, 15); // Center map on user's barangay
                 userMarker.bindPopup('<b>Your Registered Barangay:</b><br>' + USER_BARANGAY_NAME).openPopup();
 
@@ -686,7 +621,7 @@
         (function () {
             'use strict';
             const forms = document.querySelectorAll('.needs-validation');
-            
+
             Array.from(forms).forEach(form => {
                 const inputs = form.querySelectorAll('input, select');
 

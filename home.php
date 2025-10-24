@@ -25,7 +25,13 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Welcome, <?php echo $user_name; ?> | Moya Water Delivery</title>
 
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <!-- Bricolage Grotesque & Lato Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
@@ -41,16 +47,44 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
             --bs-primary-rgb: 0, 128, 128;
         }
         body {
-            font-family: 'Inter', sans-serif; 
-            background-color: var(--moya-bg);
+            font-family: Lato, sans-serif;
+            background-image: url(img/bg.svg);
             color: #1f2937;
+            font-size: 1.5em;
         }
-        /* ... (keep all your other styles: hero-bg, btn-cta, card-shadow, etc.) ... */
-         .hero-bg {
-            background-image: linear-gradient(to bottom right, #ffffff, var(--moya-bg));
+        h2 {
+            font-family: Bricolage Grotesque, sans-serif;
+            font-size: 5rem;
+        }
+        .hero-bg {
+            background-image: url(img/bg.svg);
+        }
+        .hero-bg h1 {
+            font-family: Bricolage Grotesque, sans-serif;
+            font-size: 5rem;
+        }
+        .hero-bg .lead {
+            font-size: 1.5rem;
+            font-family: Lato, sans-serif;
+            font-weight: 350;
+        }
+        #hero .col-md-5 {
+            display: flex;
+            align-items: flex-end;
+            position: relative;
+            min-height: 500px;
+        }
+        #hero .col-md-5 img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            transform: scale(1.3);
+            transform-origin: bottom center;
+            position: absolute;
+            bottom: 0;
         }
         .btn-cta {
-            background-color: #007bff; /* Primary Blue */
+            background-color: #007bff;
             border-color: #007bff;
             color: #fff !important;
             font-weight: 700;
@@ -59,9 +93,9 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
             transition: all 0.3s ease;
         }
         .btn-cta:hover {
-            background-color: #0056b3; /* Darker blue on hover */
+            background-color: #0056b3;
             border-color: #0056b3;
-            color: #fff !important; /* Keep text white on hover */
+            color: #fff !important;
             box-shadow: 0 10px 20px rgba(0, 123, 255, 0.5) !important;
             transform: translateY(-2px);
         }
@@ -83,18 +117,47 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
             height: 450px;
             width: 100%;
             border-radius: 0.5rem;
-            cursor: grab; /* Indicate map is interactive */
+            cursor: grab;
         }
         .leaflet-marker-draggable {
-             cursor: grabbing !important; /* Indicate marker is being dragged */
+             cursor: grabbing !important;
         }
         #addressDisplay {
-            min-height: 40px; /* Reserve space for address */
+            min-height: 40px;
             font-size: 0.9rem;
             background-color: #e9ecef;
             padding: 8px 12px;
             border-radius: 4px;
             margin-top: 10px;
+        }
+        #products h2 {
+            font-family: Bricolage Grotesque, sans-serif;
+            font-size: 4rem;
+            color: var(--moya-primary) !important;
+        }
+        #process h2 {
+            font-family: Bricolage Grotesque, sans-serif;
+            font-size: 4rem;
+            color: var(--moya-primary) !important;
+        }
+        #process .h5 {
+            font-size: 1.2rem;
+        }
+        #process p {
+            font-size: 1.2rem;
+        }
+        #location .lead {
+            font-weight: 400;
+        }
+        .map-placeholder {
+            min-height: 350px;
+            background-color: #e3f2fd;
+            border: 2px solid #90caf9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border-radius: 0.75rem;
         }
     </style>
 </head>
@@ -102,21 +165,21 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
         <div class="container py-2">
-            <a class="navbar-brand fw-bold text-primary d-flex align-items-center" href="#">
-                 <svg class="me-2 text-info" width="28" height="28" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 3.924 2.222 7.375 5.508 9.062a1 1 0 001.037-.091l1.545-1.545a1 1 0 00-.091-1.037C7.545 17.022 6 14.73 6 12c0-3.314 2.686-6 6-6s6 2.686 6 6c0 2.73-.545 5.022-2.991 7.429a1 1 0 00-.091 1.037l1.545 1.545a1 1 0 001.037.091C19.778 19.375 22 15.924 22 12 22 6.477 17.523 2 12 2z" /></svg>
+            <a class="navbar-brand fw-bold text-primary d-flex align-items-center fs-3 gap-2" href="#">
+                <img src="img/moya_logo.png" alt="moya_logo" style="height: 50px; width: auto; object-fit: contain;">
                 Moya
             </a>
             <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto fw-semibold align-items-center">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-semibold fs-5">
                     <li class="nav-item"><a class="nav-link" href="#hero">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="#products">Containers</a></li>
                     <li class="nav-item"><a class="nav-link" href="#process">Delivery</a></li>
                     <li class="nav-item"><a class="nav-link" href="#location">Area</a></li>
                     <li class="nav-item dropdown ms-lg-3">
-                        <a class="nav-link dropdown-toggle btn btn-primary rounded-pill px-3 text-white" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle btn btn-primary rounded-pill px-4 btn-md text-white" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <?php echo $user_name; ?>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="profileDropdown">
@@ -134,82 +197,106 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
     <section id="hero" class="hero-bg py-5 py-xl-10">
         <div class="container">
             <div class="row align-items-center gx-5">
-                <div class="col-md-7 text-center text-md-start pt-5">
-                    <h1 class="display-5 fw-bold lh-1 mb-3">
-                        Welcome back, <span class="text-primary"><?php echo $user_name; ?>!</span>
+                <div class="col-md-7 order-md-1 order-2 text-center text-md-start pt-5">
+                    <h1 class="display-4 fw-bolder lh-1 mb-3 text-gray-800">
+                        Welcome back, <br><span class="text-primary d-block d-sm-inline"><?php echo $user_name; ?>!</span>
                     </h1>
-                    <p class="lead text-secondary mb-4" style="max-width: 600px;">
-                        Ready to order? Enjoy fast delivery of premium mineral water in <b>Rosario, La Union</b> — straight to your door in 1–2 hours.
+                    <p class="lead text-secondary mb-4 mx-auto mx-md-0 text-black" style="max-width: 600px;">
+                        Ready to order? Enjoy fast delivery of premium mineral water in <b>Rosario, La Union</b> — straight to your door in <b>1–2 hours</b>.
                     </p>
                     <div class="d-grid d-sm-flex gap-3 justify-content-center justify-content-md-start">
                         <a href="order.php" class="btn btn-cta btn-lg rounded-pill shadow-lg">Place an Order</a>
-                        <a href="#products" class="btn btn-outline-primary btn-lg rounded-pill fw-bold">View Containers</a>
+                        <a href="#products" class="btn btn-outline-primary btn-lg rounded-pill fw-bold d-inline-flex align-items-center justify-content-center" style="border-width: 2px; text-decoration: none; background-color: var(--moya-bg);">View Containers</a>
                     </div>
                 </div>
-                <div class="col-md-5 text-center">
-                    <img src="img/delivery.png" class="img-fluid rounded-4 shadow-lg" alt="Moya Delivery Van">
+                <div class="col-md-5 order-md-2 order-1 text-center d-flex align-items-center justify-content-center" style="min-height: 500px;">
+                    <img src="img/front_img.png" class="img-fluid w-100" alt="Moya Delivery" style="max-height: 600px; object-fit: contain;">
                 </div>
             </div>
         </div>
     </section>
-    <section id="products" class="py-5 bg-white">
+
+    <section id="products" class="py-5 py-xl-10 bg-white">
         <div class="container">
             <h2 class="display-6 fw-bold text-center mb-2">Our Gallon Options</h2>
-            <p class="text-center text-secondary mb-5 mx-auto" style="max-width: 700px;">
+            <p class="text-center text-secondary mb-5 mx-auto text-black" style="max-width: 700px;">
                 Choose your preferred container and order directly — no need to log in again.
             </p>
             <div class="row g-4 justify-content-center">
                 <div class="col-md-5">
-                    <div class="card p-4 rounded-4 card-shadow text-center h-100 hover-border-primary">
+                    <div class="card p-4 rounded-4 card-shadow text-center h-100 border-2 border-transparent transition duration-300 hover-border-primary">
                         <img src="img/round-water-jug.png" class="mx-auto mb-3 product-img" alt="Round Jug">
-                        <h3 class="h4 fw-semibold mb-2">Standard Round Container</h3>
+                        <h3 class="h4 fw-semibold mb-2 text-gray-800">Standard Round Container</h3>
                         <p class="text-muted mb-3">Traditional and robust 5-gallon container.</p>
-                        <p class="h5 fw-bold text-primary mb-0">₱20.00 per refill</p>
-                        <a href="order.php?item=round" class="btn btn-primary rounded-pill fw-semibold shadow-sm w-100 mt-4">Order Now</a>
+                        <div class="bg-light rounded-3 p-3 mb-3">
+                            <p class="mb-1 fw-bold text-primary">REFILL PRICE:</p>
+                            <p class="display-6 fw-bold text-primary mb-0">₱20.00</p>
+                        </div>
+                        <div class="mt-3">
+                            <p class="fw-semibold text-secondary mb-1">Buy New Container Option:</p>
+                            <p class="h5 fw-bold text-dark">₱120.00 (Includes container + First Refill)</p>
+                        </div>
+                        <a href="order.php?item=round" class="btn btn-primary btn-lg rounded-pill fw-semibold shadow-sm w-100 mt-4">Order Now</a>
                     </div>
                 </div>
                 <div class="col-md-5">
-                    <div class="card p-4 rounded-4 card-shadow text-center h-100 hover-border-primary">
+                    <div class="card p-4 rounded-4 card-shadow text-center h-100 border-2 border-transparent transition duration-300 hover-border-primary">
                         <img src="img/slim-water-gallon.jpg" class="mx-auto mb-3 product-img" alt="Slim Jug">
-                        <h3 class="h4 fw-semibold mb-2">Slim Container with Faucet</h3>
+                        <h3 class="h4 fw-semibold mb-2 text-gray-800">Slim Container with Faucet</h3>
                         <p class="text-muted mb-3">Space-saving and easy to use.</p>
-                        <p class="h5 fw-bold text-primary mb-0">₱20.00 per refill</p>
-                        <a href="order.php?item=slim" class="btn btn-primary rounded-pill fw-semibold shadow-sm w-100 mt-4">Order Now</a>
+                        <div class="bg-light rounded-3 p-3 mb-3">
+                            <p class="mb-1 fw-bold text-primary">REFILL PRICE:</p>
+                            <p class="display-6 fw-bold text-primary mb-0">₱20.00</p>
+                        </div>
+                        <div class="mt-3">
+                            <p class="fw-semibold text-secondary mb-1">Buy New Container Option:</p>
+                            <p class="h5 fw-bold text-dark">₱120.00 (Includes container + First Refill)</p>
+                        </div>
+                        <a href="order.php?item=slim" class="btn btn-primary btn-lg rounded-pill fw-semibold shadow-sm w-100 mt-4">Order Now</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <section id="promo-banner" class="text-center py-3" style="background: linear-gradient(to right, #4fc3f7, #29b6f6); color: white; letter-spacing: 0.5px; font-size: 1.2rem; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);">
+        <div class="container">
+            <h4 class="m-0 fw-bold">
+                💧 Buy Five, Get One Refill Free! — Stay hydrated and save more! 💧
+            </h4>
+        </div>
+    </section>
+
     <section id="process" class="py-5 py-xl-10" style="background-color: #e9f2ff;">
         <div class="container">
-            <h2 class="display-6 fw-bold text-center mb-5" style="color: var(--moya-primary) !important;">Delivery Promise & Schedule</h2>
+            <h2 class="display-6 fw-bold text-center mb-5">Delivery & Schedule</h2>
             <div class="row g-4 text-center">
                 <div class="col-md-4">
                     <div class="p-4 bg-white rounded-4 card-shadow h-100">
                         <svg class="mb-3 text-primary" width="48" height="48" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 15h2v2h-2zm0-8h2v6h-2z" /></svg>
                         <h3 class="h5 fw-bold text-gray-800">Operating Hours</h3>
                         <p class="text-secondary mb-0">
-                            <b>8:00 AM - 4:00 PM</b> daily. <br>
-                            <b>Last orders accepted at 4:00 PM.</b>
+                            <strong>8:00 AM - 4:00 PM</strong> daily. <br>
+                            <small>Last orders accepted at 4:00 PM.</small>
                         </p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="p-4 bg-white rounded-4 card-shadow h-100">
-                        <svg class="mb-3 text-cta" width="48" height="48" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 13v-2h-3V8h-2v3h-2v-3h-2v3h-2v-3H8v5h2v-3h2v3h2v-3h2v3h3zm-8-5h2V6h-2v2zm-4 0h2V6H9v2zm8 0h2V6h-2v2z" /><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" /></svg>
-                        <h3 class="h5 fw-bold text-gray-800">Guaranteed Fast Delivery</h3>
+                        <svg class="mb-3 text-primary" width="48" height="48" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm11 0c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" /></svg>
+                        <h3 class="h5 fw-bold text-gray-800">Fast Delivery</h3>
                         <p class="text-secondary mb-0">
-                            Delivery is <b>within the day</b>, typically arriving <b>1-2 hours</b> after confirmation.<br>
-                            <b>Last delivery run ends at 5:00 PM.</b>
+                            Delivery is <strong>within the day</strong>, typically arriving <strong>1-2 hours</strong> after your order is confirmed. <br>
+                            <small>Last delivery run ends at 5:00 PM.</small>
                         </p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="p-4 bg-white rounded-4 card-shadow h-100">
-                         <svg class="mb-3 text-success" width="48" height="48" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H3V8h18v8zm-5-3c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" /></svg>
+                        <svg class="mb-3 text-success" width="48" height="48" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H3V8h18v8zm-5-3c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" /></svg>
                         <h3 class="h5 fw-bold text-gray-800">Payment Method</h3>
                         <p class="text-secondary mb-0">
-                            We accept <b>Cash on Delivery (COD)</b> only. Please prepare the exact amount.
+                            We accept <strong>Cash on Delivery (COD)</strong> only. Please prepare the exact amount for a smooth transaction.
                         </p>
                     </div>
                 </div>
@@ -225,7 +312,7 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
                     <p class="lead text-secondary mb-4">
                         We proudly serve <b>Barangay Cataguingtingan</b> and surrounding <b>In-Town areas</b> only. Use the button below to pinpoint your location and check if we can deliver to you.
                     </p>
-                    <button onclick="openLocationCheckModal()" class="btn btn-primary rounded-pill fw-semibold">
+                    <button onclick="openLocationCheckModal()" class="btn btn-primary btn-lg rounded-pill fw-semibold">
                         Confirm My Delivery Address
                     </button>
                 </div>
@@ -260,15 +347,17 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
         </div>
     </div>
 
+    <footer class="bg-primary text-white py-4 mt-auto">
+        <div class="container text-center">
+            <p class="mb-0" style="font-size: 1rem;">&copy; 2024 Moya - Mineral Water Delivery. All rights reserved. | Rosario, La Union.</p>
+        </div>
+    </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // --- GLOBAL VARIABLES ---
-        
-        // Your 28 delivery points (BLUE pins). Keep this list.
         const serviceAreaPoints = [
             [16.219468, 120.493981], [16.213475, 120.501831], [16.225049, 120.503922],
             [16.246571, 120.487866], [16.239948, 120.468656], [16.228787, 120.459740],
@@ -282,49 +371,31 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
             [16.214498, 120.429782] 
         ];
 
-        // --- BARANGAY COORDINATE LOOKUP TABLE ---
-        // You MUST update this with approximate centers for your barangays.
-        // Names must EXACTLY match the database/signup options.
         const barangayCoordinateLookup = {
-            // == [ ACTION REQUIRED ] ==
-            // Replace these demo coordinates with real ones for your service barangays.
-            // Find coordinates using Google Maps (right-click -> "What's here?").
-            "Cataguingtingan": [16.239948, 120.468656], // Example - Please verify
-            "Poblacion East": [16.2143, 120.4913],    // Example - Please verify
-            "Poblacion West": [16.2134, 120.5018],    // Example - Please verify
-            "Subusub": [16.2287, 120.4597],          // Example - Please verify
-             "Bani": [16.2465, 120.4878],             // Example - Please verify
-            // Add ALL other barangays available during signup here
-            // =========================
+            "Cataguingtingan": [16.239948, 120.468656],
+            "Poblacion East": [16.2143, 120.4913],
+            "Poblacion West": [16.2134, 120.5018],
+            "Subusub": [16.2287, 120.4597],
+            "Bani": [16.2465, 120.4878],
         };
         
-        // --- Get the user's barangay from PHP ---
         const USER_BARANGAY_NAME = <?php echo json_encode($user_barangay); ?>;
+        let modalMap;
+        let userMarker;
+        let geocoder = L.Control.Geocoder.nominatim();
+        const DELIVERY_RADIUS_METERS = 3000;
 
-        let modalMap; // Holds the modal map instance
-        let userMarker; // Holds the draggable green marker
-        let geocoder = L.Control.Geocoder.nominatim(); // Geocoder for finding address
-        
-        // --- NEW: Define Delivery Radius ---
-        // How close (in meters) the user's pin must be to a blue delivery point.
-        // Adjust this value based on how far your drivers will travel from a point.
-        // 1000 meters = 1 kilometer
-        const DELIVERY_RADIUS_METERS = 3000; // Example: 3km radius around each blue pin
-
-        // --- INITIALIZE MAIN PAGE MAP ---
         document.addEventListener('DOMContentLoaded', function() {
-            const mainMap = L.map('main-page-map').setView([16.245, 120.47], 13); // Centered on Rosario
+            const mainMap = L.map('main-page-map').setView([16.245, 120.47], 13);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(mainMap);
 
-            // Add blue markers for service points to the main map
             serviceAreaPoints.forEach(coords => {
                 L.marker(coords).addTo(mainMap).bindPopup('We deliver near this point.');
             });
         });
 
-        // --- MODAL AND LOCATION CHECKING LOGIC ---
         const locationModalElement = document.getElementById('locationCheckModal');
         const locationModal = new bootstrap.Modal(locationModalElement);
         
@@ -332,22 +403,17 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
             locationModal.show();
         }
         
-        // Initialize map & add logic AFTER the modal is fully shown
         locationModalElement.addEventListener('shown.bs.modal', function() {
-            if (!modalMap) { // Initialize map only the first time modal opens
+            if (!modalMap) {
+                let initialCoords = barangayCoordinateLookup[USER_BARANGAY_NAME] || [16.245, 120.47];
                 
-                // Find initial coordinates for the user's barangay, default if not found
-                let initialCoords = barangayCoordinateLookup[USER_BARANGAY_NAME] || [16.245, 120.47]; // Default to center if lookup fails
-                
-                modalMap = L.map('location-check-map').setView(initialCoords, 15); // Start zoomed in
+                modalMap = L.map('location-check-map').setView(initialCoords, 15);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(modalMap);
                 
-                // Add all BLUE service area markers to the modal map
                 serviceAreaPoints.forEach(coords => {
                     L.marker(coords).addTo(modalMap);
                 });
 
-                // Add the DRAGGABLE GREEN marker for the user
                 userMarker = L.marker(initialCoords, {
                     draggable: true,
                     icon: L.icon({
@@ -357,25 +423,18 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
                     })
                 }).addTo(modalMap);
 
-                // --- EVENT LISTENER FOR MARKER DRAG ---
                 userMarker.on('dragend', function(event) {
                     const marker = event.target;
-                    const position = marker.getLatLng(); // Get the new coordinates after dragging
+                    const position = marker.getLatLng();
                     console.log('Marker dragged to:', position);
-                    validateMarkerLocation(position); // Validate the new location
-                    reverseGeocode(position); // Find address for the new location
+                    validateMarkerLocation(position);
+                    reverseGeocode(position);
                 });
 
             } else {
-                 // If map already exists, just ensure size is correct
                  modalMap.invalidateSize(); 
-                 // Optionally, reset view to initial barangay coords if needed
-                 // let initialCoords = barangayCoordinateLookup[USER_BARANGAY_NAME] || [16.245, 120.47];
-                 // modalMap.setView(initialCoords, 15);
-                 // userMarker.setLatLng(initialCoords); 
             }
             
-            // --- Initial check and geocode when modal opens ---
             const initialPosition = userMarker.getLatLng();
             validateMarkerLocation(initialPosition);
             reverseGeocode(initialPosition);
@@ -383,26 +442,23 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
 
         });
 
-        // --- NEW: Function to Validate Marker Location ---
         function validateMarkerLocation(userLatLng) {
             const statusDiv = document.getElementById('locationStatus');
-            statusDiv.className = 'mt-3 text-center fw-bold'; // Reset class
+            statusDiv.className = 'mt-3 text-center fw-bold';
             
             let isInside = false;
-            // Check distance to ALL blue service points
             for (const point of serviceAreaPoints) {
                 const servicePointLatLng = L.latLng(point[0], point[1]);
-                const distance = userLatLng.distanceTo(servicePointLatLng); // Distance in meters
+                const distance = userLatLng.distanceTo(servicePointLatLng);
 
-                console.log(`Distance to point ${point}: ${distance} meters`); // For debugging
+                console.log(`Distance to point ${point}: ${distance} meters`);
 
                 if (distance <= DELIVERY_RADIUS_METERS) {
                     isInside = true;
-                    break; // Found a point within range, no need to check further
+                    break;
                 }
             }
 
-            // Update status message based on validation
             if (isInside) {
                 statusDiv.innerHTML = '<span class="text-success">✅ Great! Your selected location is within our delivery area.</span>';
             } else {
@@ -410,14 +466,13 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
             }
         }
 
-        // --- NEW: Function for Reverse Geocoding (Address Lookup) ---
         function reverseGeocode(latlng) {
             const addressDiv = document.getElementById('addressDisplay');
             addressDiv.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Finding address...';
 
             geocoder.reverse(latlng, modalMap.options.crs.scale(modalMap.getZoom()), function(results) {
                 if (results && results.length > 0 && results[0].name) {
-                     addressDiv.textContent = results[0].name; // Display the found address
+                     addressDiv.textContent = results[0].name;
                 } else {
                     addressDiv.textContent = 'Could not find address for this location.';
                  }

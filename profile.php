@@ -63,108 +63,297 @@ mysqli_close($conn);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Moya - My Profile & Orders</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <!-- Bricolage Grotesque & Lato Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
-        :root { --moya-primary: #008080; --moya-secondary: #00bfff; }
-        body { font-family: 'Inter', sans-serif; background-color: #f5fcfc; }
+        :root { 
+            --moya-primary: #008080; 
+            --moya-secondary: #00bfff; 
+            --moya-cta: #ff9900;
+            --moya-bg: #f5fcfc;
+        }
+        body { 
+            font-family: Lato, sans-serif; 
+            background-image: url(img/bg.svg);
+            color: #1f2937;
+            font-size: 1.5em;
+        }
+        h1, h2 {
+            font-family: Bricolage Grotesque, sans-serif;
+        }
+        h1 {
+            font-size: 4rem;
+        }
+        h2 {
+            font-size: 2.5rem;
+        }
         .bg-primary { background-color: var(--moya-primary) !important; }
         .text-primary { color: var(--moya-primary) !important; }
-        .card-shadow { box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); }
+        .card-shadow { 
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 15px rgba(0, 0, 0, 0.03);
+        }
+        .btn-cta {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: #fff !important;
+            font-weight: 700;
+            padding: .75rem 2rem;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        .btn-cta:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            color: #fff !important;
+            box-shadow: 0 10px 20px rgba(0, 123, 255, 0.5) !important;
+            transform: translateY(-2px);
+        }
         .status-badge-pending { background-color: #ffc107; color: #343a40; }
         .status-badge-confirmed { background-color: #0dcaf0; color: #000; }
         .status-badge-ontheway { background-color: #0d6efd; color: #fff; }
         .status-badge-delivered { background-color: #198754; color: #fff; }
         .status-badge-completed { background-color: #20c997; color: #fff; }
         .status-badge-cancelled { background-color: #dc3545; color: #fff; }
+        .profile-header {
+            background: linear-gradient(135deg, var(--moya-primary) 0%, var(--moya-secondary) 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            border-radius: 1rem;
+            position: relative;
+        }
+        .profile-pic-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        .profile-pic-container:hover + .position-absolute {
+            transform: scale(1.1);
+        }
+        .info-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+        .info-value {
+            font-size: 1.1rem;
+            color: #1f2937;
+            font-weight: 500;
+        }
+        .table {
+            font-size: 0.95rem;
+        }
+        .table th {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+        #profileDropdown {
+            background-color: #008080 !important;
+        }
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 1.8rem; }
+            body { font-size: 1.2em; }
+        }
     </style>
 </head>
 <body>
 
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+    <div class="container py-2">
+        <a class="navbar-brand fw-bold text-primary d-flex align-items-center fs-3 gap-2" href="home.php">
+            <img src="img/moya_logo.png" alt="moya_logo" style="height: 50px; width: auto; object-fit: contain;">
+            Moya
+        </a>
+        <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-semibold fs-5">
+                <li class="nav-item"><a class="nav-link" href="home.php">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="home.php#products">Containers</a></li>
+                <li class="nav-item"><a class="nav-link" href="home.php#process">Delivery</a></li>
+                <li class="nav-item"><a class="nav-link" href="home.php#location">Area</a></li>
+                <li class="nav-item dropdown ms-lg-3">
+                    <a class="nav-link dropdown-toggle btn btn-primary rounded-pill px-4 btn-md text-white" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <?php echo $user_name; ?>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="profileDropdown">
+                        <li><a class="dropdown-item" href="profile.php">Profile</a></li>
+                        <li><a class="dropdown-item" href="order.php">Order Here</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger fw-semibold" href="logout.php">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="display-5 text-primary fw-bold">My Moya Profile</h1>
-                <div>
-                    <a href="order.php" class="btn btn-outline-primary me-2"><i class="bi bi-cart3 me-1"></i> New Order</a>
-                    <a href="logout.php" class="btn btn-danger">Log Out</a>
+            <!-- Profile Header -->
+            <div class="profile-header text-center card-shadow mb-4">
+                <div class="container position-relative">
+
+                    <div class="d-flex justify-content-center align-items-center mb-3">
+                        <div class="position-relative">
+                            <label for="profilePictureInput" style="cursor: pointer;">
+                                <div class="bg-white rounded-circle p-3 profile-pic-container" style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
+                                    <i class="bi bi-person-fill text-primary" style="font-size: 3rem;"></i>
+                                </div>
+                                <div class="position-absolute bottom-0 end-0 bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px; border: 3px solid white;">
+                                    <i class="bi bi-camera-fill text-white" style="font-size: 0.9rem;"></i>
+                                </div>
+                            </label>
+                            <input type="file" id="profilePictureInput" accept="image/*" style="display: none;" onchange="handleProfilePictureUpload(this)">
+                        </div>
+                    </div>
+                    <h1 class="display-5 fw-bold mb-2" style="color: white;"><?php echo htmlspecialchars($user_details['full_name'] ?? $user_name); ?></h1>
+                    <p class="lead mb-0" style="color: rgba(255,255,255,0.9);">
+                        <i class="bi bi-geo-alt-fill me-2"></i><?php echo htmlspecialchars($user_details['address_barangay'] ?? $user_barangay); ?>
+                    </p>
                 </div>
             </div>
             
             <?php echo $profile_message; ?>
 
+            <!-- Account Information Card -->
             <div class="card p-4 rounded-4 card-shadow border-0 mb-5">
-                <h2 class="h4 fw-bold mb-3 border-bottom pb-2">Account Information</h2>
-                <div class="row">
+                <h2 class="fw-bold mb-4 pb-3 border-bottom">
+                    <i class="bi bi-person-badge me-2 text-primary"></i> Account Information
+                </h2>
+                <div class="row g-4">
                     <div class="col-md-6">
-                        <p class="mb-2"><span class="fw-semibold text-secondary">Full Name:</span> <span class="fw-medium text-dark"><?php echo htmlspecialchars($user_details['full_name'] ?? $user_name); ?></span></p>
-                        <p class="mb-2"><span class="fw-semibold text-secondary">Email:</span> <span class="fw-medium text-dark"><?php echo htmlspecialchars($user_details['email'] ?? 'N/A'); ?></span></p>
-                        <p class="mb-2"><span class="fw-semibold text-secondary">Phone:</span> <span class="fw-medium text-dark"><?php echo htmlspecialchars($user_details['phone_number'] ?? 'N/A'); ?></span></p>
+                        <div class="mb-3">
+                            <div class="info-label">Full Name</div>
+                            <div class="info-value"><?php echo htmlspecialchars($user_details['full_name'] ?? $user_name); ?></div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="info-label">Email Address</div>
+                            <div class="info-value"><?php echo htmlspecialchars($user_details['email'] ?? 'N/A'); ?></div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="info-label">Phone Number</div>
+                            <div class="info-value"><?php echo htmlspecialchars($user_details['phone_number'] ?? 'N/A'); ?></div>
+                        </div>
                     </div>
                     <div class="col-md-6">
-                        <p class="mb-2"><span class="fw-semibold text-secondary">Barangay:</span> <span class="fw-medium text-dark text-primary"><?php echo htmlspecialchars($user_details['address_barangay'] ?? $user_barangay); ?></span></p>
-                        <p class="mb-2"><span class="fw-semibold text-secondary">Address Details:</span> <span class="fw-medium text-dark"><?php echo htmlspecialchars($user_details['address_detail'] ?? 'N/A'); ?></span></p>
-                        <p class="mb-2 small text-muted">You can request an address update by contacting us.</p>
+                        <div class="mb-3">
+                            <div class="info-label">Delivery Barangay</div>
+                            <div class="info-value text-primary fw-bold"><?php echo htmlspecialchars($user_details['address_barangay'] ?? $user_barangay); ?></div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="info-label">Complete Address</div>
+                            <div class="info-value"><?php echo htmlspecialchars($user_details['address_detail'] ?? 'N/A'); ?></div>
+                        </div>
+                        <div class="alert alert-info border-0 mt-3 mb-0" style="font-size: 0.85rem;">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Need to update your address? Please contact our support team.
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="card p-4 rounded-4 card-shadow border-0">
-                <h2 class="h4 fw-bold mb-3 border-bottom pb-2">Order History (<?php echo count($order_history); ?> Orders)</h2>
+            <!-- Order History Card -->
+            <div class="card p-4 rounded-4 card-shadow border-0 mb-5">
+                <h2 class="fw-bold mb-4 pb-3 border-bottom">
+                    <i class="bi bi-clock-history me-2 text-primary"></i> Order History 
+                    <span class="badge bg-primary rounded-pill ms-2"><?php echo count($order_history); ?></span>
+                </h2>
                 <?php if (empty($order_history)): ?>
-                    <div class="alert alert-info text-center mt-3 mb-0">You haven't placed any orders yet. <a href="order.php" class="alert-link fw-bold">Click here to start your first order!</a></div>
+                    <div class="text-center py-5">
+                        <i class="bi bi-cart-x text-muted" style="font-size: 4rem;"></i>
+                        <h3 class="mt-3 text-muted">No Orders Yet</h3>
+                        <p class="text-secondary mb-4">You haven't placed any orders yet. Start your first order now!</p>
+                        <a href="order.php" class="btn btn-cta rounded-pill px-4">
+                            <i class="bi bi-cart-plus me-2"></i> Place Your First Order
+                        </a>
+                    </div>
                 <?php else: ?>
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover align-middle">
-                            <thead class="bg-light">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
                                 <tr>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Total</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col" class="text-center">Actions</th>
+                                    <th scope="col"><i class="bi bi-hash me-1"></i> Order ID</th>
+                                    <th scope="col"><i class="bi bi-calendar-event me-1"></i> Date</th>
+                                    <th scope="col"><i class="bi bi-currency-peso me-1"></i> Total</th>
+                                    <th scope="col"><i class="bi bi-info-circle me-1"></i> Status</th>
+                                    <th scope="col" class="text-center"><i class="bi bi-gear me-1"></i> Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($order_history as $order): ?>
                                     <tr>
-                                        <th scope="row">#<?php echo htmlspecialchars($order['id']); ?></th>
+                                        <th scope="row" class="fw-bold">#<?php echo htmlspecialchars($order['id']); ?></th>
                                         <td><?php echo date("M d, Y, h:i A", strtotime(htmlspecialchars($order['order_date']))); ?></td>
                                         <td class="fw-bold text-success">₱<?php echo number_format(htmlspecialchars($order['total_amount']), 2); ?></td>
                                         <td>
                                             <?php 
                                                 $status = htmlspecialchars($order['status']);
                                                 $badge_class = '';
+                                                $icon = '';
                                                 switch ($status) {
-                                                    case 'Pending': $badge_class = 'status-badge-pending'; break;
-                                                    case 'Confirmed': $badge_class = 'status-badge-confirmed'; break;
-                                                    case 'On the Way': $badge_class = 'status-badge-ontheway'; break;
-                                                    case 'Delivered': $badge_class = 'status-badge-delivered'; break;
-                                                    case 'Completed': $badge_class = 'status-badge-completed'; break;
-                                                    case 'Cancelled': $badge_class = 'status-badge-cancelled'; break;
-                                                    default: $badge_class = 'bg-secondary';
+                                                    case 'Pending': 
+                                                        $badge_class = 'status-badge-pending'; 
+                                                        $icon = 'bi-hourglass-split';
+                                                        break;
+                                                    case 'Confirmed': 
+                                                        $badge_class = 'status-badge-confirmed'; 
+                                                        $icon = 'bi-check-circle';
+                                                        break;
+                                                    case 'On the Way': 
+                                                        $badge_class = 'status-badge-ontheway'; 
+                                                        $icon = 'bi-truck';
+                                                        break;
+                                                    case 'Delivered': 
+                                                        $badge_class = 'status-badge-delivered'; 
+                                                        $icon = 'bi-box-seam';
+                                                        break;
+                                                    case 'Completed': 
+                                                        $badge_class = 'status-badge-completed'; 
+                                                        $icon = 'bi-check2-all';
+                                                        break;
+                                                    case 'Cancelled': 
+                                                        $badge_class = 'status-badge-cancelled'; 
+                                                        $icon = 'bi-x-circle';
+                                                        break;
+                                                    default: 
+                                                        $badge_class = 'bg-secondary';
+                                                        $icon = 'bi-question-circle';
                                                 }
                                             ?>
-                                            <span class="badge rounded-pill <?php echo $badge_class; ?> p-2"><?php echo $status; ?></span>
+                                            <span class="badge rounded-pill <?php echo $badge_class; ?> px-3 py-2">
+                                                <i class="bi <?php echo $icon; ?> me-1"></i><?php echo $status; ?>
+                                            </span>
                                         </td>
                                         <td class="text-center">
-                                            <!-- NEW LOGIC: This now handles both actions based on the order status -->
                                             <?php if ($order['status'] == 'On the Way'): ?>
                                                 <form action="confirm_delivery.php" method="POST" class="d-inline">
                                                     <input type="hidden" name="order_id" value="<?php echo $order['id']; ?>">
-                                                    <button type="submit" class="btn btn-sm btn-success">
-                                                        <i class="bi bi-truck"></i> Mark as Received
+                                                    <button type="submit" class="btn btn-sm btn-success rounded-pill px-3">
+                                                        <i class="bi bi-check-circle me-1"></i> Mark as Received
                                                     </button>
                                                 </form>
                                             <?php elseif ($order['status'] == 'Delivered'): ?>
                                                 <form action="user_confirm_completion.php" method="POST" class="d-inline">
                                                     <input type="hidden" name="order_id" value="<?php echo $order['id']; ?>">
-                                                    <button type="submit" class="btn btn-sm btn-primary">
-                                                        <i class="bi bi-check2-circle"></i> Confirm Order
+                                                    <button type="submit" class="btn btn-sm btn-primary rounded-pill px-3">
+                                                        <i class="bi bi-check2-circle me-1"></i> Confirm Order
                                                     </button>
                                                 </form>
+                                            <?php else: ?>
+                                                <span class="text-muted small">—</span>
                                             <?php endif; ?>
                                         </td>
                                     </tr>
@@ -174,9 +363,57 @@ mysqli_close($conn);
                     </div>
                 <?php endif; ?>
             </div>
+
+            <!-- Logout Button at Bottom -->
+            <div class="text-center mb-5">
+                <a href="logout.php" class="btn btn-danger btn-lg rounded-pill shadow-sm px-5 py-3">
+                    <i class="bi bi-box-arrow-right me-2"></i> Log Out
+                </a>
+            </div>
         </div>
     </div>
 </div>
+
+<footer class="bg-primary text-white py-4 mt-auto">
+    <div class="container text-center">
+        <p class="mb-0" style="font-size: 1rem;">&copy; 2024 Moya - Mineral Water Delivery. All rights reserved. | Rosario, La Union.</p>
+    </div>
+</footer>
+
+<script>
+function handleProfilePictureUpload(input) {
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        
+        // Validate file size
+        if (file.size > maxSize) {
+            alert('File size must be less than 5MB');
+            return;
+        }
+        
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            alert('Please upload an image file');
+            return;
+        }
+        
+        // Preview the image
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const profilePicContainer = document.querySelector('.profile-pic-container');
+            profilePicContainer.innerHTML = `<img src="${e.target.result}" alt="Profile Picture" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+        };
+        reader.readAsDataURL(file);
+        
+        // Here you would typically upload to server
+        // For now, we'll just show a success message
+        setTimeout(() => {
+            alert('Profile picture updated successfully! (Note: This is a demo - implement server upload in production)');
+        }, 500);
+    }
+}
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
