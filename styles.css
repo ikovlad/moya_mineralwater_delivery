@@ -178,3 +178,84 @@ h2 {
 #footer-text {
     font-size: 1rem;
 }
+
+/* --- How to Order Section Styles --- */
+#how-to-order {
+    background-color: #e6f7f7; /* Lighter teal background */
+}
+
+.process-steps {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    justify-content: space-between;
+    position: relative;
+    padding: 20px 0;
+}
+
+.step {
+    flex: 1; /* Try to take equal space */
+    min-width: 180px; /* Minimum width before wrapping */
+    text-align: center;
+    padding: 20px 15px;
+    position: relative;
+    margin-bottom: 30px; /* Space for wrapping */
+}
+
+/* Style for the step icon */
+.step-icon {
+    width: 60px;
+    height: 60px;
+    background-color: var(--moya-primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px auto;
+    font-size: 1.8rem;
+    box-shadow: 0 4px 10px rgba(0, 128, 128, 0.3);
+}
+
+.step h5 {
+    font-weight: 600;
+    color: var(--moya-primary);
+    margin-bottom: 8px;
+}
+
+.step p {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.5;
+}
+
+/* Arrow Styling - using pseudo-elements */
+.step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 30px; /* Align vertically with the center of the icon */
+    right: -40px; /* Position between steps */
+    width: 30px; /* Arrow width */
+    height: 30px; /* Arrow height */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%23008080' class='bi bi-arrow-right-short' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+/* Responsive adjustments for arrows */
+@media (max-width: 1199px) { /* Adjust breakpoint as needed */
+     /* Hide arrows when items might start wrapping significantly */
+    .step:not(:last-child)::after {
+        display: none;
+    }
+    .process-steps {
+        flex-direction: column; /* Stack vertically on smaller screens */
+        align-items: center;
+    }
+     .step {
+         min-width: 80%; /* Take more width when stacked */
+         margin-bottom: 20px;
+     }
+}

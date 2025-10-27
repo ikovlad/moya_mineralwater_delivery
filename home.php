@@ -159,6 +159,87 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
             text-align: center;
             border-radius: 0.75rem;
         }
+
+            /* --- How to Order Section Styles --- */
+        #how-to-order {
+            background-color: #e6f7f7; /* Lighter teal background */
+        }
+
+        .process-steps {
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            justify-content: space-between;
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .step {
+            flex: 1; /* Try to take equal space */
+            min-width: 180px; /* Minimum width before wrapping */
+            text-align: center;
+            padding: 20px 15px;
+            position: relative;
+            margin-bottom: 30px; /* Space for wrapping */
+        }
+
+        /* Style for the step icon */
+        .step-icon {
+            width: 60px;
+            height: 60px;
+            background-color: var(--moya-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px auto;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 10px rgba(0, 128, 128, 0.3);
+        }
+
+        .step h5 {
+            font-weight: 600;
+            color: var(--moya-primary);
+            margin-bottom: 8px;
+        }
+
+        .step p {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        /* Arrow Styling - using pseudo-elements */
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 30px; /* Align vertically with the center of the icon */
+            right: -40px; /* Position between steps */
+            width: 30px; /* Arrow width */
+            height: 30px; /* Arrow height */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%23008080' class='bi bi-arrow-right-short' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+
+        /* Responsive adjustments for arrows */
+        @media (max-width: 1199px) { /* Adjust breakpoint as needed */
+            /* Hide arrows when items might start wrapping significantly */
+            .step:not(:last-child)::after {
+                display: none;
+            }
+            .process-steps {
+                flex-direction: column; /* Stack vertically on smaller screens */
+                align-items: center;
+            }
+            .step {
+                min-width: 80%; /* Take more width when stacked */
+                margin-bottom: 20px;
+            }
+        }
     </style>
 </head>
 
@@ -259,6 +340,82 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
         </div>
     </section>
 
+    <!-- ===============================
+         NEW: How to Order Section
+         =============================== -->
+    <section id="how-to-order" class="py-5 py-xl-10">
+        <div class="container">
+            <h2 class="display-6 fw-bold text-center mb-5" style="color: var(--moya-primary) !important;">
+                How to Order & Process
+            </h2>
+            <div class="process-steps">
+
+                <!-- Step 1: Sign Up / Login & Order -->
+                <div class="step">
+                    <div class="step-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-person-plus-fill" viewBox="0 0 16 16">
+                          <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                          <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5"/>
+                        </svg>
+                    </div>
+                    <h5>Step 1: Account & Order</h5>
+                    <p>Sign up or Login. Browse products, add items to your order, and agree to the order policy before submitting.</p>
+                </div>
+
+                <!-- Step 2: Confirmation -->
+                <div class="step">
+                    <div class="step-icon">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-telephone-outbound-fill" viewBox="0 0 16 16">
+                           <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877zm10.761.135a.5.5 0 0 1 .708 0l2.5 2.5a.5.5 0 0 1 0 .708l-2.5 2.5a.5.5 0 0 1-.708-.708L14.293 4H9.5a.5.5 0 0 1 0-1h4.793l-1.647-1.646a.5.5 0 0 1 0-.708"/>
+                         </svg>
+                    </div>
+                    <h5>Step 2: Admin Confirmation</h5>
+                    <p>View your 'Pending' order in your Profile. Our admin will call you to confirm details. Then, the admin updates the status to 'Confirmed'.</p>
+                </div>
+
+                <!-- Step 3: Container Pickup -->
+                <div class="step">
+                    <div class="step-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+                           <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"/>
+                           <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"/>
+                        </svg>
+                    </div>
+                    <h5>Step 3: Container Pickup</h5>
+                    <p>Our rider collects your empty container(s). Afterwards, please go to your Profile and update the order status to 'Confirm Pickup'.</p>
+                </div>
+
+                <!-- Step 4: Refill & Delivery Prep -->
+                <div class="step">
+                    <div class="step-icon">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-truck" viewBox="0 0 16 16">
+                           <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12z"/>
+                           <path d="M10 11.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m-7 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                         </svg>
+                    </div>
+                    <h5>Step 4: Refill & En Route</h5>
+                    <p>We refill your container at the station. Once the rider is heading back to you, the admin will update the status to 'Set Out for Delivery'.</p>
+                </div>
+
+                <!-- Step 5: Delivery & Payment -->
+                <div class="step">
+                    <div class="step-icon">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-cash-stack" viewBox="0 0 16 16">
+                           <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+                           <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2z"/>
+                         </svg>
+                    </div>
+                    <h5>Step 5: Delivery & Payment</h5>
+                    <p>The rider delivers your refilled container. Please pay via Cash on Delivery (COD). Finally, go to your Profile and update the status to 'Confirm Delivery & Payment'.</p>
+                </div>
+
+            </div> <!-- End process-steps -->
+        </div> <!-- End container -->
+    </section>
+    <!-- ===============================
+         End How to Order Section
+         =============================== -->
+
     <section id="promo-banner" class="text-center py-3" style="background: linear-gradient(to right, #4fc3f7, #29b6f6); color: white; letter-spacing: 0.5px; font-size: 1.2rem; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);">
         <div class="container">
             <h4 class="m-0 fw-bold">
@@ -333,11 +490,10 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
                 <div class="modal-body">
                     <p class="text-muted">
                         We've placed a <span class="text-success fw-bold">green pin</span> near your registered barangay (<b><?php echo $user_barangay; ?></b>). 
-                        <span class="fw-bold">Please drag the green pin to your exact house location.</span> 
+                        <span class="fw-bold">Please drag the green pin to your exact house location, to know if we delivering at your place.</span> 
                         The <span class="text-primary fw-bold">blue pins</span> are our reference delivery points.
                     </p>
                     <div id="location-check-map" class="mb-3"></div>
-                    <div id="addressDisplay" class="text-muted">Drag the marker to get the address...</div>
                     <div id="locationStatus" class="mt-3 text-center fw-bold"></div>
                 </div>
                  <div class="modal-footer">
@@ -358,127 +514,116 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        const serviceAreaPoints = [
-            [16.219468, 120.493981], [16.213475, 120.501831], [16.225049, 120.503922],
-            [16.246571, 120.487866], [16.239948, 120.468656], [16.228787, 120.459740],
-            [16.238981, 120.455706], [16.248206, 120.453848], [16.255083, 120.469280],
-            [16.265017, 120.445564], [16.224417, 120.450107], [16.220696, 120.468793],
-            [16.214975, 120.468423], [16.214365, 120.491307], [16.211052, 120.484091],
-            [16.236634, 120.431094], [16.234697, 120.421645], [16.232188, 120.407840],
-            [16.220671, 120.412298], [16.242430, 120.404603], [16.250993, 120.429892],
-            [16.266720, 120.408259], [16.281248, 120.443265], [16.268898, 120.475935],
-            [16.249906, 120.495360], [16.277226, 120.489522], [16.281798, 120.488149],
-            [16.214498, 120.429782] 
-        ];
+    const serviceAreaPoints = [
+        [16.219468, 120.493981], [16.213475, 120.501831], [16.225049, 120.503922],
+        [16.246571, 120.487866], [16.239948, 120.468656], [16.228787, 120.459740],
+        [16.238981, 120.455706], [16.248206, 120.453848], [16.255083, 120.469280],
+        [16.265017, 120.445564], [16.224417, 120.450107], [16.220696, 120.468793],
+        [16.214975, 120.468423], [16.214365, 120.491307], [16.211052, 120.484091],
+        [16.236634, 120.431094], [16.234697, 120.421645], [16.232188, 120.407840],
+        [16.220671, 120.412298], [16.242430, 120.404603], [16.250993, 120.429892],
+        [16.266720, 120.408259], [16.281248, 120.443265], [16.268898, 120.475935],
+        [16.249906, 120.495360], [16.277226, 120.489522], [16.281798, 120.488149],
+        [16.214498, 120.429782]
+    ];
 
-        const barangayCoordinateLookup = {
-            "Cataguingtingan": [16.239948, 120.468656],
-            "Poblacion East": [16.2143, 120.4913],
-            "Poblacion West": [16.2134, 120.5018],
-            "Subusub": [16.2287, 120.4597],
-            "Bani": [16.2465, 120.4878],
-        };
-        
-        const USER_BARANGAY_NAME = <?php echo json_encode($user_barangay); ?>;
-        let modalMap;
-        let userMarker;
-        let geocoder = L.Control.Geocoder.nominatim();
-        const DELIVERY_RADIUS_METERS = 2000;
+    const barangayCoordinateLookup = {
+        "Cataguingtingan": [16.239948, 120.468656],
+        "Poblacion East": [16.2143, 120.4913],
+        "Poblacion West": [16.2134, 120.5018],
+        "Subusub": [16.2287, 120.4597],
+        "Bani": [16.2465, 120.4878],
+    };
+    
+    const USER_BARANGAY_NAME = <?php echo json_encode($user_barangay); ?>;
+    let modalMap;
+    let userMarker;
+    // DELETED: let geocoder = L.Control.Geocoder.nominatim();
+    const DELIVERY_RADIUS_METERS = 2000;
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const mainMap = L.map('main-page-map').setView([16.245, 120.47], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(mainMap);
+    document.addEventListener('DOMContentLoaded', function() {
+        const mainMap = L.map('main-page-map').setView([16.245, 120.47], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(mainMap);
 
+        serviceAreaPoints.forEach(coords => {
+            L.marker(coords).addTo(mainMap).bindPopup('We deliver near this point.');
+        });
+    });
+
+    const locationModalElement = document.getElementById('locationCheckModal');
+    const locationModal = new bootstrap.Modal(locationModalElement);
+    
+    function openLocationCheckModal() {
+        locationModal.show();
+    }
+    
+    locationModalElement.addEventListener('shown.bs.modal', function() {
+        if (!modalMap) {
+            let initialCoords = barangayCoordinateLookup[USER_BARANGAY_NAME] || [16.245, 120.47];
+            
+            modalMap = L.map('location-check-map').setView(initialCoords, 15);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(modalMap);
+            
             serviceAreaPoints.forEach(coords => {
-                L.marker(coords).addTo(mainMap).bindPopup('We deliver near this point.');
+                L.marker(coords).addTo(modalMap);
             });
-        });
 
-        const locationModalElement = document.getElementById('locationCheckModal');
-        const locationModal = new bootstrap.Modal(locationModalElement);
-        
-        function openLocationCheckModal() {
-            locationModal.show();
+            userMarker = L.marker(initialCoords, {
+                draggable: true,
+                icon: L.icon({
+                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                    iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+                })
+            }).addTo(modalMap);
+
+            userMarker.on('dragend', function(event) {
+                const marker = event.target;
+                const position = marker.getLatLng();
+                console.log('Marker dragged to:', position);
+                validateMarkerLocation(position);
+                // DELETED: reverseGeocode(position);
+            });
+
+        } else {
+             modalMap.invalidateSize(); 
         }
         
-        locationModalElement.addEventListener('shown.bs.modal', function() {
-            if (!modalMap) {
-                let initialCoords = barangayCoordinateLookup[USER_BARANGAY_NAME] || [16.245, 120.47];
-                
-                modalMap = L.map('location-check-map').setView(initialCoords, 15);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(modalMap);
-                
-                serviceAreaPoints.forEach(coords => {
-                    L.marker(coords).addTo(modalMap);
-                });
+        const initialPosition = userMarker.getLatLng();
+        validateMarkerLocation(initialPosition);
+        // DELETED: reverseGeocode(initialPosition);
+        userMarker.bindPopup('Drag this pin to your exact house location.').openPopup();
 
-                userMarker = L.marker(initialCoords, {
-                    draggable: true,
-                    icon: L.icon({
-                        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-                        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                        iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
-                    })
-                }).addTo(modalMap);
+    });
 
-                userMarker.on('dragend', function(event) {
-                    const marker = event.target;
-                    const position = marker.getLatLng();
-                    console.log('Marker dragged to:', position);
-                    validateMarkerLocation(position);
-                    reverseGeocode(position);
-                });
+    function validateMarkerLocation(userLatLng) {
+        const statusDiv = document.getElementById('locationStatus');
+        statusDiv.className = 'mt-3 text-center fw-bold';
+        
+        let isInside = false;
+        for (const point of serviceAreaPoints) {
+            const servicePointLatLng = L.latLng(point[0], point[1]);
+            const distance = userLatLng.distanceTo(servicePointLatLng);
 
-            } else {
-                 modalMap.invalidateSize(); 
-            }
-            
-            const initialPosition = userMarker.getLatLng();
-            validateMarkerLocation(initialPosition);
-            reverseGeocode(initialPosition);
-            userMarker.bindPopup('Drag this pin to your exact house location.').openPopup();
+            console.log(`Distance to point ${point}: ${distance} meters`);
 
-        });
-
-        function validateMarkerLocation(userLatLng) {
-            const statusDiv = document.getElementById('locationStatus');
-            statusDiv.className = 'mt-3 text-center fw-bold';
-            
-            let isInside = false;
-            for (const point of serviceAreaPoints) {
-                const servicePointLatLng = L.latLng(point[0], point[1]);
-                const distance = userLatLng.distanceTo(servicePointLatLng);
-
-                console.log(`Distance to point ${point}: ${distance} meters`);
-
-                if (distance <= DELIVERY_RADIUS_METERS) {
-                    isInside = true;
-                    break;
-                }
-            }
-
-            if (isInside) {
-                statusDiv.innerHTML = '<span class="text-success">✅ Great! Your selected location is within our delivery area.</span>';
-            } else {
-                statusDiv.innerHTML = '<span class="text-danger">❌ Sorry, your selected location appears to be outside our service radius.</span>';
+            if (distance <= DELIVERY_RADIUS_METERS) {
+                isInside = true;
+                break;
             }
         }
 
-        function reverseGeocode(latlng) {
-            const addressDiv = document.getElementById('addressDisplay');
-            addressDiv.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Finding address...';
-
-            geocoder.reverse(latlng, modalMap.options.crs.scale(modalMap.getZoom()), function(results) {
-                if (results && results.length > 0 && results[0].name) {
-                     addressDiv.textContent = results[0].name;
-                } else {
-                    addressDiv.textContent = 'Could not find address for this location.';
-                 }
-            }, this);
+        if (isInside) {
+            statusDiv.innerHTML = '<span class="text-success">✅ Great! Your selected location is within our delivery area.</span>';
+        } else {
+            statusDiv.innerHTML = '<span class="text-danger">❌ Sorry, your selected location appears to be outside our service radius.</span>';
         }
+    }
 
-    </script>
+    // DELETED: function reverseGeocode(latlng) { ... }
+
+</script>
 </body>
 </html>
