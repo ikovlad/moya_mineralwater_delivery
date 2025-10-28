@@ -1,5 +1,5 @@
 <?php
-// --- CORRECTED VERSION ---
+// Admin
 session_start(); // Session is started only ONCE at the top.
 require_once "config.php";
 
@@ -71,82 +71,285 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Moya Admin - Secure Login</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         :root {
-            --primary-color: #008080;
-            --background-start: #e0f2f1;
-            --background-end: #b2dfdb;
+            --moya-primary: #008080;
+            --moya-light: #f8f9fa;
+            --moya-dark-text: #34495e;
+            --border-color: #dee2e6;
+            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, var(--background-start), var(--background-end));
+            font-family: 'Inter', sans-serif;
+            background-color: var(--moya-light);
+            color: var(--moya-dark-text);
             display: flex;
             flex-direction: column; 
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
             padding: 1rem;
         }
-        .login-card {
-            max-width: 450px;
+        
+        .login-container {
             width: 100%;
-            background-color: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 1rem;
-            padding: 2.5rem;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            max-width: 480px;
         }
-        .login-card-header { text-align: center; margin-bottom: 2rem; }
-        .login-card-header h1 { color: var(--primary-color); font-weight: 700; }
-        .login-card-header p { color: #6c757d; }
-        .btn-primary { background-color: var(--primary-color); border: none; padding: 0.75rem; font-weight: 600; transition: background-color 0.3s ease; }
-        .btn-primary:hover { background-color: #006666; }
-        .form-control:focus { border-color: var(--primary-color); box-shadow: 0 0 0 0.25rem rgba(0, 128, 128, 0.25); }
-        .input-group-text { background-color: #f8f9fa; }
+        
+        .login-card {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 3rem 2.5rem;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .logo-section {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--moya-primary), #006666);
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 128, 128, 0.2);
+        }
+        
+        .logo-icon i {
+            font-size: 1.75rem;
+            color: white;
+        }
+        
+        .login-card-header h1 { 
+            color: var(--moya-dark-text);
+            font-weight: 700;
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+        
+        .login-card-header p { 
+            color: #6c757d;
+            font-size: 0.95rem;
+            font-weight: 400;
+            margin-bottom: 0;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--moya-dark-text);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .form-control {
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .form-control:focus { 
+            border-color: var(--moya-primary);
+            box-shadow: 0 0 0 3px rgba(0, 128, 128, 0.1);
+            outline: none;
+        }
+        
+        .input-group {
+            position: relative;
+        }
+        
+        .input-group-text { 
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            border-right: none;
+            border-radius: 0.5rem 0 0 0.5rem;
+            color: #8895a7;
+            padding: 0.75rem 1rem;
+        }
+        
+        .input-group .form-control {
+            border-left: none;
+            border-radius: 0 0.5rem 0.5rem 0;
+            padding-left: 0.5rem;
+        }
+        
+        .input-group:focus-within .input-group-text {
+            border-color: var(--moya-primary);
+            color: var(--moya-primary);
+        }
+        
+        .btn-primary { 
+            background-color: var(--moya-primary);
+            border: none;
+            padding: 0.875rem;
+            font-weight: 600;
+            font-size: 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+            letter-spacing: 0.3px;
+        }
+        
+        .btn-primary:hover { 
+            background-color: #006666;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 128, 128, 0.3);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .forgot-password { 
+            text-align: right;
+            margin-top: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .forgot-password a { 
+            color: var(--moya-primary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        
+        .forgot-password a:hover { 
+            color: #006666;
+            text-decoration: underline;
+        }
+        
+        .forgot-password i {
+            font-size: 0.75rem;
+            margin-right: 0.25rem;
+        }
+        
+        .alert {
+            border-radius: 0.5rem;
+            border: none;
+            font-size: 0.9rem;
+            padding: 0.875rem 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .alert-danger {
+            background-color: #fff5f5;
+            color: #c53030;
+            border-left: 3px solid #c53030;
+        }
+        
+        .alert-success {
+            background-color: #f0fdf4;
+            color: #15803d;
+            border-left: 3px solid #15803d;
+        }
+        
+        .alert-info {
+            background-color: #eff6ff;
+            color: #1e40af;
+            border-left: 3px solid #1e40af;
+        }
+        
+        /* Loading state for button */
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 576px) {
+            .login-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .login-card-header h1 {
+                font-size: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <div class="login-card">
-        <div class="login-card-header">
-            <h1>Moya Admin Panel</h1>
-            <p>Please sign in to continue</p>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="bi bi-shield-lock-fill"></i>
+                </div>
+            </div>
+            
+            <div class="login-card-header">
+                <h1>Admin Login</h1>
+                <p>Sign in to access the dashboard</p> <br>
+            </div>
+
+            <?php
+            // Display login errors
+            if (!empty($login_err)) {
+                echo '<div class="alert alert-danger"><i class="bi bi-exclamation-circle me-2"></i>' . htmlspecialchars($login_err) . '</div>';
+            }
+            
+            // Display success messages (e.g., after password reset)
+            if (isset($_SESSION['admin_login_message'])) {
+                $msg_type = $_SESSION['admin_login_message_type'] ?? 'info';
+                $icon = $msg_type === 'success' ? 'check-circle' : 'info-circle';
+                echo '<div class="alert alert-' . htmlspecialchars($msg_type) . '"><i class="bi bi-' . $icon . ' me-2"></i>' . htmlspecialchars($_SESSION['admin_login_message']) . '</div>';
+                unset($_SESSION['admin_login_message']);
+                unset($_SESSION['admin_login_message_type']);
+            }
+            ?>
+
+            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" novalidate>
+                
+                <div class="mb-4">
+                    <label for="email" class="form-label">Email Address</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                        <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" placeholder="admin@moya.com" required>
+                    </div>
+                </div>
+
+                <div class="mb-2">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                    </div>
+                </div>
+
+                <div class="forgot-password">
+                    <a href="admin_forgot_password.php">
+                        <i class="bi bi-question-circle-fill"></i> Forgot Password?
+                    </a>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                    </button>
+                </div>
+                
+            </form>
         </div>
-
-        <?php
-        if (!empty($login_err)) {
-            echo '<div class="alert alert-danger">' . htmlspecialchars($login_err) . '</div>';
-        }
-        ?>
-
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" novalidate>
-            
-            <div class="mb-4">
-                <label for="email" class="form-label">Email Address</label>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
-                    <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" placeholder="e.g., admin@moya.com" required>
-                </div>
-            </div>
-
-            <div class="mb-4">
-                <label for="password" class="form-label">Password</label>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
-                </div>
-            </div>
-
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary">Sign In</button>
-            </div>
-            
-        </form>
     </div>
 
 </body>
