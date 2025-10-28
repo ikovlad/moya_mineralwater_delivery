@@ -11,6 +11,7 @@ $sql = "SELECT o.id, u.full_name, o.total_amount, o.status, o.order_date
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
+<<<<<<< HEAD
     echo '<table class="table table-striped">';
     echo '<thead><tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>';
     echo '<tbody>';
@@ -26,6 +27,34 @@ if ($result->num_rows > 0) {
     echo '</tbody></table>';
 } else {
     echo '<p class="text-center">No new orders at the moment.</p>';
+=======
+    while($row = $result->fetch_assoc()) {
+        // Status badge color mapping
+        $statusColors = [
+            'Pending' => 'warning',
+            'Processing' => 'info',
+            'Out for Delivery' => 'primary',
+            'Shipped' => 'success'
+        ];
+        
+        $badgeClass = isset($statusColors[$row['status']]) ? $statusColors[$row['status']] : 'secondary';
+        
+        echo '<div class="order-item">';
+        echo '  <div class="order-info">';
+        echo '    <div class="order-id">#' . str_pad($row['id'], 5, '0', STR_PAD_LEFT) . '</div>';
+        echo '    <div class="order-customer">' . htmlspecialchars($row['full_name']) . '</div>';
+        echo '    <div class="order-date"><i class="bi bi-clock"></i> ' . date('M d, Y • h:i A', strtotime($row['order_date'])) . '</div>';
+        echo '  </div>';
+        echo '  <div class="order-amount">₱' . number_format($row['total_amount'], 2) . '</div>';
+        echo '  <span class="status-badge bg-' . $badgeClass . ' text-white">' . htmlspecialchars($row['status']) . '</span>';
+        echo '</div>';
+    }
+} else {
+    echo '<div class="empty-state">';
+    echo '  <i class="bi bi-inbox"></i>';
+    echo '  <p>No incoming orders at the moment.</p>';
+    echo '</div>';
+>>>>>>> 81caf45 (try)
 }
 
 $conn->close();

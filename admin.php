@@ -6,6 +6,7 @@ require_once "config.php";
 $email = $password = "";
 $login_err = ""; 
 
+
 if (!function_exists('sanitize_input')) {
     function sanitize_input($conn, $data) {
         return htmlspecialchars(mysqli_real_escape_string($conn, trim($data)));
