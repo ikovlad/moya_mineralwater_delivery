@@ -28,6 +28,7 @@ if (!empty($search)) {
         $params[] = (int)$search; // Add ID param first if numeric
 =======
     $id_search_clause = is_numeric($search) ? "o.id = ?" : "1=0";
+    
     $where_clauses[] = "($id_search_clause OR u.full_name LIKE ? OR u.phone_number LIKE ?)";
     
     if (is_numeric($search)) {
@@ -129,6 +130,7 @@ $orders_result = $stmt_orders->get_result();
 $possible_statuses = ['Pending', 'Confirmed', 'Picked Up', 'On the Way', 'Completed', 'Cancelled'];
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 // Check for success/error messages from session (if needed, e.g., from update_order_status.php)
 $alert_message = '';
 if (isset($_SESSION['alert_message'])) {
@@ -148,10 +150,13 @@ foreach ($possible_statuses as $status) {
     $stmt->close();
 }
 
+=======
+>>>>>>> 93ac7ac (Added all)
 // Check for success/error messages from session
 $alert_message = '';
 if (isset($_SESSION['alert_message'])) {
     $alert_type = $_SESSION['alert_type'] ?? 'info';
+<<<<<<< HEAD
     $icon_map = [
         'success' => 'check-circle-fill',
         'danger' => 'exclamation-triangle-fill',
@@ -163,6 +168,10 @@ if (isset($_SESSION['alert_message'])) {
     $alert_message = '<div class="alert alert-' . $alert_type . ' alert-dismissible fade show alert-modern" role="alert">
         <i class="bi bi-' . $icon . ' me-2"></i>' . htmlspecialchars($_SESSION['alert_message']) . '
 >>>>>>> 81caf45 (try)
+=======
+    $alert_message = '<div class="alert alert-' . $alert_type . ' alert-dismissible fade show" role="alert">
+        ' . htmlspecialchars($_SESSION['alert_message']) . '
+>>>>>>> 93ac7ac (Added all)
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>';
     unset($_SESSION['alert_message']);
@@ -170,10 +179,14 @@ if (isset($_SESSION['alert_message'])) {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 // Function to generate pagination links (keeping filters)
 =======
 // Function to generate pagination links with numbers
 >>>>>>> 81caf45 (try)
+=======
+// Enhanced pagination function
+>>>>>>> 93ac7ac (Added all)
 function generate_order_pagination_links($current_page, $total_pages, $search_value, $status_value) {
     $links = '';
     $base_url = "admin_orders.php";
@@ -181,8 +194,14 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
     if (!empty($search_value)) $query_params['search'] = $search_value;
     if (!empty($status_value)) $query_params['status'] = $status_value;
     
-    // Previous Button
+    // Calculate page range
+    $range = 2; // Number of pages to show on each side of current page
+    $start_page = max(1, $current_page - $range);
+    $end_page = min($total_pages, $current_page + $range);
+    
+    // Previous Button with arrow and text
     if ($current_page > 1) {
+<<<<<<< HEAD
         $prev_page = $current_page - 1;
         $query_params['page'] = $prev_page;
 <<<<<<< HEAD
@@ -191,49 +210,50 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
         $links .= '<li class="page-item disabled"><span class="page-link">Previous</span></li>';
 =======
         $links .= '<li class="page-item"><a class="page-link page-link-arrow" href="' . $base_url . '?' . http_build_query($query_params) . '"><i class="bi bi-chevron-left"></i> Previous</a></li>';
+=======
+        $query_params['page'] = $current_page - 1;
+        $links .= '<li class="page-item"><a class="page-link" href="' . $base_url . '?' . http_build_query($query_params) . '"><i class="bi bi-chevron-left"></i> Previous</a></li>';
+>>>>>>> 93ac7ac (Added all)
     } else {
-        $links .= '<li class="page-item disabled"><span class="page-link page-link-arrow"><i class="bi bi-chevron-left"></i> Previous</span></li>';
-    }
-
-    // Calculate page range to show
-    $show_pages = 5; // Show max 5 page numbers
-    $half = floor($show_pages / 2);
-    
-    $start = max(1, $current_page - $half);
-    $end = min($total_pages, $current_page + $half);
-    
-    // Adjust if at the start
-    if ($current_page <= $half) {
-        $end = min($total_pages, $show_pages);
+        $links .= '<li class="page-item disabled"><span class="page-link"><i class="bi bi-chevron-left"></i> Previous</span></li>';
     }
     
-    // Adjust if at the end
-    if ($current_page > $total_pages - $half) {
-        $start = max(1, $total_pages - $show_pages + 1);
+    // First page + ellipsis
+    if ($start_page > 1) {
+        $query_params['page'] = 1;
+        $links .= '<li class="page-item"><a class="page-link" href="' . $base_url . '?' . http_build_query($query_params) . '">1</a></li>';
+        if ($start_page > 2) {
+            $links .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
+        }
     }
-
-    // Show page numbers
-    for ($i = $start; $i <= $end; $i++) {
+    
+    // Page numbers
+    for ($i = $start_page; $i <= $end_page; $i++) {
         $query_params['page'] = $i;
         if ($i == $current_page) {
-            $links .= '<li class="page-item active"><span class="page-link page-number">' . $i . '</span></li>';
+            $links .= '<li class="page-item active"><span class="page-link">' . $i . '</span></li>';
         } else {
-            $links .= '<li class="page-item"><a class="page-link page-number" href="' . $base_url . '?' . http_build_query($query_params) . '">' . $i . '</a></li>';
+            $links .= '<li class="page-item"><a class="page-link" href="' . $base_url . '?' . http_build_query($query_params) . '">' . $i . '</a></li>';
         }
     }
-
-    // Show ellipsis and last page if needed
-    if ($end < $total_pages) {
-        if ($end < $total_pages - 1) {
-            $links .= '<li class="page-item disabled"><span class="page-link page-ellipsis">...</span></li>';
+    
+    // Last page + ellipsis
+    if ($end_page < $total_pages) {
+        if ($end_page < $total_pages - 1) {
+            $links .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
         }
         $query_params['page'] = $total_pages;
+<<<<<<< HEAD
         $links .= '<li class="page-item"><a class="page-link page-number" href="' . $base_url . '?' . http_build_query($query_params) . '">' . $total_pages . '</a></li>';
 >>>>>>> 81caf45 (try)
+=======
+        $links .= '<li class="page-item"><a class="page-link" href="' . $base_url . '?' . http_build_query($query_params) . '">' . $total_pages . '</a></li>';
+>>>>>>> 93ac7ac (Added all)
     }
 
-    // Next Button
+    // Next Button with text and arrow
     if ($current_page < $total_pages) {
+<<<<<<< HEAD
         $next_page = $current_page + 1;
         $query_params['page'] = $next_page;
 <<<<<<< HEAD
@@ -245,6 +265,12 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
     } else {
         $links .= '<li class="page-item disabled"><span class="page-link page-link-arrow">Next <i class="bi bi-chevron-right"></i></span></li>';
 >>>>>>> 81caf45 (try)
+=======
+        $query_params['page'] = $current_page + 1;
+        $links .= '<li class="page-item"><a class="page-link" href="' . $base_url . '?' . http_build_query($query_params) . '">Next <i class="bi bi-chevron-right"></i></a></li>';
+    } else {
+        $links .= '<li class="page-item disabled"><span class="page-link">Next <i class="bi bi-chevron-right"></i></span></li>';
+>>>>>>> 93ac7ac (Added all)
     }
 
     return $links;
@@ -272,382 +298,290 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
 =======
 
 <style>
-/* Modern Order Management Styles */
-.order-stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 1rem;
-    margin-bottom: 2rem;
+/* Enhanced Professional Styling */
+.page-header {
+    color: #1e293b;
+    font-weight: 700;
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 3px solid #3b82f6;
+    padding-bottom: 0.75rem;
 }
 
-.order-stat-card {
-    background: white;
+.card {
+    border: none;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.card-header {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    font-weight: 600;
+    padding: 1.25rem 1.5rem;
+    font-size: 1.1rem;
+    border-bottom: none;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* Filter Section Styling */
+.filter-section {
+    background: #f8fafc;
+    border-radius: 0.5rem;
     padding: 1.25rem;
-    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.08);
-    border-left: 4px solid;
-    transition: all 0.3s ease;
+    margin-bottom: 1.5rem;
+    border: 1px solid #e2e8f0;
 }
 
-.order-stat-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 0.5rem 2rem 0 rgba(58, 59, 69, 0.15);
+.form-control:focus, .form-select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.15);
 }
 
-.order-stat-card.pending { border-left-color: #f6c23e; }
-.order-stat-card.confirmed { border-left-color: #36b9cc; }
-.order-stat-card.picked-up { border-left-color: #858796; }
-.order-stat-card.on-the-way { border-left-color: #4e73df; }
-.order-stat-card.completed { border-left-color: #1cc88a; }
-.order-stat-card.cancelled { border-left-color: #e74a3b; }
-
-.order-stat-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
+/* Table Enhancements */
+.table-responsive {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 }
 
-.order-stat-label {
-    font-size: 0.75rem;
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    background-color: #f1f5f9;
+    color: #475569;
     font-weight: 600;
     text-transform: uppercase;
-    color: #858796;
-    letter-spacing: 0.5px;
-}
-
-.order-stat-icon {
-    font-size: 1.25rem;
-    opacity: 0.3;
-}
-
-.order-stat-value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--moya-dark-text);
-}
-
-/* Filter Section */
-.filter-section-modern {
-    background: #f8f9fc;
-    padding: 1.5rem;
-    border-radius: 0.75rem;
-    margin-bottom: 1.5rem;
-}
-
-.filter-section-modern .form-control,
-.filter-section-modern .form-select {
-    border: 1px solid #e3e6f0;
-    padding: 0.75rem 1rem;
-    font-size: 0.95rem;
-    border-radius: 0.5rem;
-}
-
-.filter-section-modern .form-control:focus,
-.filter-section-modern .form-select:focus {
-    border-color: var(--moya-primary);
-    box-shadow: 0 0 0 3px rgba(0, 128, 128, 0.1);
-}
-.order-table-modern {
-    margin: 0;
-    font-size: 0.9rem;
-}
-
-.order-table-modern thead th {
-    background: #f8f9fc;
-    border: none;
-    color: #858796;
-    font-weight: 700;
     font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid #e2e8f0;
     padding: 1rem 0.75rem;
-    border-bottom: 2px solid #e3e6f0;
     white-space: nowrap;
 }
 
-.order-table-modern tbody td {
-    padding: 1rem 0.75rem;
-    vertical-align: middle;
-    border-bottom: 1px solid #f1f3f5;
-}
-
-.order-table-modern tbody tr {
+.table tbody tr {
     transition: all 0.2s ease;
 }
 
-.order-table-modern tbody tr:hover {
-    background-color: #f8f9fc;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+.table tbody tr:hover {
+    background-color: #f8fafc;
+    transform: scale(1.001);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-/* Order ID Badge */
-.order-id-badge {
-    background: linear-gradient(135deg, rgba(0, 128, 128, 0.1) 0%, rgba(0, 128, 128, 0.05) 100%);
-    color: var(--moya-primary);
-    padding: 0.375rem 0.75rem;
-    border-radius: 2rem;
-    font-weight: 700;
-    font-size: 0.875rem;
-    display: inline-block;
-}
-
-/* Customer Info */
-.customer-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.customer-name {
-    font-weight: 600;
-    color: var(--moya-dark-text);
-    margin-bottom: 0.25rem;
-}
-
-.customer-contact {
-    font-size: 0.8rem;
-    color: #858796;
-}
-
-.customer-contact i {
-    font-size: 0.75rem;
-}
-
-/* Address Cell */
-.address-cell {
-    max-width: 200px;
-}
-
-.address-detail {
-    color: var(--moya-dark-text);
-    font-size: 0.875rem;
-    margin-bottom: 0.25rem;
-}
-
-.address-barangay {
-    display: inline-block;
-    background: linear-gradient(135deg, rgba(54, 185, 204, 0.1) 0%, rgba(54, 185, 204, 0.05) 100%);
-    color: #36b9cc;
-    padding: 0.25rem 0.625rem;
-    border-radius: 1rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-}
-
-/* Date Cell */
-.date-cell {
-    font-size: 0.875rem;
-}
-
-.date-primary {
-    color: var(--moya-dark-text);
-    font-weight: 600;
-}
-
-.time-secondary {
-    color: #858796;
-    font-size: 0.8rem;
-    display: block;
-}
-
-/* Amount Cell */
-.amount-cell {
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: var(--moya-primary);
+.table td {
+    padding: 1rem 0.75rem;
+    vertical-align: middle;
+    color: #334155;
 }
 
 /* Status Badges */
-.status-badge-modern {
-    padding: 0.5rem 1rem;
-    border-radius: 2rem;
+.badge {
+    font-weight: 600;
     font-size: 0.75rem;
-    font-weight: 700;
+    padding: 0.5rem 0.85rem;
+    border-radius: 0.375rem;
+    letter-spacing: 0.025em;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    display: inline-flex;
+}
+
+/* Enhanced Pagination - Centered like image */
+.pagination {
+    margin: 0;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.page-item {
+    margin: 0;
+}
+
+.page-link {
+    color: #64748b;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+    padding: 0.625rem 1rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    min-width: 45px;
+    text-align: center;
+    background-color: white;
+}
+
+/* Specific styling for Previous/Next buttons */
+.page-item:first-child .page-link,
+.page-item:last-child .page-link {
+    min-width: auto;
+    padding: 0.625rem 1.25rem;
+}
+
+.page-link:hover {
+    background-color: #f1f5f9;
+    border-color: #94a3b8;
+    color: #334155;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.page-item.active .page-link {
+    background-color: #1e293b;
+    border-color: #1e293b;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(30, 41, 59, 0.3);
+}
+
+.page-item.disabled .page-link {
+    background-color: #f8fafc;
+    border-color: #e2e8f0;
+    color: #cbd5e1;
+    cursor: not-allowed;
+}
+
+.page-link i {
+    font-size: 0.75rem;
+}
+
+/* Pagination Info */
+.pagination-info {
+    display: flex;
     align-items: center;
-    gap: 0.375rem;
-}
-
-.status-badge-modern i {
+    justify-content: space-between;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e2e8f0;
+    color: #64748b;
     font-size: 0.875rem;
 }
 
-.status-pending {
-    background: linear-gradient(135deg, rgba(246, 194, 62, 0.2) 0%, rgba(246, 194, 62, 0.1) 100%);
-    color: #c59217;
-}
-
-.status-confirmed {
-    background: linear-gradient(135deg, rgba(54, 185, 204, 0.2) 0%, rgba(54, 185, 204, 0.1) 100%);
-    color: #258391;
-}
-
-.status-picked-up {
-    background: linear-gradient(135deg, rgba(133, 135, 150, 0.2) 0%, rgba(133, 135, 150, 0.1) 100%);
-    color: #5a5c69;
-}
-
-.status-on-the-way {
-    background: linear-gradient(135deg, rgba(78, 115, 223, 0.2) 0%, rgba(78, 115, 223, 0.1) 100%);
-    color: #2e59d9;
-}
-
-.status-completed {
-    background: linear-gradient(135deg, rgba(28, 200, 138, 0.2) 0%, rgba(28, 200, 138, 0.1) 100%);
-    color: #17a673;
-}
-
-.status-cancelled {
-    background: linear-gradient(135deg, rgba(231, 74, 59, 0.2) 0%, rgba(231, 74, 59, 0.1) 100%);
-    color: #c0392b;
-}
-
-/* Action Dropdown */
-.action-select-modern {
-    border: 2px solid #e3e6f0;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.875rem;
+/* Button Enhancements */
+.btn {
     font-weight: 600;
     border-radius: 0.5rem;
+    padding: 0.625rem 1.25rem;
     transition: all 0.2s ease;
 }
 
-.action-select-modern:focus {
-    border-color: var(--moya-primary);
-    box-shadow: 0 0 0 3px rgba(0, 128, 128, 0.1);
+.btn-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border: none;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
 }
 
-.action-waiting {
-    color: #858796;
-    font-size: 0.8rem;
-    font-style: italic;
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
 }
 
-.action-waiting i {
-    animation: pulse 2s infinite;
+.btn-secondary {
+    background-color: #64748b;
+    border: none;
 }
 
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+.btn-secondary:hover {
+    background-color: #475569;
+    transform: translateY(-1px);
 }
 
-.action-final {
-    color: #858796;
+/* Form Select Styling */
+.form-select-sm {
+    border-radius: 0.375rem;
+    border: 1px solid #e2e8f0;
     font-size: 0.875rem;
-    font-style: italic;
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
+    transition: all 0.2s ease;
 }
 
-/* Responsive */
-@media (max-width: 1200px) {
-    .order-stats-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
+.form-select-sm:hover {
+    border-color: #cbd5e1;
 }
 
+/* Empty State */
+.empty-state {
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    color: #cbd5e1;
+    margin-bottom: 1rem;
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
-    .order-stats-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .page-header {
+        font-size: 1.5rem;
     }
     
-    .order-table-modern {
-        font-size: 0.8rem;
+    .card-header {
+        font-size: 1rem;
+        padding: 1rem;
     }
     
-    .order-table-modern thead th,
-    .order-table-modern tbody td {
-        padding: 0.75rem 0.5rem;
+    .card-body {
+        padding: 1rem;
     }
-}
-
-@media (max-width: 576px) {
-    .order-stats-grid {
-        grid-template-columns: 1fr;
+    
+    .filter-section {
+        padding: 1rem;
+    }
+    
+    .table {
+        font-size: 0.875rem;
+    }
+    
+    .pagination {
+        font-size: 0.875rem;
+    }
+    
+    .page-link {
+        padding: 0.375rem 0.625rem;
+        min-width: 35px;
     }
 }
 </style>
 
 <div class="container-fluid">
-    <div class="page-header-modern">
-        <h1><i class="bi bi-box-seam-fill"></i> Order Management</h1>
-    </div>
-
+    <h1 class="page-header">
+        <i class="bi bi-clipboard-check me-2"></i>Order Management
+    </h1>
+    
     <?php echo $alert_message; ?>
 
-    <!-- Status Stats Grid -->
-    <div class="order-stats-grid">
-        <div class="order-stat-card pending">
-            <div class="order-stat-header">
-                <span class="order-stat-label">Pending</span>
-                <i class="bi bi-clock-history order-stat-icon" style="color: #f6c23e;"></i>
-            </div>
-            <div class="order-stat-value"><?php echo $status_counts['Pending'] ?? 0; ?></div>
+    <div class="card">
+        <div class="card-header">
+            <i class="bi bi-list-ul me-2"></i>All Orders
         </div>
-        
-        <div class="order-stat-card confirmed">
-            <div class="order-stat-header">
-                <span class="order-stat-label">Confirmed</span>
-                <i class="bi bi-check-circle order-stat-icon" style="color: #36b9cc;"></i>
-            </div>
-            <div class="order-stat-value"><?php echo $status_counts['Confirmed'] ?? 0; ?></div>
-        </div>
-        
-        <div class="order-stat-card picked-up">
-            <div class="order-stat-header">
-                <span class="order-stat-label">Picked Up</span>
-                <i class="bi bi-box order-stat-icon" style="color: #858796;"></i>
-            </div>
-            <div class="order-stat-value"><?php echo $status_counts['Picked Up'] ?? 0; ?></div>
-        </div>
-        
-        <div class="order-stat-card on-the-way">
-            <div class="order-stat-header">
-                <span class="order-stat-label">On the Way</span>
-                <i class="bi bi-truck order-stat-icon" style="color: #4e73df;"></i>
-            </div>
-            <div class="order-stat-value"><?php echo $status_counts['On the Way'] ?? 0; ?></div>
-        </div>
-        
-        <div class="order-stat-card completed">
-            <div class="order-stat-header">
-                <span class="order-stat-label">Completed</span>
-                <i class="bi bi-check-circle-fill order-stat-icon" style="color: #1cc88a;"></i>
-            </div>
-            <div class="order-stat-value"><?php echo $status_counts['Completed'] ?? 0; ?></div>
-        </div>
-        
-        <div class="order-stat-card cancelled">
-            <div class="order-stat-header">
-                <span class="order-stat-label">Cancelled</span>
-                <i class="bi bi-x-circle-fill order-stat-icon" style="color: #e74a3b;"></i>
-            </div>
-            <div class="order-stat-value"><?php echo $status_counts['Cancelled'] ?? 0; ?></div>
-        </div>
-    </div>
-
-    <!-- Main Orders Card -->
-    <div class="section-card-modern">
-        <div class="section-card-header-modern">
-            <h5><i class="bi bi-list-ul"></i> All Orders</h5>
-            <span class="badge bg-secondary"><?php echo $total_records; ?> Total</span>
-        </div>
-        <div class="section-card-body-modern">
-            <!-- Filters -->
-            <form method="GET" action="admin_orders.php" class="mb-3">
-                <div class="row g-2 align-items-center">
-                    <div class="col-md-4">
-                        <input type="text" name="search" class="form-control" placeholder="Search Order ID, Name, or Phone..." value="<?php echo htmlspecialchars($search); ?>">
+        <div class="card-body">
+            <!-- Filter Section -->
+            <form method="GET" action="admin_orders.php" id="filterForm" class="filter-section">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label small text-muted mb-1">
+                            <i class="bi bi-search me-1"></i>Search
+                        </label>
+                        <input type="text" 
+                               name="search" 
+                               id="searchInput" 
+                               class="form-control" 
+                               placeholder="Order ID, Name, or Phone..." 
+                               value="<?php echo htmlspecialchars($search); ?>"
+                               autocomplete="off">
                     </div>
-                    <div class="col-md-3">
-                        <select name="status" class="form-select">
+                    <div class="col-md-4">
+                        <label class="form-label small text-muted mb-1">
+                            <i class="bi bi-funnel me-1"></i>Status Filter
+                        </label>
+                        <select name="status" 
+                                id="statusFilter" 
+                                class="form-select" 
+                                onchange="document.getElementById('filterForm').submit()">
                             <option value="">All Statuses</option>
 >>>>>>> 81caf45 (try)
                             <?php foreach ($possible_statuses as $stat): ?>
@@ -657,6 +591,7 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
                             <?php endforeach; ?>
                         </select>
                     </div>
+<<<<<<< HEAD
 <<<<<<< HEAD
                     <div class="col-md-3 d-flex">
                         <button class="btn btn-primary flex-grow-1 me-2" type="submit"><i class="bi bi-funnel-fill"></i> Apply Filters</button>
@@ -669,18 +604,25 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
                         </button>
                     </div>
                     <div class="col-md-3">
+=======
+                    <div class="col-md-2 d-flex align-items-end">
+>>>>>>> 93ac7ac (Added all)
                         <?php if(!empty($search) || !empty($status_filter)): ?>
-                            <a href="admin_orders.php" class="btn btn-secondary w-100">
-                                <i class="bi bi-x-lg me-1"></i>Clear Filters
+                            <a href="admin_orders.php" class="btn btn-secondary w-100" title="Clear all filters">
+                                <i class="bi bi-x-lg me-1"></i> Clear
                             </a>
+<<<<<<< HEAD
                         <?php else: ?>
                             <span class="text-muted small">Showing all <?php echo $total_records; ?> orders</span>
 >>>>>>> 81caf45 (try)
+=======
+>>>>>>> 93ac7ac (Added all)
                         <?php endif; ?>
                     </div>
                 </div>
             </form>
 
+<<<<<<< HEAD
 <<<<<<< HEAD
             <div class="table-responsive">
                 <table class="table table-bordered table-hover align-middle">
@@ -696,22 +638,31 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
                             <th>Admin Action</th>
 =======
             <!-- Orders Table -->
+=======
+            <!-- Table -->
+>>>>>>> 93ac7ac (Added all)
             <div class="table-responsive">
-                <table class="table order-table-modern">
+                <table class="table table-hover align-middle">
                     <thead>
                         <tr>
                             <th>Order ID</th>
                             <th>Customer</th>
-                            <th>Delivery Address</th>
-                            <th>Order Date</th>
-                            <th>Amount</th>
+                            <th>Contact</th>
+                            <th>Address</th>
+                            <th>Date</th>
+                            <th>Total</th>
                             <th>Status</th>
+<<<<<<< HEAD
                             <th>Actions</th>
 >>>>>>> 81caf45 (try)
+=======
+                            <th>Action</th>
+>>>>>>> 93ac7ac (Added all)
                         </tr>
                     </thead>
                     <tbody>
                         <?php if ($orders_result->num_rows > 0): ?>
+<<<<<<< HEAD
 <<<<<<< HEAD
                             <?php while($order = $orders_result->fetch_assoc()): ?>
                             <tr>
@@ -758,35 +709,49 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
                                 $status_class = $status_class_map[$status] ?? '';
                                 $status_icon = $status_icon_map[$status] ?? 'circle';
                             ?>
+=======
+                            <?php while($order = $orders_result->fetch_assoc()): ?>
+>>>>>>> 93ac7ac (Added all)
                             <tr>
+                                <td><strong>#<?php echo $order['id']; ?></strong></td>
+                                <td><?php echo htmlspecialchars($order['full_name']); ?></td>
                                 <td>
-                                    <span class="order-id-badge">#<?php echo str_pad($order['id'], 5, '0', STR_PAD_LEFT); ?></span>
-                                </td>
-                                <td>
-                                    <div class="customer-info">
-                                        <span class="customer-name"><?php echo htmlspecialchars($order['full_name']); ?></span>
-                                        <span class="customer-contact">
-                                            <i class="bi bi-telephone-fill"></i> <?php echo htmlspecialchars($order['phone_number']); ?>
-                                        </span>
-                                    </div>
-                                </td>
-                                <td class="address-cell">
-                                    <div class="address-detail"><?php echo htmlspecialchars($order['address_detail']); ?></div>
-                                    <span class="address-barangay"><?php echo htmlspecialchars($order['address_barangay']); ?></span>
-                                </td>
-                                <td class="date-cell">
-                                    <span class="date-primary"><?php echo date('M d, Y', strtotime($order['order_date'])); ?></span>
-                                    <span class="time-secondary"><?php echo date('h:i A', strtotime($order['order_date'])); ?></span>
-                                </td>
-                                <td class="amount-cell">
-                                    ₱<?php echo number_format($order['total_amount'], 2); ?>
+                                    <small class="text-muted">
+                                        <i class="bi bi-telephone me-1"></i><?php echo htmlspecialchars($order['phone_number']); ?>
+                                    </small>
                                 </td>
                                 <td>
+                                    <small><?php echo htmlspecialchars($order['address_detail'] . ', ' . $order['address_barangay']); ?></small>
+                                </td>
+                                <td>
+<<<<<<< HEAD
                                     <span class="status-badge-modern <?php echo $status_class; ?>">
                                         <i class="bi bi-<?php echo $status_icon; ?>"></i>
                                         <?php echo $status; ?>
                                     </span>
 >>>>>>> 81caf45 (try)
+=======
+                                    <small><?php echo date('M d, Y', strtotime($order['order_date'])); ?></small>
+                                    <br>
+                                    <small class="text-muted"><?php echo date('h:i A', strtotime($order['order_date'])); ?></small>
+                                </td>
+                                <td><strong class="text-success">₱<?php echo number_format($order['total_amount'], 2); ?></strong></td>
+                                <td>
+                                    <?php
+                                        $status = htmlspecialchars($order['status']);
+                                        $badge_class = '';
+                                        switch ($status) {
+                                            case 'Pending': $badge_class = 'bg-warning text-dark'; break;
+                                            case 'Confirmed': $badge_class = 'bg-info text-dark'; break;
+                                            case 'Picked Up': $badge_class = 'bg-secondary'; break;
+                                            case 'On the Way': $badge_class = 'bg-primary'; break;
+                                            case 'Completed': $badge_class = 'bg-success'; break;
+                                            case 'Cancelled': $badge_class = 'bg-danger'; break;
+                                            default: $badge_class = 'bg-light text-dark';
+                                        }
+                                    ?>
+                                    <span class="badge <?php echo $badge_class; ?>"><?php echo $status; ?></span>
+>>>>>>> 93ac7ac (Added all)
                                 </td>
                                 <td>
                                     <?php
@@ -795,6 +760,7 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
                                     ?>
 
                                     <?php if ($is_final_state): ?>
+<<<<<<< HEAD
 <<<<<<< HEAD
                                         <span class="text-muted fst-italic">No action needed</span>
                                     <?php else: ?>
@@ -825,31 +791,36 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
                                         <span class="action-final">
                                             <i class="bi bi-check-circle-fill"></i>
                                             Finalized
+=======
+                                        <span class="text-muted fst-italic small">
+                                            <i class="bi bi-check-circle me-1"></i>Finalized
+>>>>>>> 93ac7ac (Added all)
                                         </span>
                                     <?php else: ?>
-                                        <select class="form-select form-select-sm action-select-modern"
+                                        <select class="form-select form-select-sm"
                                                 onchange="updateOrderStatus(<?php echo $order['id']; ?>, this.value)">
 
-                                            <option value="<?php echo $current_status; ?>" selected disabled hidden>Update Status</option>
+                                            <option value="<?php echo $current_status; ?>" selected disabled hidden>
+                                                <?php echo $current_status; ?> ▼
+                                            </option>
 
                                             <?php if ($current_status == 'Pending'): ?>
-                                                <option value="Confirmed">✓ Confirm Order</option>
+                                                <option value="Confirmed">Confirm Order</option>
                                             <?php elseif ($current_status == 'Confirmed'): ?>
-                                                <option value="Confirmed" disabled>⏳ Waiting for Pickup</option>
+                                                <option value="Confirmed" disabled>⏳ Awaiting Pickup...</option>
                                             <?php elseif ($current_status == 'Picked Up'): ?>
                                                 <option value="On the Way">🚚 Out for Delivery</option>
                                             <?php elseif ($current_status == 'On the Way'): ?>
-                                                <option value="On the Way" disabled>⏳ Waiting for Completion</option>
+                                                <option value="On the Way" disabled>⏳ Awaiting Completion...</option>
                                             <?php endif; ?>
                                             
                                             <?php if (!$is_final_state): ?>
-                                                <option value="Cancelled">✕ Cancel Order</option>
+                                                <option value="Cancelled">Cancel Order</option>
                                             <?php endif; ?>
                                         </select>
                                         <?php if (in_array($current_status, ['Confirmed', 'On the Way'])): ?>
-                                            <small class="action-waiting mt-1">
-                                                <i class="bi bi-hourglass-split"></i>
-                                                Waiting for customer
+                                            <small class="text-muted d-block mt-1">
+                                                <i class="bi bi-clock-history me-1"></i>User action needed
                                             </small>
 >>>>>>> 81caf45 (try)
                                         <?php endif; ?>
@@ -860,6 +831,7 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
                         <?php else: ?>
                             <tr>
 <<<<<<< HEAD
+<<<<<<< HEAD
                                 <td colspan="8" class="text-center text-muted p-4">
                                     <?php if(!empty($search) || !empty($status_filter)): ?>
                                         No orders found matching your filters.
@@ -869,13 +841,16 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
 =======
                                 <td colspan="7">
                                     <div class="empty-state-modern">
+=======
+                                <td colspan="8">
+                                    <div class="empty-state">
+>>>>>>> 93ac7ac (Added all)
                                         <i class="bi bi-inbox"></i>
-                                        <h5>No Orders Found</h5>
-                                        <p>
+                                        <p class="text-muted mb-0">
                                             <?php if(!empty($search) || !empty($status_filter)): ?>
-                                                No orders match your search criteria
+                                                No orders found matching your filters.
                                             <?php else: ?>
-                                                No orders have been placed yet
+                                                No orders available yet.
                                             <?php endif; ?>
                                         </p>
                                     </div>
@@ -888,6 +863,7 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
             </div>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
              <?php if ($total_pages > 1): ?>
                 <nav aria-label="Order navigation">
                     <ul class="pagination justify-content-center">
@@ -899,6 +875,31 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
                         <?php echo generate_order_pagination_links($page, $total_pages, $search, $status_filter); ?>
                     </ul>
                 </nav>
+=======
+            <!-- Pagination - Centered like the image -->
+            <?php if ($total_pages > 1): ?>
+                <div class="d-flex justify-content-center mt-4 pt-3 border-top">
+                    <nav aria-label="Order pagination">
+                        <ul class="pagination mb-0">
+                            <?php echo generate_order_pagination_links($page, $total_pages, $search, $status_filter); ?>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="text-center mt-2">
+                    <small class="text-muted">
+                        Page <?php echo $page; ?> of <?php echo $total_pages; ?> 
+                        <span class="mx-2">•</span>
+                        <?php echo $total_records; ?> total orders
+                    </small>
+                </div>
+            <?php elseif ($total_records > 0): ?>
+                <div class="text-center mt-3 pt-3 border-top">
+                    <small class="text-muted">
+                        <i class="bi bi-info-circle me-1"></i>
+                        Showing all <?php echo $total_records; ?> orders
+                    </small>
+                </div>
+>>>>>>> 93ac7ac (Added all)
             <?php endif; ?>
 
 <<<<<<< HEAD
@@ -916,20 +917,25 @@ function updateOrderStatus(orderId, newStatus) {
 =======
         </div>
     </div>
-
-    <!-- Bottom Pagination -->
-    <?php if ($total_pages > 1): ?>
-    <div class="d-flex justify-content-center mt-3 mb-4">
-        <nav aria-label="Order navigation bottom">
-            <ul class="pagination pagination-modern">
-                <?php echo generate_order_pagination_links($page, $total_pages, $search, $status_filter); ?>
-            </ul>
-        </nav>
-    </div>
-    <?php endif; ?>
 </div>
 
 <script>
+// Auto-search with debounce for accurate results
+let searchTimeout;
+const searchInput = document.getElementById('searchInput');
+
+if (searchInput) {
+    searchInput.addEventListener('input', function() {
+        // Clear the previous timeout
+        clearTimeout(searchTimeout);
+        
+        // Set a new timeout to submit after user stops typing (500ms delay)
+        searchTimeout = setTimeout(function() {
+            document.getElementById('filterForm').submit();
+        }, 500); // Wait 500ms after user stops typing
+    });
+}
+
 function updateOrderStatus(orderId, newStatus) {
     if (newStatus === 'Cancelled') {
         if (!confirm('⚠️ Are you sure you want to cancel Order #' + orderId + '?\n\nThis action cannot be undone.')) {
@@ -940,9 +946,10 @@ function updateOrderStatus(orderId, newStatus) {
     }
 
     // Show loading state
-    let selectElement = event.target;
+    const selectElement = event.target;
+    const originalHTML = selectElement.innerHTML;
     selectElement.disabled = true;
-    selectElement.style.opacity = '0.6';
+    selectElement.innerHTML = '<option>Updating...</option>';
 
 >>>>>>> 81caf45 (try)
     fetch('update_order_status.php', {
@@ -966,8 +973,12 @@ function updateOrderStatus(orderId, newStatus) {
         } else {
             alert('❌ Failed to update status: ' + (data.message || 'Unknown error'));
             selectElement.disabled = false;
+<<<<<<< HEAD
             selectElement.style.opacity = '1';
 >>>>>>> 81caf45 (try)
+=======
+            selectElement.innerHTML = originalHTML;
+>>>>>>> 93ac7ac (Added all)
         }
     })
     .catch(error => {
@@ -983,7 +994,7 @@ $stmt_orders->close(); // Close the prepared statement
 =======
         alert('❌ An error occurred while updating the status.');
         selectElement.disabled = false;
-        selectElement.style.opacity = '1';
+        selectElement.innerHTML = originalHTML;
     });
 }
 </script>

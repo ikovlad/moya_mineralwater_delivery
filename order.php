@@ -106,26 +106,6 @@ if (isset($conn) && $conn) {
             font-family: 'Bricolage Grotesque', sans-serif;
         }
 
-        /* Navbar Styles */
-        .navbar {
-            background-color: #fff !important;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .navbar-brand {
-            font-weight: 700;
-            font-size: 1.5rem;
-        }
-
-        .nav-link {
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .nav-link:hover {
-            color: var(--moya-primary) !important;
-        }
-
         #profileDropdown {
             background-color: var(--moya-primary) !important;
             border-color: var(--moya-primary) !important;
@@ -320,34 +300,26 @@ if (isset($conn) && $conn) {
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light sticky-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
     <div class="container py-2">
-        <a class="navbar-brand d-flex align-items-center gap-2" href="home.php">
-            <img src="img/moya_logo.png" alt="Moya Logo" style="height: 50px; width: auto;">
-            <span class="text-primary">Moya</span>
+        <a class="navbar-brand fw-bold text-primary d-flex align-items-center fs-3 gap-2" href="home.php">
+            <img src="img/moya_logo.png" alt="moya_logo" style="height: 50px; width: auto; object-fit: contain;">
+            Moya
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto align-items-lg-center">
-                <li class="nav-item">
-                    <a class="nav-link" href="home.php">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="home.php#products">Containers</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="home.php#process">Delivery</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="home.php#location">Area</a>
-                </li>
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-semibold fs-5">
+                <li class="nav-item"><a class="nav-link" href="home.php">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="home.php#products">Containers</a></li>
+                <li class="nav-item"><a class="nav-link" href="home.php#process">Delivery</a></li>
+                <li class="nav-item"><a class="nav-link" href="home.php#location">Area</a></li>
                 <li class="nav-item dropdown ms-lg-3">
-                    <a class="nav-link dropdown-toggle btn btn-primary rounded-pill px-4 text-white" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle btn btn-primary rounded-pill px-4 btn-md text-white" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <?php echo $user_name; ?>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="profileDropdown">
                         <li><a class="dropdown-item" href="profile.php">Profile</a></li>
                         <li><a class="dropdown-item" href="order.php">Order Here</a></li>
                         <li><hr class="dropdown-divider"></li>

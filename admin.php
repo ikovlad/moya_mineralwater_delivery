@@ -6,6 +6,7 @@ require_once "config.php";
 $email = $password = "";
 $login_err = ""; 
 
+<<<<<<< HEAD
 
 if (!function_exists('sanitize_input')) {
     function sanitize_input($conn, $data) {
@@ -20,6 +21,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($email) || empty($password)) {
         $login_err = "Email and password are required.";
+=======
+if (!function_exists('sanitize_input')) {
+    function sanitize_input($conn, $data) {
+        return htmlspecialchars(mysqli_real_escape_string($conn, trim($data)));
+    }
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $email = sanitize_input($conn, $_POST["email"] ?? '');
+    $password = $_POST["password"] ?? '';
+    $terms_accepted = isset($_POST["terms_accepted"]) ? true : false;
+
+    if (empty($email) || empty($password)) {
+        $login_err = "Email and password are required.";
+    } elseif (!$terms_accepted) {
+        $login_err = "You must accept the Terms & Conditions and Data Privacy Act to proceed.";
+>>>>>>> 93ac7ac (Added all)
     } else {
         $sql = "SELECT id, full_name, password_hash FROM admins WHERE email = ?";
         
@@ -220,6 +239,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             transform: translateY(0);
         }
         
+<<<<<<< HEAD
+=======
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: #6c757d;
+            transform: none;
+        }
+        
+        .btn-primary:disabled:hover {
+            box-shadow: none;
+        }
+        
+>>>>>>> 93ac7ac (Added all)
         .forgot-password { 
             text-align: right;
             margin-top: 0.75rem;
@@ -270,10 +303,120 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-left: 3px solid #1e40af;
         }
         
+<<<<<<< HEAD
         /* Loading state for button */
         .btn-primary:disabled {
             opacity: 0.6;
             cursor: not-allowed;
+=======
+        /* Terms & Conditions Checkbox Styling */
+        .terms-section {
+            background-color: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-check {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        
+        .form-check-input {
+            margin-top: 0.25rem;
+            width: 1.125rem;
+            height: 1.125rem;
+            border: 2px solid var(--border-color);
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--moya-primary);
+            border-color: var(--moya-primary);
+        }
+        
+        .form-check-input:focus {
+            box-shadow: 0 0 0 3px rgba(0, 128, 128, 0.1);
+        }
+        
+        .form-check-label {
+            font-size: 0.875rem;
+            color: #334155;
+            line-height: 1.5;
+            cursor: pointer;
+        }
+        
+        .terms-link {
+            color: var(--moya-primary);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        
+        .terms-link:hover {
+            color: #006666;
+            text-decoration: underline;
+        }
+        
+        /* Modal Styling */
+        .modal-header {
+            background: linear-gradient(135deg, var(--moya-primary) 0%, #006666 100%);
+            color: white;
+            border-bottom: none;
+            padding: 1.25rem 1.5rem;
+        }
+        
+        .modal-title {
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+        
+        .btn-close {
+            filter: brightness(0) invert(1);
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .modal-body h5 {
+            color: var(--moya-primary);
+            font-weight: 600;
+            margin-top: 1rem;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+        
+        .modal-body h5:first-child {
+            margin-top: 0;
+        }
+        
+        .modal-body p, .modal-body ul {
+            font-size: 0.9rem;
+            color: #475569;
+            line-height: 1.6;
+        }
+        
+        .modal-body ul {
+            padding-left: 1.5rem;
+        }
+        
+        .modal-body li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .modal-footer {
+            border-top: 1px solid var(--border-color);
+            padding: 1rem 1.5rem;
+>>>>>>> 93ac7ac (Added all)
         }
         
         /* Responsive adjustments */
@@ -285,6 +428,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             .login-card-header h1 {
                 font-size: 1.5rem;
             }
+<<<<<<< HEAD
+=======
+            
+            .terms-section {
+                padding: 0.875rem;
+            }
+            
+            .form-check-label {
+                font-size: 0.8rem;
+            }
+>>>>>>> 93ac7ac (Added all)
         }
     </style>
 </head>
@@ -319,13 +473,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             ?>
 
+<<<<<<< HEAD
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" novalidate>
+=======
+            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" id="loginForm" novalidate>
+>>>>>>> 93ac7ac (Added all)
                 
                 <div class="mb-4">
                     <label for="email" class="form-label">Email Address</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-envelope"></i></span>
                         <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" placeholder="admin@moya.com" required>
+<<<<<<< HEAD
                     </div>
                 </div>
 
@@ -345,13 +504,226 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="d-grid">
                     <button type="submit" class="btn btn-primary">
+=======
+                    </div>
+                </div>
+
+                <div class="mb-2">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                    </div>
+                </div>
+
+                <div class="forgot-password">
+                    <a href="admin_forgot_password.php">
+                        <i class="bi"></i> Forgot Password?
+                    </a>
+                </div>
+
+                <!-- Terms & Conditions Section -->
+                <div class="terms-section">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="termsAccepted" name="terms_accepted" required>
+                        <label class="form-check-label" for="termsAccepted">
+                            I have read and agree to the 
+                            <a href="#" class="terms-link" data-bs-toggle="modal" data-bs-target="#termsModal" onclick="event.preventDefault();">Terms & Conditions</a> 
+                            and 
+                            <a href="#" class="terms-link" data-bs-toggle="modal" data-bs-target="#privacyModal" onclick="event.preventDefault();">Data Privacy Act</a>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary" id="loginButton" disabled>
+>>>>>>> 93ac7ac (Added all)
                         <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
                     </button>
                 </div>
                 
             </form>
+<<<<<<< HEAD
         </div>
     </div>
 
+=======
+        </div>
+    </div>
+
+    <!-- Terms & Conditions Modal -->
+    <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="termsModalLabel">
+                        <i class="bi bi-file-text me-2"></i>Terms & Conditions
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>1. Acceptance of Terms</h5>
+                    <p>By accessing and using the Moya Water Delivery Admin Panel, you accept and agree to be bound by the terms and provisions of this agreement.</p>
+
+                    <h5>2. Administrator Responsibilities</h5>
+                    <p>As an administrator, you agree to:</p>
+                    <ul>
+                        <li>Maintain the confidentiality of your login credentials</li>
+                        <li>Use the system only for legitimate business purposes</li>
+                        <li>Not share your account access with unauthorized persons</li>
+                        <li>Report any security breaches immediately</li>
+                        <li>Handle customer data with care and professionalism</li>
+                    </ul>
+
+                    <h5>3. Data Management</h5>
+                    <p>Administrators must:</p>
+                    <ul>
+                        <li>Ensure accuracy of all data entered into the system</li>
+                        <li>Process orders and customer information promptly</li>
+                        <li>Maintain data integrity and security at all times</li>
+                        <li>Follow company protocols for data backup and recovery</li>
+                    </ul>
+
+                    <h5>4. Prohibited Activities</h5>
+                    <p>The following activities are strictly prohibited:</p>
+                    <ul>
+                        <li>Unauthorized access to system areas</li>
+                        <li>Modification of system code or database without authorization</li>
+                        <li>Sharing customer information with third parties</li>
+                        <li>Using the system for personal gain or fraudulent purposes</li>
+                        <li>Attempting to bypass security measures</li>
+                    </ul>
+
+                    <h5>5. Account Termination</h5>
+                    <p>Moya reserves the right to terminate or suspend administrator access at any time for violations of these terms or for any reason deemed necessary for business operations.</p>
+
+                    <h5>6. Limitation of Liability</h5>
+                    <p>Moya shall not be liable for any indirect, incidental, or consequential damages arising from the use or inability to use the admin panel.</p>
+
+                    <h5>7. Changes to Terms</h5>
+                    <p>Moya reserves the right to modify these terms at any time. Continued use of the system after changes constitutes acceptance of the new terms.</p>
+
+                    <h5>8. Governing Law</h5>
+                    <p>These terms shall be governed by and construed in accordance with the laws of the Republic of the Philippines.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Privacy Act Modal -->
+    <div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="privacyModalLabel">
+                        <i class="bi bi-shield-check me-2"></i>Data Privacy Act Compliance
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>Data Privacy Act of 2012 (RA 10173)</h5>
+                    <p>Moya Water Delivery is committed to protecting the privacy and security of personal data in compliance with the Data Privacy Act of 2012.</p>
+
+                    <h5>1. Data Collection and Processing</h5>
+                    <p>As an administrator, you will have access to personal information including:</p>
+                    <ul>
+                        <li>Customer names, addresses, and contact information</li>
+                        <li>Order history and transaction details</li>
+                        <li>Payment information</li>
+                        <li>Delivery preferences and schedules</li>
+                    </ul>
+
+                    <h5>2. Administrator Obligations</h5>
+                    <p>You agree to:</p>
+                    <ul>
+                        <li>Process personal data only for legitimate business purposes</li>
+                        <li>Implement appropriate security measures to protect data</li>
+                        <li>Not disclose personal information to unauthorized parties</li>
+                        <li>Report any data breaches immediately to management</li>
+                        <li>Delete or anonymize data when no longer necessary</li>
+                    </ul>
+
+                    <h5>3. Data Subject Rights</h5>
+                    <p>Customers have the right to:</p>
+                    <ul>
+                        <li>Access their personal information</li>
+                        <li>Request correction of inaccurate data</li>
+                        <li>Object to processing of their data</li>
+                        <li>Request deletion of their data (subject to legal requirements)</li>
+                        <li>Be informed of data breaches affecting their information</li>
+                    </ul>
+
+                    <h5>4. Security Measures</h5>
+                    <p>The system implements:</p>
+                    <ul>
+                        <li>Encrypted data transmission and storage</li>
+                        <li>Access controls and authentication</li>
+                        <li>Regular security audits and updates</li>
+                        <li>Activity logging and monitoring</li>
+                    </ul>
+
+                    <h5>5. Data Retention</h5>
+                    <p>Personal data will be retained only for as long as necessary to fulfill business purposes or as required by law. Inactive accounts and completed orders will be archived or deleted according to company policy.</p>
+
+                    <h5>6. Third-Party Sharing</h5>
+                    <p>Customer data may be shared with third parties only when:</p>
+                    <ul>
+                        <li>Required by law or legal process</li>
+                        <li>Necessary for service delivery (e.g., delivery partners)</li>
+                        <li>Customer has provided explicit consent</li>
+                    </ul>
+
+                    <h5>7. Data Breach Protocol</h5>
+                    <p>In the event of a data breach, administrators must:</p>
+                    <ul>
+                        <li>Immediately report the incident to management</li>
+                        <li>Document the nature and extent of the breach</li>
+                        <li>Cooperate with the investigation</li>
+                        <li>Assist in notifying affected customers</li>
+                    </ul>
+
+                    <h5>8. Penalties for Non-Compliance</h5>
+                    <p>Violations of the Data Privacy Act may result in:</p>
+                    <ul>
+                        <li>Immediate termination of access</li>
+                        <li>Legal action and penalties</li>
+                        <li>Criminal prosecution under RA 10173</li>
+                    </ul>
+
+                    <h5>Contact Information</h5>
+                    <p>For questions regarding data privacy, contact the Data Protection Officer at: privacy@moya.com</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Enable/disable login button based on checkbox
+        document.addEventListener('DOMContentLoaded', function() {
+            const termsCheckbox = document.getElementById('termsAccepted');
+            const loginButton = document.getElementById('loginButton');
+            
+            termsCheckbox.addEventListener('change', function() {
+                loginButton.disabled = !this.checked;
+            });
+
+            // Prevent form submission if terms not accepted
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                if (!termsCheckbox.checked) {
+                    e.preventDefault();
+                    alert('You must accept the Terms & Conditions and Data Privacy Act to proceed.');
+                }
+            });
+        });
+    </script>
+
+>>>>>>> 93ac7ac (Added all)
 </body>
 </html>

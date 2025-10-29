@@ -11,25 +11,393 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2ntuNlWwwR0z5jD9Dq0a9G" crossorigin="anonymous">
+        crossorigin="anonymous">
+    <!-- Bootstrap Icons - IMPORTANT! -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <!-- Google Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
         rel="stylesheet">
-
+    <!-- Custom Styles -->
     <link rel="stylesheet" href="styles.css">
+
+
+    <style>
+        :root {
+            --moya-primary: #008080;
+            --moya-secondary: #00bfff;
+            --moya-cta: #ff9900;
+            --moya-bg: #f5fcfc;
+            --bs-primary: var(--moya-primary);
+            --bs-primary-rgb: 0, 128, 128;
+        }
+
+        body {
+            font-family: Lato, sans-serif;
+            background-image: url(img/bg.svg);
+            color: #1f2937;
+            font-size: 1.5em;
+        }
+
+        h2 {
+            font-family: Bricolage Grotesque, sans-serif;
+            font-size: 5rem;
+        }
+
+        .hero-bg {
+            background-image: url(img/bg.svg);
+        }
+
+        .hero-bg h1 {
+            font-family: Bricolage Grotesque, sans-serif;
+            font-size: 5rem;
+        }
+
+        .hero-bg .lead {
+            font-size: 1.5rem;
+            font-family: Lato, sans-serif;
+            font-weight: 350;
+        }
+
+        #hero .col-md-5 {
+            display: flex;
+            align-items: flex-end;
+            position: relative;
+            min-height: 500px;
+        }
+
+        #hero .col-md-5 img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            transform: scale(1.3);
+            transform-origin: bottom center;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .btn-cta {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: #fff !important;
+            font-weight: 700;
+            padding: .75rem 2rem;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-cta:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            color: #fff !important;
+            box-shadow: 0 10px 20px rgba(0, 123, 255, 0.5) !important;
+            transform: translateY(-2px);
+        }
+
+        .card-shadow {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 15px rgba(0, 0, 0, 0.03);
+        }
+
+        .product-img {
+            max-width: 100%;
+            height: 250px;
+            object-fit: contain;
+        }
+
+        .hover-border-primary:hover {
+            border-color: var(--moya-primary) !important;
+        }
+
+        #profileDropdown {
+            background-color: #008080 !important;
+        }
+
+        #location-check-map {
+            height: 450px;
+            width: 100%;
+            border-radius: 0.5rem;
+            cursor: grab;
+        }
+
+        .leaflet-marker-draggable {
+            cursor: grabbing !important;
+        }
+
+        #addressDisplay {
+            min-height: 40px;
+            font-size: 0.9rem;
+            background-color: #e9ecef;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        #products h2 {
+            font-family: Bricolage Grotesque, sans-serif;
+            font-size: 4rem;
+            color: var(--moya-primary) !important;
+        }
+
+        #process h2 {
+            font-family: Bricolage Grotesque, sans-serif;
+            font-size: 4rem;
+            color: var(--moya-primary) !important;
+        }
+
+        #process .h5 {
+            font-size: 1.2rem;
+        }
+
+        #process p {
+            font-size: 1.2rem;
+        }
+
+        /* --- MAP --- */
+        #location .lead {
+            font-weight: 400;
+        }
+
+        .map-placeholder {
+            min-height: 350px;
+            background-color: #e3f2fd;
+            border: 2px solid #90caf9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border-radius: 0.75rem;
+        }
+
+        /* --- How to Order Section Styles --- */
+        #how-to-order {
+            background: linear-gradient(135deg, #e6f7f7 0%, #f0fbfb 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #how-to-order::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 128, 128, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: 0;
+        }
+
+        #how-to-order .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        #how-to-order h2 {
+            font-family: 'Bricolage Grotesque', sans-serif;
+            font-size: 4rem;
+            font-weight: bold;
+            color: var(--moya-primary) !important;
+            margin-bottom: 1rem;
+        }
+
+        #how-to-order .section-subtitle {
+            font-size: 1.25rem;
+            color: #555;
+            max-width: 900px;
+            margin: 0 auto 3rem;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 992px) {
+            #how-to-order .section-subtitle {
+                white-space: normal;
+            }
+        }
+
+        .process-timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline-step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 3rem;
+            position: relative;
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .timeline-step:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .timeline-step:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .timeline-step:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .timeline-step:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .timeline-step:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--moya-primary) 0%, #006666 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            box-shadow: 0 6px 20px rgba(0, 128, 128, 0.3);
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-step:hover .step-number {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 8px 25px rgba(0, 128, 128, 0.4);
+        }
+
+        .step-connector {
+            position: absolute;
+            left: 39px;
+            top: 80px;
+            width: 3px;
+            height: calc(100% - 50px);
+            background: linear-gradient(to bottom, var(--moya-primary), transparent);
+            z-index: 1;
+        }
+
+        .timeline-step:last-child .step-connector {
+            display: none;
+        }
+
+        .step-content {
+            flex: 1;
+            margin-left: 2rem;
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--moya-primary);
+        }
+
+        .timeline-step:hover .step-content {
+            transform: translateX(10px);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .step-icon-badge {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 128, 128, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: var(--moya-primary);
+            font-size: 1.3rem;
+        }
+
+        .step-content h5 {
+            font-weight: 700;
+            color: var(--moya-primary);
+            margin: 0;
+            font-size: 1.4rem;
+        }
+
+        .step-content p {
+            color: #555;
+            margin: 0;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .step-tag {
+            display: inline-block;
+            background: rgba(0, 128, 128, 0.1);
+            color: var(--moya-primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        /* Responsive adjustments for arrows */
+        @media (max-width: 768px) {
+            #how-to-order h2 {
+                font-size: 2.5rem;
+            }
+
+            .step-number {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            .step-connector {
+                left: 29px;
+                top: 60px;
+            }
+
+            .step-content {
+                margin-left: 1rem;
+                padding: 1.25rem 1.5rem;
+            }
+
+            .step-content h5 {
+                font-size: 1.2rem;
+            }
+
+            .step-content p {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <!-- User page -->
-
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
         <div class="container py-2">
-            <!-- Logo: Moya -->
             <a class="navbar-brand fw-bold text-primary d-flex align-items-center fs-3 gap-2" href="index.html">
-                <!-- Water Drop Icon -->
                 <img src="img/moya_logo.png" alt="moya_logo" style="height: 50px; width: auto; object-fit: contain;">
                 Moya
             </a>
@@ -52,7 +420,6 @@
                         <a class="nav-link" href="#location">Area</a>
                     </li>
                 </ul>
-                <!-- Login CTA in Nav -->
                 <button onclick="openLoginModal('nav')"
                     class="btn btn-primary rounded-pill fw-semibold ms-lg-3 px-4 btn-md">
                     Get Started
@@ -61,12 +428,10 @@
         </div>
     </nav>
 
-
     <!-- Hero Section -->
     <section id="hero" class="hero-bg py-5 py-xl-10">
         <div class="container">
             <div class="row align-items-center gx-5">
-                <!-- Text Content -->
                 <div class="col-md-7 order-md-1 order-2 text-center text-md-start pt-5">
                     <h1 class="display-4 fw-bolder lh-1 mb-3 text-gray-800" id="tagline">
                         Refill the Chill <br><span class="text-primary d-block d-sm-inline">Anytime, Anywhere</span>
@@ -77,11 +442,9 @@
                         In-Town). Order now and expect delivery in <b>1-2 hours</b>!
                     </p>
                     <div class="d-grid d-sm-flex gap-3 justify-content-center justify-content-md-start">
-                        <!-- Primary CTA: Must require login first -->
                         <button onclick="openLoginModal('hero')" class="btn btn-cta btn-lg rounded-pill shadow-lg">
                             Place Your Order Now
                         </button>
-                        <!-- Secondary CTA -->
                         <a href="#products"
                             class="btn btn-outline-primary btn-lg rounded-pill fw-bold d-inline-flex align-items-center justify-content-center view-pricing-btn"
                             style="border-width: 2px; text-decoration: none; background-color: var(--moya-bg);">
@@ -89,8 +452,6 @@
                         </a>
                     </div>
                 </div>
-
-                <!-- Image/Placeholder -->
                 <div class="col-md-5 order-md-2 order-1 text-center d-flex align-items-center justify-content-center"
                     style="min-height: 500px;">
                     <img src="img/front_img.png" class="img-fluid w-100"
@@ -106,15 +467,12 @@
     <section id="products" class="py-5 py-xl-10 bg-white">
         <div class="container">
             <h2 class="display-6 fw-bold text-center mb-2" id="options" style="color: var(--moya-primary) !important;">
-                Our Gallon
-                Options</h2>
+                Our Gallon Options</h2>
             <p class="text-center text-secondary mb-5 mx-auto text-black" style="max-width: 700px;">
                 Choose the container that fits your home. Remember, you must <b>log in or sign up</b> to place an order.
             </p>
 
             <div class="row g-4 justify-content-center">
-
-                <!-- Product 1: Standard Round Gallon -->
                 <div class="col-md-5">
                     <div
                         class="card p-4 rounded-4 card-shadow text-center h-100 border-2 border-transparent transition duration-300 hover-border-primary">
@@ -122,18 +480,14 @@
                             class="mx-auto mb-3 product-img" style="max-width: 180px;">
                         <h3 class="h4 fw-semibold mb-2 text-gray-800">Standard Round Container</h3>
                         <p class="text-muted mb-3">The traditional and robust 5-gallon container.</p>
-
                         <div class="bg-light rounded-3 p-3 mb-3">
                             <p class="mb-1 fw-bold text-primary">REFILL PRICE:</p>
                             <p class="display-6 fw-bold text-primary mb-0">₱20.00</p>
                         </div>
-
                         <div class="mt-3">
                             <p class="fw-semibold text-secondary mb-1">Buy New Container Option:</p>
                             <p class="h5 fw-bold text-dark">₱120.00 (Includes container + First Refill)</p>
                         </div>
-
-
                         <button onclick="openLoginModal('Round Gallon')"
                             class="btn btn-primary btn-lg rounded-pill fw-semibold shadow-sm w-100 mt-4">
                             Order Refill or New Container
@@ -141,7 +495,6 @@
                     </div>
                 </div>
 
-                <!-- Product 2: Slim w/ Faucet Gallon -->
                 <div class="col-md-5">
                     <div
                         class="card p-4 rounded-4 card-shadow text-center h-100 border-2 border-transparent transition duration-300 hover-border-primary">
@@ -149,17 +502,14 @@
                             class="mx-auto mb-3 product-img" style="max-width: 180px;">
                         <h3 class="h4 fw-semibold mb-2 text-gray-800">Slim Container with Faucet</h3>
                         <p class="text-muted mb-3">Space-saving with dispensing faucet</p>
-
                         <div class="bg-light rounded-3 p-3 mb-3">
                             <p class="mb-1 fw-bold text-primary">REFILL PRICE:</p>
                             <p class="display-6 fw-bold text-primary mb-0">₱20.00</p>
                         </div>
-
                         <div class="mt-3">
                             <p class="fw-semibold text-secondary mb-1">Buy New Container Option:</p>
                             <p class="h5 fw-bold text-dark">₱120.00 (Includes container + First Refill)</p>
                         </div>
-
                         <button onclick="openLoginModal('Slim Gallon')"
                             class="btn btn-primary btn-lg rounded-pill fw-semibold shadow-sm w-100 mt-4">
                             Order Refill or New Container
@@ -170,98 +520,141 @@
         </div>
     </section>
 
-    <!-- ===============================
-         NEW: How to Order Section
-         =============================== -->
+    <!-- How to Order Section -->
     <section id="how-to-order" class="py-5 py-xl-10">
         <div class="container">
-            <h2 class="display-6 fw-bold text-center mb-5" style="color: var(--moya-primary) !important;">
-                How to Order & Process
-            </h2>
-            <div class="process-steps">
+            <h2 class="text-center mb-2">How to Order & Process</h2>
+            <p class="text-center section-subtitle">
+                Follow these simple steps to get your premium water delivered fresh to your door
+            </p>
 
-                <!-- Step 1: Sign Up / Login & Order -->
-                <div class="step">
-                    <div class="step-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
-                            class="bi bi-person-plus-fill" viewBox="0 0 16 16">
-                            <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
-                            <path fill-rule="evenodd"
-                                d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5" />
-                        </svg>
+            <div class="process-timeline">
+                <!-- Step 1 -->
+                <div class="timeline-step">
+                    <div class="step-number">1</div>
+                    <div class="step-connector"></div>
+                    <div class="step-content">
+                        <div class="step-header">
+                            <div class="step-icon-badge">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
+                                    viewBox="0 0 16 16">
+                                    <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                                    <path fill-rule="evenodd"
+                                        d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5" />
+                                </svg>
+                            </div>
+                            <h5>Create Account & Place Order</h5>
+                        </div>
+                        <p>Sign up or log in to your account. Browse our container options, select your products, and
+                            submit your order. Make sure to review and agree to our order policy before completing your
+                            request.</p>
+                        <span class="step-tag">Your Action Required</span>
                     </div>
-                    <h5>Step 1: Account & Order</h5>
-                    <p>Sign up or Login. Browse products, add items to your order, and agree to the order policy before
-                        submitting.</p>
                 </div>
 
-                <!-- Step 2: Confirmation -->
-                <div class="step">
-                    <div class="step-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
-                            class="bi bi-telephone-outbound-fill" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd"
-                                d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877zm10.761.135a.5.5 0 0 1 .708 0l2.5 2.5a.5.5 0 0 1 0 .708l-2.5 2.5a.5.5 0 0 1-.708-.708L14.293 4H9.5a.5.5 0 0 1 0-1h4.793l-1.647-1.646a.5.5 0 0 1 0-.708" />
-                        </svg>
+                <!-- Step 2 -->
+                <div class="timeline-step">
+                    <div class="step-number">2</div>
+                    <div class="step-connector"></div>
+                    <div class="step-content">
+                        <div class="step-header">
+                            <div class="step-icon-badge">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
+                                    viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                        d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877zm10.761.135a.5.5 0 0 1 .708 0l2.5 2.5a.5.5 0 0 1 0 .708l-2.5 2.5a.5.5 0 0 1-.708-.708L14.293 4H9.5a.5.5 0 0 1 0-1h4.793l-1.647-1.646a.5.5 0 0 1 0-.708" />
+                                </svg>
+                            </div>
+                            <h5>Receive Confirmation Call</h5>
+                        </div>
+                        <p>Your order will appear as "Pending" in your profile. Our team will call you shortly to
+                            confirm your order details, delivery address, and preferred time. Once confirmed, the status
+                            updates to "Confirmed".</p>
+                        <span class="step-tag">We'll Contact You</span>
                     </div>
-                    <h5>Step 2: Admin Confirmation</h5>
-                    <p>View your 'Pending' order in your Profile. Our admin will call you to confirm details. Then, the
-                        admin updates the status to 'Confirmed'.</p>
                 </div>
 
-                <!-- Step 3: Container Pickup -->
-                <div class="step">
-                    <div class="step-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
-                            class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd"
-                                d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5" />
-                            <path fill-rule="evenodd"
-                                d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z" />
-                        </svg>
+                <!-- Step 3 -->
+                <div class="timeline-step">
+                    <div class="step-number">3</div>
+                    <div class="step-connector"></div>
+                    <div class="step-content">
+                        <div class="step-header">
+                            <div class="step-icon-badge">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
+                                    viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                        d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5" />
+                                    <path fill-rule="evenodd"
+                                        d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z" />
+                                </svg>
+                            </div>
+                            <h5>Container Pickup</h5>
+                        </div>
+                        <p>Our delivery rider will arrive at your location to collect your empty container(s) for
+                            refilling. After the pickup is complete, please go to your profile and update the order
+                            status to "Confirm Pickup".</p>
+                        <span class="step-tag">Your Action Required</span>
                     </div>
-                    <h5>Step 3: Container Pickup</h5>
-                    <p>Our rider collects your empty container(s). Afterwards, please go to your Profile and update the
-                        order status to 'Confirm Pickup'.</p>
                 </div>
 
-                <!-- Step 4: Refill & Delivery Prep -->
-                <div class="step">
-                    <div class="step-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
-                            class="bi bi-truck" viewBox="0 0 16 16">
-                            <path
-                                d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12z" />
-                            <path
-                                d="M10 11.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m-7 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
-                        </svg>
+                <!-- Step 4 -->
+                <div class="timeline-step">
+                    <div class="step-number">4</div>
+                    <div class="step-connector"></div>
+                    <div class="step-content">
+                        <div class="step-header">
+                            <div class="step-icon-badge">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
+                                    viewBox="0 0 16 16">
+                                    <path
+                                        d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12z" />
+                                    <path
+                                        d="M10 11.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m-7 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+                                </svg>
+                            </div>
+                            <h5>Refilling & Out for Delivery</h5>
+                        </div>
+                        <p>We'll refill your container with premium purified water at our station. Once your order is
+                            ready and our rider is heading to your location, we'll update the status to "Set Out for
+                            Delivery".</p>
+                        <span class="step-tag">We're Processing</span>
                     </div>
-                    <h5>Step 4: Refill & En Route</h5>
-                    <p>We refill your container at the station. Once the rider is heading back to you, the admin will
-                        update the status to 'Set Out for Delivery'.</p>
                 </div>
 
-                <!-- Step 5: Delivery & Payment -->
-                <div class="step">
-                    <div class="step-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
-                            class="bi bi-cash-stack" viewBox="0 0 16 16">
-                            <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
-                            <path
-                                d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2z" />
-                        </svg>
+                <!-- Step 5 -->
+                <div class="timeline-step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <div class="step-header">
+                            <div class="step-icon-badge">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
+                                    viewBox="0 0 16 16">
+                                    <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
+                                    <path
+                                        d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2z" />
+                                </svg>
+                            </div>
+                            <h5>Delivery & Payment</h5>
+                        </div>
+                        <p>The rider delivers your freshly refilled container to your doorstep. Pay using Cash on
+                            Delivery (COD). After receiving your order and making payment, please update the status to
+                            "Confirm Delivery & Payment" in your profile.</p>
+                        <span class="step-tag">Your Action Required</span>
                     </div>
-                    <h5>Step 5: Delivery & Payment</h5>
-                    <p>The rider delivers your refilled container. Please pay via Cash on Delivery (COD). Finally, go to
-                        your Profile and update the status to 'Confirm Delivery & Payment'.</p>
                 </div>
+            </div>
 
-            </div> <!-- End process-steps -->
-        </div> <!-- End container -->
+            <!-- Optional: Add a helpful note -->
+            <div class="text-center mt-5">
+                <div class="alert alert-info d-inline-block"
+                    style="max-width: 600px; border-left: 4px solid var(--moya-primary);">
+                    <strong>💡 Pro Tip:</strong> Keep your profile updated throughout the process for accurate tracking
+                    and faster service!
+                </div>
+            </div>
+        </div>
     </section>
-    <!-- ===============================
-         End How to Order Section
-         =============================== -->
 
     <!-- Promo Banner -->
     <section id="promo-banner" class="text-center py-3">
@@ -272,15 +665,12 @@
         </div>
     </section>
 
-
     <!-- Delivery Process & Schedule Section -->
     <section id="process" class="py-5 py-xl-10" style="background-color: #e9f2ff;">
         <div class="container">
             <h2 class="display-6 fw-bold text-center mb-5" id="dands" style="color: var(--moya-primary) !important;">
                 Delivery & Schedule</h2>
             <div class="row g-4 text-center">
-
-                <!-- Step 1: Schedule -->
                 <div class="col-md-4">
                     <div class="p-4 bg-white rounded-4 card-shadow h-100">
                         <svg class="mb-3 text-primary" width="48" height="48" fill="currentColor" viewBox="0 0 24 24"
@@ -296,7 +686,6 @@
                     </div>
                 </div>
 
-                <!-- Step 2: Delivery Speed -->
                 <div class="col-md-4">
                     <div class="p-4 bg-white rounded-4 card-shadow h-100">
                         <svg class="mb-3 text-primary" width="48" height="48" fill="currentColor" viewBox="0 0 24 24"
@@ -313,7 +702,6 @@
                     </div>
                 </div>
 
-                <!-- Step 3: Payment -->
                 <div class="col-md-4">
                     <div class="p-4 bg-white rounded-4 card-shadow h-100">
                         <svg class="mb-3 text-success" width="48" height="48" fill="currentColor" viewBox="0 0 24 24"
@@ -323,9 +711,7 @@
                         </svg>
                         <h3 class="h5 fw-bold text-gray-800">Payment Method</h3>
                         <p class="text-secondary mb-0" id="payment">
-                            We accept <strong>Cash on Delivery (COD)</strong> only. Please prepare the exact amount for
-                            a smooth
-                            transaction.
+                            We accept <strong>Cash on Delivery (COD)</strong> only. Please prepare the exact amount.
                         </p>
                     </div>
                 </div>
@@ -333,16 +719,14 @@
         </div>
     </section>
 
-    <!-- Service Area Section (Map Integration Placeholder) -->
+    <!-- Service Area Section -->
     <section id="location" class="py-5 py-xl-10">
         <div class="container">
             <div class="row align-items-center gx-5">
                 <div class="col-lg-6 mb-4 mb-lg-0">
                     <h2 class="display-6 fw-bold mb-3">Service Area: Rosario, La Union</h2>
                     <p class="lead text-secondary mb-4" id="service-desc">
-                        We proudly serve our local community in <b>Barangay Cataguingtingan</b> and surrounding
-                        <b>In-Town
-                            areas</b> only. Check the map for our specific delivery locations.
+                        We proudly serve <b>Barangay Cataguingtingan</b> and surrounding <b>In-Town areas</b> only.
                     </p>
                     <button onclick="openLocationCheckModal()" class="btn btn-primary btn-lg rounded-pill fw-semibold">
                         Confirm My Delivery Address
@@ -355,6 +739,7 @@
         </div>
     </section>
 
+    <!-- Location Check Modal -->
     <div class="modal fade" id="locationCheckModal" tabindex="-1" aria-labelledby="locationCheckModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -364,10 +749,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="text-muted">This feature is only available for registered users. Please login first.
-                        The <span class="text-success fw-bold">green pin</span> is your barangay, and the <span
-                            class="text-primary fw-bold">blue pins</span> are our delivery points.
-                    </p>
+                    <p class="text-muted">This feature is only available for registered users. Please login first.</p>
                     <div id="location-check-map" class="mb-3"></div>
                     <div id="locationStatus" class="mt-3 text-center fw-bold"></div>
                 </div>
@@ -378,201 +760,476 @@
     <!-- Footer -->
     <footer class="bg-primary text-white py-4 mt-auto">
         <div class="container text-center">
-            <p class="mb-0" id="footer-text">&copy; 2024 Moya - Mineral Water Delivery. All rights reserved. | Rosario,
-                La Union.</p>
+            <p class="mb-0" id="footer-text">&copy; 2024 Moya - Mineral Water Delivery. All rights reserved.</p>
         </div>
     </footer>
 
-    <!-- Authentication Modal (Login/Signup Pop-up) - REQUIRED TO ORDER -->
+    <!-- Authentication Modal -->
     <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content rounded-4 card-shadow">
-                <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold text-gray-800 fs-3" id="authModalLabel"
-                        style="color: var(--moya-primary) !important;">Welcome to Moya!</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-content">
+                <!-- Professional Gradient Header -->
+                <div class="modal-header border-0"
+                    style="background: linear-gradient(135deg, #008080 0%, #006666 100%); color: white; padding: 2.5rem 2rem 2rem; position: relative;">
+                    <div class="w-100 text-center">
+                        <div class="water-drop-icon"
+                            style="width: 70px; height: 70px; background-color: rgba(255, 255, 255, 0.2); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 1rem; animation: float 3s ease-in-out infinite;">
+                            <i class="bi bi-droplet-fill" style="font-size: 2.25rem; color: white;"></i>
+                        </div>
+                        <h5 class="modal-title" id="authModalLabel"
+                            style="font-size: 1.75rem; font-weight: 700; color: white; margin: 0; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                            Welcome to Moya!</h5>
+                        <p class="modal-subtitle mb-0"
+                            style="font-size: 0.95rem; color: rgba(255, 255, 255, 0.85); font-weight: 400;">Premium
+                            Mineral Water Delivery</p>
+                    </div>
+                    <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal"
+                        aria-label="Close" style="filter: brightness(0) invert(1); opacity: 0.9;"></button>
                 </div>
 
-                <div class="modal-body">
-                    <ul class="nav nav-tabs mb-3" id="authTabs" role="tablist">
+                <div class="modal-body" style="padding: 2.5rem 3rem 3rem;">
+                    <!-- Tab Navigation -->
+                    <ul class="nav nav-tabs nav-fill mb-4" id="authTabs" role="tablist"
+                        style="background-color: #f1f5f9; border-radius: 0.75rem; padding: 0.375rem; border: none; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active fw-semibold" id="login-tab" data-bs-toggle="tab"
-                                data-bs-target="#login-pane" type="button" role="tab" aria-controls="login-pane"
-                                aria-selected="true">Login</button>
+                            <button class="nav-link active" id="login-tab" data-bs-toggle="tab"
+                                data-bs-target="#login-pane" type="button" role="tab"
+                                style="border: none; border-radius: 0.625rem; padding: 0.875rem 1.75rem; font-weight: 600; font-size: 1rem; transition: all 0.3s ease;">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                            </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link fw-semibold" id="signup-tab" data-bs-toggle="tab"
-                                data-bs-target="#signup-pane" type="button" role="tab" aria-controls="signup-pane"
-                                aria-selected="false">Sign Up</button>
+                            <button class="nav-link" id="signup-tab" data-bs-toggle="tab" data-bs-target="#signup-pane"
+                                type="button" role="tab"
+                                style="border: none; border-radius: 0.625rem; padding: 0.875rem 1.75rem; font-weight: 600; font-size: 1rem; transition: all 0.3s ease;">
+                                <i class="bi bi-person-plus me-2"></i>Sign Up
+                            </button>
                         </li>
                     </ul>
 
                     <!-- Tab Content -->
                     <div class="tab-content">
+                        <!-- LOGIN TAB -->
+                        <div class="tab-pane fade show active" id="login-pane" role="tabpanel">
+                            <form action="login.php" method="POST" id="loginForm">
+                                <div class="mb-4">
+                                    <label for="loginEmail" class="form-label"
+                                        style="font-weight: 600; font-size: 0.95rem; color: #34495e; margin-bottom: 0.75rem;">
+                                        Email Address
+                                    </label>
+                                    <div class="input-group"
+                                        style="border: 2px solid #e2e8f0; border-radius: 0.625rem; overflow: hidden; transition: all 0.2s ease;">
+                                        <span class="input-group-text"
+                                            style="background-color: transparent; border: none; color: #8895a7; padding: 0.875rem 1rem;">
+                                            <i class="bi bi-envelope" style="font-size: 1.1rem;"></i>
+                                        </span>
+                                        <input type="email" class="form-control" id="loginEmail" name="email"
+                                            placeholder="johndoe@email.com" required
+                                            style="border: none; padding: 0.875rem 1rem 0.875rem 0.5rem; font-size: 0.95rem; background-color: #f8fafc;">
+                                    </div>
+                                </div>
 
-                        <div class="tab-pane fade show active" id="login-pane" role="tabpanel"
-                            aria-labelledby="login-tab" tabindex="0">
-                            <form action="login.php" method="POST" onsubmit="return mockLogin(event)">
                                 <div class="mb-3">
-                                    <label for="loginEmail"
-                                        class="form-label small fw-semibold text-secondary text-black">Email</label>
-                                    <input type="email" class="form-control rounded-3 p-3" id="loginEmail" name="email"
-                                        placeholder="johndoe@email.com" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="loginPassword"
-                                        class="form-label small fw-semibold text-secondary text-black">Password</label>
-                                    <input type="password" class="form-control rounded-3 p-3" id="loginPassword"
-                                        name="password" placeholder="********" required>
+                                    <label for="loginPassword" class="form-label"
+                                        style="font-weight: 600; font-size: 0.95rem; color: #34495e; margin-bottom: 0.75rem;">
+                                        Password
+                                    </label>
+                                    <div class="input-group position-relative"
+                                        style="border: 2px solid #e2e8f0; border-radius: 0.625rem; overflow: hidden;">
+                                        <span class="input-group-text"
+                                            style="background-color: transparent; border: none; color: #8895a7; padding: 0.875rem 1rem;">
+                                            <i class="bi bi-lock" style="font-size: 1.1rem;"></i>
+                                        </span>
+                                        <input type="password" class="form-control" id="loginPassword" name="password"
+                                            placeholder="Enter your password" required
+                                            style="border: none; padding: 0.875rem 3rem 0.875rem 0.5rem; font-size: 0.95rem; background-color: #f8fafc;">
+                                        <button type="button"
+                                            class="btn btn-link position-absolute end-0 top-50 translate-middle-y"
+                                            style="color: #64748b; z-index: 10; padding: 0.5rem 1rem;"
+                                            onclick="togglePassword('loginPassword', this)">
+                                            <i class="bi bi-eye" style="font-size: 1.1rem;"></i>
+                                        </button>
+                                    </div>
                                 </div>
 
-                                <div class="text-end mb-3">
-                                    <a href="forgot_password.php" class="small text-decoration-none"
-                                        style="color: var(--moya-primary);">Forgot Password?</a>
+                                <div class="d-flex justify-content-between align-items-center mb-4"
+                                    style="margin-top: 1rem;">
+                                    <div class="form-check d-flex align-items-center">
+                                        <input class="form-check-input" type="checkbox" id="rememberMe"
+                                            style="width: 1.125rem; height: 1.125rem; border: 2px solid #cbd5e1; margin-top: 0; margin-right: 0.5rem; flex-shrink: 0; cursor: pointer;">
+                                        <label class="form-check-label mb-0" for="rememberMe"
+                                            style="font-size: 0.875rem; color: #64748b; cursor: pointer;">
+                                            Remember me
+                                        </label>
+                                    </div>
+                                    <a href="forgot_password.php" class="small fw-semibold"
+                                        style="color: #008080; text-decoration: none; font-size: 0.875rem;">
+                                        <i class="bi me-1"></i>Forgot Password?
+                                    </a>
                                 </div>
 
-                                <button type="submit" class="btn btn-cta rounded-pill shadow-sm w-100 mt-3">
-                                    Log In
+                                <button type="submit" class="btn btn-lg w-100 mb-3"
+                                    style="background: linear-gradient(135deg, #008080 0%, #006666 100%); border: none; color: white; padding: 1rem; font-weight: 600; font-size: 1rem; border-radius: 0.75rem; transition: all 0.3s ease;">
+                                    <i class="bi bi-box-arrow-in-right me-2"></i>Log In
                                 </button>
+
+                                <p class="text-center text-muted small mb-0" style="font-size: 0.875rem;">
+                                    Don't have an account?
+                                    <a href="#" class="fw-semibold" style="color: #008080; text-decoration: none;"
+                                        onclick="document.getElementById('signup-tab').click(); return false;">
+                                        Sign up here
+                                    </a>
+                                </p>
                             </form>
                         </div>
 
-                        <!-- Sign Up Form (Updated to include full user data) -->
-                        <div class="tab-pane fade" id="signup-pane" role="tabpanel" aria-labelledby="signup-tab"
-                            tabindex="0">
-                            <form action="signup.php" method="POST" class="needs-validation" novalidate>
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="signupName"
-                                            class="form-label small fw-semibold text-secondary text-black">Full
-                                            Name</label>
-                                        <input type="text" class="form-control rounded-3 p-3" id="signupName"
-                                            name="full_name" pattern="^[A-Za-z\s]{2,}$"
-                                            title="Name should only contain letters and spaces." placeholder="John Doe"
-                                            required>
-                                        <div class="invalid-feedback">Please enter your full name (letters only).</div>
-                                        <div class="valid-feedback">Looks good!</div>
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="signupPhone"
-                                            class="form-label small fw-semibold text-secondary text-black">Phone
-                                            Number</label>
-                                        <input type="tel" class="form-control rounded-3 p-3" id="signupPhone"
-                                            name="phone_number" pattern="^09\d{9}$"
-                                            title="Enter a valid Philippine phone number (e.g., 09123456789)"
-                                            placeholder="09123456789" required>
-                                        <div class="invalid-feedback">Enter a valid 11-digit number starting with 09.
+                        <!-- SIGNUP TAB -->
+                        <div class="tab-pane fade" id="signup-pane" role="tabpanel">
+                            <form action="signup.php" method="POST" class="needs-validation" id="signupForm" novalidate>
+                                <div class="row g-4">
+                                    <div class="col-md-6">
+                                        <label for="signupName" class="form-label"
+                                            style="font-weight: 600; font-size: 0.95rem; color: #34495e; margin-bottom: 0.75rem;">
+                                            Full Name
+                                        </label>
+                                        <div class="input-group"
+                                            style="border: 2px solid #e2e8f0; border-radius: 0.625rem; overflow: hidden;">
+                                            <span class="input-group-text"
+                                                style="background-color: transparent; border: none; color: #8895a7; padding: 0.875rem 1rem;">
+                                                <i class="bi bi-person" style="font-size: 1.1rem;"></i>
+                                            </span>
+                                            <input type="text" class="form-control" id="signupName" name="full_name"
+                                                pattern="^[A-Za-zÑñ\s]{2,}$" placeholder="John Doe" required
+                                                style="border: none; padding: 0.875rem 1rem 0.875rem 0.5rem; font-size: 0.95rem; background-color: #f8fafc;">
                                         </div>
-                                        <div class="valid-feedback">Valid phone number!</div>
+                                        <div class="invalid-feedback" style="font-size: 0.8125rem; margin-top: 0.5rem;">
+                                            Enter your full name (letters only).</div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="signupPhone" class="form-label"
+                                            style="font-weight: 600; font-size: 0.95rem; color: #34495e; margin-bottom: 0.75rem;">
+                                            Phone Number
+                                        </label>
+                                        <div class="input-group"
+                                            style="border: 2px solid #e2e8f0; border-radius: 0.625rem; overflow: hidden;">
+                                            <span class="input-group-text"
+                                                style="background-color: transparent; border: none; color: #8895a7; padding: 0.875rem 1rem;">
+                                                <i class="bi bi-telephone" style="font-size: 1.1rem;"></i>
+                                            </span>
+                                            <input type="tel" class="form-control" id="signupPhone" name="phone_number"
+                                                pattern="^09\d{9}$" placeholder="09123456789" required
+                                                style="border: none; padding: 0.875rem 1rem 0.875rem 0.5rem; font-size: 0.95rem; background-color: #f8fafc;">
+                                        </div>
+                                        <div class="invalid-feedback" style="font-size: 0.8125rem; margin-top: 0.5rem;">
+                                            Valid 11-digit number starting with 09.</div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="signupEmail" class="form-label"
+                                            style="font-weight: 600; font-size: 0.95rem; color: #34495e; margin-bottom: 0.75rem;">
+                                            Email Address
+                                        </label>
+                                        <div class="input-group"
+                                            style="border: 2px solid #e2e8f0; border-radius: 0.625rem; overflow: hidden;">
+                                            <span class="input-group-text"
+                                                style="background-color: transparent; border: none; color: #8895a7; padding: 0.875rem 1rem;">
+                                                <i class="bi bi-envelope" style="font-size: 1.1rem;"></i>
+                                            </span>
+                                            <input type="email" class="form-control" id="signupEmail" name="email"
+                                                placeholder="johndoe@gmail.com" required
+                                                style="border: none; padding: 0.875rem 1rem 0.875rem 0.5rem; font-size: 0.95rem; background-color: #f8fafc;">
+                                        </div>
+                                        <div class="invalid-feedback" style="font-size: 0.8125rem; margin-top: 0.5rem;">
+                                            Enter a valid email address.</div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="signupPassword" class="form-label"
+                                            style="font-weight: 600; font-size: 0.95rem; color: #34495e; margin-bottom: 0.75rem;">
+                                            Password
+                                        </label>
+                                        <div class="input-group position-relative"
+                                            style="border: 2px solid #e2e8f0; border-radius: 0.625rem; overflow: hidden;">
+                                            <span class="input-group-text"
+                                                style="background-color: transparent; border: none; color: #8895a7; padding: 0.875rem 1rem;">
+                                                <i class="bi bi-lock" style="font-size: 1.1rem;"></i>
+                                            </span>
+                                            <input type="password" class="form-control" id="signupPassword"
+                                                name="password" minlength="8"
+                                                pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$"
+                                                placeholder="Create a password" required
+                                                style="border: none; padding: 0.875rem 3rem 0.875rem 0.5rem; font-size: 0.95rem; background-color: #f8fafc;">
+                                            <button type="button"
+                                                class="btn btn-link position-absolute end-0 top-50 translate-middle-y"
+                                                style="color: #64748b; z-index: 10; padding: 0.5rem 1rem;"
+                                                onclick="togglePassword('signupPassword', this)">
+                                                <i class="bi bi-eye" style="font-size: 1.1rem;"></i>
+                                            </button>
+                                        </div>
+                                        <div class="invalid-feedback" style="font-size: 0.8125rem; margin-top: 0.5rem;">
+                                            8+ chars with at least one letter and number.</div>
+                                        <small class="text-muted"
+                                            style="font-size: 0.8125rem; display: block; margin-top: 0.375rem; color: #64748b;">Must
+                                            contain at least 8 characters</small>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="signupBarangay" class="form-label"
+                                            style="font-weight: 600; font-size: 0.95rem; color: #34495e; margin-bottom: 0.75rem;">
+                                            Delivery Barangay
+                                        </label>
+                                        <div class="input-group"
+                                            style="border: 2px solid #e2e8f0; border-radius: 0.625rem; overflow: hidden;">
+                                            <span class="input-group-text"
+                                                style="background-color: transparent; border: none; color: #8895a7; padding: 0.875rem 1rem;">
+                                                <i class="bi bi-geo-alt" style="font-size: 1.1rem;"></i>
+                                            </span>
+                                            <select class="form-select" id="signupBarangay" name="address_barangay"
+                                                required
+                                                style="border: none; padding: 0.875rem 1rem 0.875rem 0.5rem; font-size: 0.95rem; background-color: #f8fafc;">
+                                                <option value="" disabled selected>Select your delivery area...</option>
+                                                <option value="Alipang">Alipang</option>
+                                                <option value="Ambangonan">Ambangonan</option>
+                                                <option value="Bacani">Bacani</option>
+                                                <option value="Bangar">Bangar</option>
+                                                <option value="Bani">Bani</option>
+                                                <option value="Benteng-Sapilang">Benteng-Sapilang</option>
+                                                <option value="Cadumanian">Cadumanian</option>
+                                                <option value="Camp One">Camp One</option>
+                                                <option value="Carunuan East">Carunuan East</option>
+                                                <option value="Carunuan West">Carunuan West</option>
+                                                <option value="Casilagan">Casilagan</option>
+                                                <option value="Cataguingtingan">Cataguingtingan</option>
+                                                <option value="Concepcion">Concepcion</option>
+                                                <option value="Damortis">Damortis</option>
+                                                <option value="Gumot-Nagcolaran">Gumot-Nagcolaran</option>
+                                                <option value="Inabaan Norte">Inabaan Norte</option>
+                                                <option value="Inabaan Sur">Inabaan Sur</option>
+                                                <option value="Marcos">Marcos</option>
+                                                <option value="Nagtagaan">Nagtagaan</option>
+                                                <option value="Nangcamotian">Nangcamotian</option>
+                                                <option value="Parasapas">Parasapas</option>
+                                                <option value="Poblacion East">Poblacion East</option>
+                                                <option value="Poblacion West">Poblacion West</option>
+                                                <option value="Puzon">Puzon</option>
+                                                <option value="Rabon">Rabon</option>
+                                                <option value="San Jose">San Jose</option>
+                                                <option value="Subusub">Subusub</option>
+                                                <option value="Tabtabungao">Tabtabungao</option>
+                                                <option value="Tanglag">Tanglag</option>
+                                                <option value="Tay-ac">Tay-ac</option>
+                                                <option value="Udiao">Udiao</option>
+                                                <option value="Vila">Vila</option>
+                                            </select>
+                                        </div>
+                                        <div class="invalid-feedback" style="font-size: 0.8125rem; margin-top: 0.5rem;">
+                                            Select your delivery barangay.</div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="signupAddressDetail" class="form-label"
+                                            style="font-weight: 600; font-size: 0.95rem; color: #34495e; margin-bottom: 0.75rem;">
+                                            House/Street/Landmark Details
+                                        </label>
+                                        <div class="input-group"
+                                            style="border: 2px solid #e2e8f0; border-radius: 0.625rem; overflow: hidden;">
+                                            <span class="input-group-text"
+                                                style="background-color: transparent; border: none; color: #8895a7; padding: 0.875rem 1rem;">
+                                                <i class="bi bi-house-door" style="font-size: 1.1rem;"></i>
+                                            </span>
+                                            <input type="text" class="form-control" id="signupAddressDetail"
+                                                name="address_detail"
+                                                placeholder="e.g., 123 Main St., near Central Mall" required
+                                                style="border: none; padding: 0.875rem 1rem 0.875rem 0.5rem; font-size: 0.95rem; background-color: #f8fafc;">
+                                        </div>
+                                        <div class="invalid-feedback" style="font-size: 0.8125rem; margin-top: 0.5rem;">
+                                            Provide your house or street details.</div>
                                     </div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="signupEmail"
-                                            class="form-label small fw-semibold text-secondary text-black">Email
-                                            Address</label>
-                                        <input type="email" class="form-control rounded-3 p-3" id="signupEmail"
-                                            name="email" placeholder="johndoe@gmail.com" required>
-                                        <div class="invalid-feedback">Please enter a valid email address.</div>
-                                        <div class="valid-feedback">Valid email!</div>
+                                <!-- Terms Section with Better Styling -->
+                                <div
+                                    style="background-color: #f8fafc; border: 2px solid #e2e8f0; border-radius: 0.75rem; padding: 1.25rem; margin-top: 1.75rem;">
+                                    <div class="form-check"
+                                        style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                                        <input class="form-check-input" type="checkbox" id="signupTerms"
+                                            style="width: 1.25rem; height: 1.25rem; border: 2px solid #cbd5e1; margin-top: 0.125rem; cursor: pointer; flex-shrink: 0;">
+                                        <label class="form-check-label" for="signupTerms"
+                                            style="font-size: 0.9rem; color: #334155; line-height: 1.7; cursor: pointer;">
+                                            I have read and agree to the
+                                            <a href="#" class="terms-link" data-bs-toggle="modal"
+                                                data-bs-target="#userTermsModal" onclick="event.preventDefault();"
+                                                style="color: #008080; font-weight: 600; text-decoration: none;">
+                                                Terms & Conditions
+                                            </a>
+                                            and
+                                            <a href="#" class="terms-link" data-bs-toggle="modal"
+                                                data-bs-target="#userPrivacyModal" onclick="event.preventDefault();"
+                                                style="color: #008080; font-weight: 600; text-decoration: none;">
+                                                Data Privacy Act
+                                            </a>
+                                        </label>
                                     </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="signupPassword"
-                                            class="form-label small fw-semibold text-secondary text-black">Password</label>
-                                        <input type="password" class="form-control rounded-3 p-3" id="signupPassword"
-                                            name="password" minlength="8"
-                                            pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
-                                            title="Password must be at least 8 characters and contain at least one number."
-                                            placeholder="●●●●●●●●" required>
-                                        <div class="invalid-feedback">Must be 8+ chars with at least one number.</div>
-                                        <div class="valid-feedback">Strong password!</div>
-                                    </div>
                                 </div>
 
-                                <div class="mb-3">
-                                    <label for="signupBarangay"
-                                        class="form-label small fw-semibold text-secondary text-black">
-                                        Delivery Barangay (In-Town Service Area)
-                                    </label>
-                                    <select class="form-select rounded-3 p-3" id="signupBarangay"
-                                        name="address_barangay" required>
-                                        <option value="" disabled selected>Select your delivery area...</option>
-                                        <option value="Alipang">Alipang</option>
-                                        <option value="Ambangonan">Ambangonan</option>
-                                        <option value="Bacani">Bacani</option>
-                                        <option value="Bangar">Bangar</option>
-                                        <option value="Bani">Bani</option>
-                                        <option value="Benteng-Sapilang">Benteng-Sapilang</option>
-                                        <option value="Cadumanian">Cadumanian</option>
-                                        <option value="Camp One">Camp One</option>
-                                        <option value="Carunuan East">Carunuan East</option>
-                                        <option value="Carunuan West">Carunuan West</option>
-                                        <option value="Casilagan">Casilagan</option>
-                                        <option value="Cataguingtingan">Cataguingtingan</option>
-                                        <option value="Concepcion">Concepcion</option>
-                                        <option value="Damortis">Damortis</option>
-                                        <option value="Gumot-Nagcolaran">Gumot-Nagcolaran</option>
-                                        <option value="Inabaan Norte">Inabaan Norte</option>
-                                        <option value="Inabaan Sur">Inabaan Sur</option>
-                                        <option value="Marcos">Marcos</option>
-                                        <option value="Nagtagaan">Nagtagaan</option>
-                                        <option value="Nangcamotian">Nangcamotian</option>
-                                        <option value="Parasapas">Parasapas</option>
-                                        <option value="Poblacion East">Poblacion East</option>
-                                        <option value="Poblacion West">Poblacion West</option>
-                                        <option value="Puzon">Puzon</option>
-                                        <option value="Rabon">Rabon</option>
-                                        <option value="San Jose">San Jose</option>
-                                        <option value="Subusub">Subusub</option>
-                                        <option value="Tabtabungao">Tabtabungao</option>
-                                        <option value="Tanglag">Tanglag</option>
-                                        <option value="Tay-ac">Tay-ac</option>
-                                        <option value="Udiao">Udiao</option>
-                                        <option value="Vila">Vila</option>
-                                    </select>
-                                    <div class="invalid-feedback">Please select your delivery barangay.</div>
-                                    <div class="valid-feedback">Selected!</div>
-                                </div>
+                                <!-- Create Account Button -->
+                                <button type="submit" class="btn btn-lg w-100 mt-4 mb-3" id="signupButton" disabled
+                                    style="background: linear-gradient(135deg, #008080 0%, #006666 100%); border: none; color: white; padding: 1rem; font-weight: 600; font-size: 1rem; border-radius: 0.75rem; transition: all 0.3s ease; opacity: 0.5; cursor: not-allowed;">
+                                    <i class="bi bi-person-check me-2"></i>Create Account
+                                </button>
 
-                                <div class="mb-3">
-                                    <label for="signupAddressDetail"
-                                        class="form-label small fw-semibold text-secondary text-black">
-                                        House/Street/Landmark Details
-                                    </label>
-                                    <input type="text" class="form-control rounded-3 p-3" id="signupAddressDetail"
-                                        name="address_detail" required>
-                                    <div class="invalid-feedback">Please provide your house or street details.</div>
-                                    <div class="valid-feedback">Looks good!</div>
-                                </div>
-
-                                <button type="submit" class="btn btn-cta rounded-pill shadow-sm w-100 mt-3">Create
-                                    Account</button>
+                                <p class="text-center text-muted small mb-0" style="font-size: 0.875rem;">
+                                    Already have an account?
+                                    <a href="#" class="fw-semibold" style="color: #008080; text-decoration: none;"
+                                        onclick="document.getElementById('login-tab').click(); return false;">
+                                        Log in here
+                                    </a>
+                                </p>
                             </form>
                         </div>
                     </div>
 
-                    <!-- Message container for server feedback -->
-                    <div id="authMessage" class="alert mt-4 d-none small" role="alert"></div>
-
+                    <div id="authMessage" class="alert mt-4 d-none" role="alert"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap JS (required for modals and responsiveness) -->
+    <!-- Terms & Conditions Modal -->
+    <div class="modal fade" id="userTermsModal" tabindex="-1" aria-labelledby="userTermsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header"
+                    style="background: linear-gradient(135deg, #008080 0%, #006666 100%); color: white; border: none; padding: 1.5rem 2rem;">
+                    <h5 class="modal-title" id="userTermsModalLabel" style="font-weight: 600; color: white;">
+                        <i class="bi bi-file-text me-2"></i>Terms & Conditions
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        style="filter: brightness(0) invert(1);"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>1. Service Agreement</h5>
+                    <p>By using Moya Water Delivery services, you agree to:</p>
+                    <ul>
+                        <li>Provide accurate delivery information</li>
+                        <li>Be available during the estimated delivery window</li>
+                        <li>Pay the agreed amount upon delivery (Cash on Delivery)</li>
+                        <li>Return empty containers for refill orders</li>
+                    </ul>
+
+                    <h5>2. Ordering & Payment</h5>
+                    <p>All orders must be placed through our system. Payment is accepted only via Cash on Delivery
+                        (COD). Please prepare the exact amount.</p>
+
+                    <h5>3. Delivery Service</h5>
+                    <ul>
+                        <li>Operating hours: 8:00 AM - 4:00 PM daily</li>
+                        <li>Delivery time: Within 1-2 hours after confirmation</li>
+                        <li>Service area: Rosario, La Union (selected barangays only)</li>
+                        <li>We reserve the right to reschedule deliveries due to weather</li>
+                    </ul>
+
+                    <h5>4. Container Policy</h5>
+                    <ul>
+                        <li>Customers are responsible for containers they purchase</li>
+                        <li>Damaged or lost containers must be replaced at full price</li>
+                        <li>Empty containers must be available for pickup during refill orders</li>
+                    </ul>
+
+                    <h5>5. Cancellation & Refunds</h5>
+                    <p>Orders can be cancelled before confirmation. Once out for delivery, cancellations are not
+                        accepted.</p>
+
+                    <h5>6. User Responsibilities</h5>
+                    <ul>
+                        <li>Maintain accurate account information</li>
+                        <li>Update order status promptly</li>
+                        <li>Report any issues immediately</li>
+                    </ul>
+
+                    <h5>7. Limitation of Liability</h5>
+                    <p>Moya is not liable for delays caused by incorrect addresses or force majeure events.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div class="modal fade" id="userPrivacyModal" tabindex="-1" aria-labelledby="userPrivacyModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header"
+                    style="background: linear-gradient(135deg, #008080 0%, #006666 100%); color: white; border: none; padding: 1.5rem 2rem;">
+                    <h5 class="modal-title" id="userPrivacyModalLabel" style="font-weight: 600; color: white;">
+                        <i class="bi bi-shield-check me-2"></i>Data Privacy Act
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        style="filter: brightness(0) invert(1);"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>Data Privacy Act Compliance</h5>
+                    <p>Moya Water Delivery is committed to protecting your personal information in accordance with the
+                        Data Privacy Act of 2012 (RA 10173).</p>
+
+                    <h5>1. Information We Collect</h5>
+                    <ul>
+                        <li>Personal information: Name, email, phone number</li>
+                        <li>Delivery address: Barangay and detailed address</li>
+                        <li>Order history and preferences</li>
+                        <li>Payment records (for COD transactions)</li>
+                    </ul>
+
+                    <h5>2. How We Use Your Information</h5>
+                    <ul>
+                        <li>Process and deliver your orders</li>
+                        <li>Contact you regarding order status</li>
+                        <li>Improve our services</li>
+                        <li>Send promotional offers (with your consent)</li>
+                    </ul>
+
+                    <h5>3. Data Security</h5>
+                    <p>We implement appropriate security measures to protect your personal information.</p>
+
+                    <h5>4. Your Rights</h5>
+                    <p>Under the Data Privacy Act, you have the right to:</p>
+                    <ul>
+                        <li>Access your personal information</li>
+                        <li>Request correction of inaccurate data</li>
+                        <li>Object to processing of your data</li>
+                        <li>Request deletion of your data</li>
+                    </ul>
+
+                    <h5>5. Data Sharing</h5>
+                    <p>We do not sell or share your personal information with third parties except when required by law.
+                    </p>
+
+                    <h5>6. Data Retention</h5>
+                    <p>We retain your information only as long as necessary for business purposes.</p>
+
+                    <h5>7. Contact Us</h5>
+                    <p>For questions about our privacy practices, contact us at: privacy@moya.com</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+    <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     <script>
-        // --- GLOBAL VARIABLES ---
-
-        // This is your complete list of 28 delivery points (the BLUE pins).
+        // Service Area Points
         const serviceAreaPoints = [
             [16.219468, 120.493981], [16.213475, 120.501831], [16.225049, 120.503922],
             [16.246571, 120.487866], [16.239948, 120.468656], [16.228787, 120.459740],
@@ -586,135 +1243,120 @@
             [16.214498, 120.429782]
         ];
 
-        // --- BARANGAY COORDINATE LOOKUP TABLE ---
-        // You need to fill this with actual coordinates from your serviceAreaPoints
         const barangayCoordinateLookup = {
-            // Example coordinates - REPLACE THESE WITH ACTUAL COORDINATES FROM YOUR serviceAreaPoints
             "Cataguingtingan": [16.239948, 120.468656],
             "Poblacion East": [16.213475, 120.501831],
             "Poblacion West": [16.225049, 120.503922],
             "Bani": [16.246571, 120.487866],
-            // Add more barangays as needed...
         };
 
-        // Default user barangay for demo purposes
-        // In a real implementation, this would come from your PHP backend
         const USER_BARANGAY_NAME = "Cataguingtingan";
+        let modalMap;
+        let userMarker;
 
-        let modalMap; // To hold the map instance for the modal
-        let userMarker; // To hold the user's location marker
-
-        // --- INITIALIZE MAIN PAGE MAP ---
+        // Initialize Main Page Map
         document.addEventListener('DOMContentLoaded', function () {
             const mainMap = L.map('main-page-map').setView([16.245, 120.47], 13);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                attribution: '&copy; OpenStreetMap contributors'
             }).addTo(mainMap);
 
             serviceAreaPoints.forEach(coords => {
-                L.marker(coords).addTo(mainMap).bindPopup('This is within our delivery area. We can deliver here!');
+                L.marker(coords).addTo(mainMap).bindPopup('We can deliver here!');
             });
         });
 
-        // --- MODAL AND LOCATION CHECKING LOGIC ---
+        // Location Modal Functions
         const locationModalElement = document.getElementById('locationCheckModal');
         const locationModal = new bootstrap.Modal(locationModalElement);
 
-        // This function is called by the "Confirm My Delivery Address" button
         function openLocationCheckModal() {
             locationModal.show();
         }
 
-        // Initialize map AND run check ONLY after the modal has been shown
         locationModalElement.addEventListener('shown.bs.modal', function () {
-            if (!modalMap) { // Initialize map only once
+            if (!modalMap) {
                 modalMap = L.map('location-check-map').setView([16.245, 120.47], 13);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(modalMap);
-
-                // Add all BLUE service area markers to the modal map
                 serviceAreaPoints.forEach(coords => {
                     L.marker(coords).addTo(modalMap);
                 });
             }
-            modalMap.invalidateSize(); // Fixes map sizing
-
-            // --- Automatically check the user's profile barangay ---
+            modalMap.invalidateSize();
             checkProfileBarangay();
         });
 
         function checkProfileBarangay() {
             const statusDiv = document.getElementById('locationStatus');
-            statusDiv.className = 'mt-3 text-center fw-bold'; // Reset class
-            statusDiv.innerHTML = ""; // Clear old text
-
-            // 1. Find the coordinates for the user's registered barangay
-            const userCoords = barangayCoordinateLookup[USER_BARANGAY_NAME];
-
-            if (userCoords) {
-                // 2. We found the barangay in our lookup table.
-
-                // Add or move the user's GREEN marker
-                if (!userMarker) {
-                    userMarker = L.marker(userCoords, {
-                        icon: L.icon({
-                            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-                            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                            iconSize: [25, 41],
-                            iconAnchor: [12, 41],
-                            popupAnchor: [1, -34],
-                            shadowSize: [41, 41]
-                        })
-                    }).addTo(modalMap);
-                } else {
-                    userMarker.setLatLng(userCoords);
-                }
-
-                modalMap.setView(userCoords, 15); // Center map on user's barangay
-                userMarker.bindPopup('<b>Your Registered Barangay:</b><br>' + USER_BARANGAY_NAME).openPopup();
-
-                // 3. Check if these coordinates are in our delivery zone
-                if (isInsideDeliveryZone(userCoords)) {
-                    statusDiv.innerHTML = '<span class="text-danger">This feature is only available for registered users. Please login first.</span>';
-                } else {
-                    statusDiv.innerHTML = '<span class="text-danger">This feature is only available for registered users. Please login first.</span>';
-                }
-
-            } else {
-                // 4. We could not find the barangay name in our lookup table.
-                statusDiv.innerHTML = '<span class="text-danger">Sorry, we could not find your barangay "' + USER_BARANGAY_NAME + '" in our system. Please check your profile address.</span>';
-            }
+            statusDiv.innerHTML = '<span class="text-danger">This feature is only available for registered users. Please login first.</span>';
         }
 
-        // This function checks if the user's coords are "close enough" to any service point
         function isInsideDeliveryZone(userCoords) {
-            // This checks if the user's coordinates are *exactly* one of the service points.
-            // This is safer than a radius check.
             for (const point of serviceAreaPoints) {
                 if (point[0] === userCoords[0] && point[1] === userCoords[1]) {
-                    return true; // The user's barangay is one of the service points
+                    return true;
                 }
             }
-            return false; // Not found in the list
+            return false;
         }
 
-        // --- Modal Control Functions ---
+        // Auth Modal Functions
         const authModalElement = document.getElementById('authModal');
         const myAuthModal = new bootstrap.Modal(authModalElement);
 
-        // This is now purely for showing/hiding the modal, as form submission will be handled by PHP redirect.
         function openLoginModal(context) {
-            console.log(`Attempting to order: ${context}. Authentication required.`);
+            console.log(`Opening login modal from: ${context}`);
             myAuthModal.show();
         }
 
-        // Mock login function now returns false to prevent actual form submission
-        function mockLogin(event) {
-            // In a real application, you might use AJAX here, but for simple PHP POST/Redirect, we disable the mock
-            alert('Form submitted to login.php. Check your browser console or network tab for the request.');
-            return true; // Allows the form to submit to login.php
+        // Password Toggle
+        function togglePassword(inputId, button) {
+            const input = document.getElementById(inputId);
+            const icon = button.querySelector('i');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            }
         }
 
-        // Form validation
+        // Terms Checkbox Handler - with proper button styling
+        document.addEventListener('DOMContentLoaded', function () {
+            const termsCheckbox = document.getElementById('signupTerms');
+            const signupButton = document.getElementById('signupButton');
+
+            if (termsCheckbox && signupButton) {
+                termsCheckbox.addEventListener('change', function () {
+                    if (this.checked) {
+                        signupButton.disabled = false;
+                        signupButton.style.opacity = '1';
+                        signupButton.style.cursor = 'pointer';
+                    } else {
+                        signupButton.disabled = true;
+                        signupButton.style.opacity = '0.5';
+                        signupButton.style.cursor = 'not-allowed';
+                    }
+                });
+            }
+
+            // Form validation
+            const signupForm = document.getElementById('signupForm');
+            if (signupForm) {
+                signupForm.addEventListener('submit', function (e) {
+                    if (!termsCheckbox.checked) {
+                        e.preventDefault();
+                        alert('You must accept the Terms & Conditions and Data Privacy Act to proceed.');
+                    }
+                });
+            }
+        });
+
+        // Form Validation
         (function () {
             'use strict';
             const forms = document.querySelectorAll('.needs-validation');
@@ -722,7 +1364,6 @@
             Array.from(forms).forEach(form => {
                 const inputs = form.querySelectorAll('input, select');
 
-                // Prevent submission if invalid
                 form.addEventListener('submit', event => {
                     if (!form.checkValidity()) {
                         event.preventDefault();
@@ -731,7 +1372,6 @@
                     form.classList.add('was-validated');
                 }, false);
 
-                // Real-time validation while typing or changing
                 inputs.forEach(input => {
                     input.addEventListener('input', () => {
                         if (input.checkValidity()) {

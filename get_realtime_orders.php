@@ -12,6 +12,7 @@ $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
 <<<<<<< HEAD
+<<<<<<< HEAD
     echo '<table class="table table-striped">';
     echo '<thead><tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>';
     echo '<tbody>';
@@ -28,33 +29,31 @@ if ($result->num_rows > 0) {
 } else {
     echo '<p class="text-center">No new orders at the moment.</p>';
 =======
+=======
+    echo '<table class="table table-striped">';
+    echo '<thead><tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>';
+    echo '<tbody>';
+>>>>>>> 93ac7ac (Added all)
     while($row = $result->fetch_assoc()) {
-        // Status badge color mapping
-        $statusColors = [
-            'Pending' => 'warning',
-            'Processing' => 'info',
-            'Out for Delivery' => 'primary',
-            'Shipped' => 'success'
-        ];
-        
-        $badgeClass = isset($statusColors[$row['status']]) ? $statusColors[$row['status']] : 'secondary';
-        
-        echo '<div class="order-item">';
-        echo '  <div class="order-info">';
-        echo '    <div class="order-id">#' . str_pad($row['id'], 5, '0', STR_PAD_LEFT) . '</div>';
-        echo '    <div class="order-customer">' . htmlspecialchars($row['full_name']) . '</div>';
-        echo '    <div class="order-date"><i class="bi bi-clock"></i> ' . date('M d, Y • h:i A', strtotime($row['order_date'])) . '</div>';
-        echo '  </div>';
-        echo '  <div class="order-amount">₱' . number_format($row['total_amount'], 2) . '</div>';
-        echo '  <span class="status-badge bg-' . $badgeClass . ' text-white">' . htmlspecialchars($row['status']) . '</span>';
-        echo '</div>';
+        echo '<tr>';
+        echo '<td>#' . $row['id'] . '</td>';
+        echo '<td>' . htmlspecialchars($row['full_name']) . '</td>';
+        echo '<td>₱' . number_format($row['total_amount'], 2) . '</td>';
+        echo '<td><span class="badge bg-warning text-dark">' . htmlspecialchars($row['status']) . '</span></td>';
+        echo '<td>' . date('M d, Y h:i A', strtotime($row['order_date'])) . '</td>';
+        echo '</tr>';
     }
+    echo '</tbody></table>';
 } else {
+<<<<<<< HEAD
     echo '<div class="empty-state">';
     echo '  <i class="bi bi-inbox"></i>';
     echo '  <p>No incoming orders at the moment.</p>';
     echo '</div>';
 >>>>>>> 81caf45 (try)
+=======
+    echo '<p class="text-center">No new orders at the moment.</p>';
+>>>>>>> 93ac7ac (Added all)
 }
 
 $conn->close();

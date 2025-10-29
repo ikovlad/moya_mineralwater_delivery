@@ -81,6 +81,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             flex-direction: column;
             padding: 0;
             overflow-y: auto;
+            transition: transform 0.3s ease;
         }
 
         .sidebar::-webkit-scrollbar {
@@ -100,6 +101,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             padding: 1.5rem 1.25rem;
             border-bottom: 1px solid var(--border-color);
             background: linear-gradient(135deg, #f8f9fc 0%, #ffffff 100%);
+            position: relative;
         }
 
         .sidebar-brand h3 {
@@ -115,6 +117,26 @@ $current_page = basename($_SERVER['PHP_SELF']);
             margin: 0;
             font-size: 0.8rem;
             font-weight: 500;
+        }
+
+        /* Mobile close button */
+        .sidebar-close {
+            display: none;
+            position: absolute;
+            top: 1.25rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #858796;
+            cursor: pointer;
+            padding: 0.25rem;
+            line-height: 1;
+            transition: color 0.2s ease;
+        }
+
+        .sidebar-close:hover {
+            color: var(--moya-primary);
         }
 
         .sidebar-nav {
@@ -255,15 +277,76 @@ $current_page = basename($_SERVER['PHP_SELF']);
             color: #c0392b !important;
         }
 
+        /* Mobile Menu Toggle Button */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: linear-gradient(135deg, var(--moya-primary) 0%, #006666 100%);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.625rem 0.875rem;
+            font-size: 1.25rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 128, 128, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 128, 128, 0.4);
+        }
+
+        .mobile-menu-toggle:active {
+            transform: translateY(0);
+        }
+
+        /* Hide hamburger button when sidebar is open */
+        .mobile-menu-toggle.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.8);
+        }
+
+        /* Sidebar Overlay for Mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar-overlay.show {
+            opacity: 1;
+        }
+
         /* Mobile responsiveness */
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
-                transition: transform 0.3s ease;
+                width: 280px;
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
             }
 
             .sidebar.show {
                 transform: translateX(0);
+            }
+
+            .sidebar-close {
+                display: block;
+            }
+
+            .sidebar-brand {
+                padding-right: 3rem;
             }
 
             .sidebar-brand h3 {
@@ -273,12 +356,89 @@ $current_page = basename($_SERVER['PHP_SELF']);
             .sidebar-brand p {
                 font-size: 0.75rem;
             }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .sidebar-overlay {
+                display: block;
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+                width: 100% !important;
+                padding-top: 4rem !important; /* Add padding to prevent overlap with hamburger button */
+            }
+
+            /* Adjust page headers on mobile to not overlap with button */
+            .page-header {
+                margin-top: 0.5rem;
+            }
+
+            /* Adjust navigation items for mobile */
+            .sidebar .nav-link {
+                font-size: 0.875rem;
+                padding: 0.7rem 1.25rem;
+            }
+
+            .nav-section-title {
+                font-size: 0.65rem;
+                padding: 0.875rem 1.25rem 0.5rem 1.25rem;
+            }
+
+            .admin-profile {
+                padding: 0.65rem 1.25rem;
+            }
+
+            .admin-avatar {
+                width: 36px;
+                height: 36px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Tablet responsiveness */
+        @media (min-width: 769px) and (max-width: 992px) {
+            .sidebar {
+                width: 220px;
+            }
+
+            .sidebar-brand h3 {
+                font-size: 1rem;
+            }
+
+            .sidebar .nav-link {
+                font-size: 0.85rem;
+                padding: 0.7rem 1.25rem;
+            }
+
+            .nav-section-title {
+                font-size: 0.65rem;
+            }
+        }
+
+        /* Prevent body scroll when mobile menu is open */
+        body.sidebar-open {
+            overflow: hidden;
         }
     </style>
 </head>
 <body>
-    <div class="sidebar">
+    <!-- Mobile Menu Toggle Button -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <!-- Sidebar Overlay (for mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
         <div class="sidebar-brand">
+            <button class="sidebar-close" id="sidebarClose" aria-label="Close menu">
+                <i class="bi bi-x-lg"></i>
+            </button>
             <h3>Delivery Management System</h3>
             <p>Moya Mineral Water</p>
         </div>
@@ -336,6 +496,76 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </ul>
         </div>
     </div>
+    
+    <!-- JavaScript for Mobile Menu -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const sidebarClose = document.getElementById('sidebarClose');
+            const body = document.body;
+
+            // Function to open sidebar
+            function openSidebar() {
+                sidebar.classList.add('show');
+                sidebarOverlay.classList.add('show');
+                body.classList.add('sidebar-open');
+                mobileMenuToggle.classList.add('hidden'); // Hide hamburger button
+            }
+
+            // Function to close sidebar
+            function closeSidebar() {
+                sidebar.classList.remove('show');
+                sidebarOverlay.classList.remove('show');
+                body.classList.remove('sidebar-open');
+                mobileMenuToggle.classList.remove('hidden'); // Show hamburger button
+            }
+
+            // Toggle sidebar on mobile menu button click
+            if (mobileMenuToggle) {
+                mobileMenuToggle.addEventListener('click', openSidebar);
+            }
+
+            // Close sidebar on close button click
+            if (sidebarClose) {
+                sidebarClose.addEventListener('click', closeSidebar);
+            }
+
+            // Close sidebar on overlay click
+            if (sidebarOverlay) {
+                sidebarOverlay.addEventListener('click', closeSidebar);
+            }
+
+            // Close sidebar when clicking on a nav link (mobile only)
+            const navLinks = document.querySelectorAll('.sidebar .nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        closeSidebar();
+                    }
+                });
+            });
+
+            // Handle window resize
+            let resizeTimer;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(function() {
+                    if (window.innerWidth > 768) {
+                        closeSidebar();
+                    }
+                }, 250);
+            });
+
+            // Prevent body scroll when sidebar is open on mobile
+            sidebar.addEventListener('touchmove', function(e) {
+                if (window.innerWidth <= 768 && sidebar.classList.contains('show')) {
+                    e.stopPropagation();
+                }
+            }, { passive: true });
+        });
+    </script>
     
     <!-- The main-content div is opened here and closed in admin_footer.php -->
     <div class="main-content">

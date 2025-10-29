@@ -146,6 +146,8 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
         #process p {
             font-size: 1.2rem;
         }
+
+          /* --- MAP --- */
         #location .lead {
             font-weight: 400;
         }
@@ -161,85 +163,209 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
         }
 
             /* --- How to Order Section Styles --- */
-        #how-to-order {
-            background-color: #e6f7f7; /* Lighter teal background */
-        }
+    #how-to-order {
+        background: linear-gradient(135deg, #e6f7f7 0%, #f0fbfb 100%);
+        position: relative;
+        overflow: hidden;
+    }
 
-        .process-steps {
-            display: flex;
-            flex-wrap: wrap; /* Allow wrapping on smaller screens */
-            justify-content: space-between;
-            position: relative;
-            padding: 20px 0;
-        }
+    #how-to-order::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0, 128, 128, 0.03) 1px, transparent 1px);
+        background-size: 30px 30px;
+        z-index: 0;
+    }
 
-        .step {
-            flex: 1; /* Try to take equal space */
-            min-width: 180px; /* Minimum width before wrapping */
-            text-align: center;
-            padding: 20px 15px;
-            position: relative;
-            margin-bottom: 30px; /* Space for wrapping */
-        }
+    #how-to-order .container {
+        position: relative;
+        z-index: 1;
+    }
 
-        /* Style for the step icon */
-        .step-icon {
-            width: 60px;
-            height: 60px;
-            background-color: var(--moya-primary);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px auto;
-            font-size: 1.8rem;
-            box-shadow: 0 4px 10px rgba(0, 128, 128, 0.3);
-        }
+    #how-to-order h2 {
+        font-family: 'Bricolage Grotesque', sans-serif;
+        font-size: 4rem;
+        font-weight: bold;
+        color: var(--moya-primary) !important;
+        margin-bottom: 1rem;
+    }
 
-        .step h5 {
-            font-weight: 600;
-            color: var(--moya-primary);
-            margin-bottom: 8px;
+    #how-to-order .section-subtitle {
+        font-size: 1.25rem;
+        color: #555;
+        max-width: 900px;
+        margin: 0 auto 3rem;
+        white-space: nowrap;
+    }
+    
+    @media (max-width: 992px) {
+        #how-to-order .section-subtitle {
+            white-space: normal;
         }
+    }
 
-        .step p {
-            font-size: 0.9rem;
-            color: #555;
-            line-height: 1.5;
-        }
+    .process-timeline {
+        position: relative;
+        padding: 2rem 0;
+    }
 
-        /* Arrow Styling - using pseudo-elements */
-        .step:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            top: 30px; /* Align vertically with the center of the icon */
-            right: -40px; /* Position between steps */
-            width: 30px; /* Arrow width */
-            height: 30px; /* Arrow height */
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%23008080' class='bi bi-arrow-right-short' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: contain;
-            transform: translateX(-50%);
-            z-index: 1;
+    .timeline-step {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 3rem;
+        position: relative;
+        animation: fadeInUp 0.6s ease-out forwards;
+        opacity: 0;
+    }
+
+    .timeline-step:nth-child(1) { animation-delay: 0.1s; }
+    .timeline-step:nth-child(2) { animation-delay: 0.2s; }
+    .timeline-step:nth-child(3) { animation-delay: 0.3s; }
+    .timeline-step:nth-child(4) { animation-delay: 0.4s; }
+    .timeline-step:nth-child(5) { animation-delay: 0.5s; }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
         }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .step-number {
+        flex-shrink: 0;
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, var(--moya-primary) 0%, #006666 100%);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: 700;
+        box-shadow: 0 6px 20px rgba(0, 128, 128, 0.3);
+        position: relative;
+        z-index: 2;
+        transition: all 0.3s ease;
+    }
+
+    .timeline-step:hover .step-number {
+        transform: scale(1.1) rotate(5deg);
+        box-shadow: 0 8px 25px rgba(0, 128, 128, 0.4);
+    }
+
+    .step-connector {
+        position: absolute;
+        left: 39px;
+        top: 80px;
+        width: 3px;
+        height: calc(100% - 50px);
+        background: linear-gradient(to bottom, var(--moya-primary), transparent);
+        z-index: 1;
+    }
+
+    .timeline-step:last-child .step-connector {
+        display: none;
+    }
+
+    .step-content {
+        flex: 1;
+        margin-left: 2rem;
+        background: white;
+        padding: 1.5rem 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        border-left: 4px solid var(--moya-primary);
+    }
+
+    .timeline-step:hover .step-content {
+        transform: translateX(10px);
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .step-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .step-icon-badge {
+        width: 40px;
+        height: 40px;
+        background: rgba(0, 128, 128, 0.1);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        color: var(--moya-primary);
+        font-size: 1.3rem;
+    }
+
+    .step-content h5 {
+        font-weight: 700;
+        color: var(--moya-primary);
+        margin: 0;
+        font-size: 1.4rem;
+    }
+
+    .step-content p {
+        color: #555;
+        margin: 0;
+        font-size: 1.05rem;
+        line-height: 1.6;
+    }
+
+    .step-tag {
+        display: inline-block;
+        background: rgba(0, 128, 128, 0.1);
+        color: var(--moya-primary);
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+    }
 
         /* Responsive adjustments for arrows */
-        @media (max-width: 1199px) { /* Adjust breakpoint as needed */
-            /* Hide arrows when items might start wrapping significantly */
-            .step:not(:last-child)::after {
-                display: none;
-            }
-            .process-steps {
-                flex-direction: column; /* Stack vertically on smaller screens */
-                align-items: center;
-            }
-            .step {
-                min-width: 80%; /* Take more width when stacked */
-                margin-bottom: 20px;
-            }
+    @media (max-width: 768px) {
+        #how-to-order h2 {
+            font-size: 2.5rem;
         }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+        }
+
+        .step-connector {
+            left: 29px;
+            top: 60px;
+        }
+
+        .step-content {
+            margin-left: 1rem;
+            padding: 1.25rem 1.5rem;
+        }
+
+        .step-content h5 {
+            font-size: 1.2rem;
+        }
+
+        .step-content p {
+            font-size: 0.95rem;
+        }
+    }
     </style>
 </head>
 
@@ -345,76 +471,114 @@ $user_barangay = htmlspecialchars($_SESSION["address_barangay"]);
          =============================== -->
     <section id="how-to-order" class="py-5 py-xl-10">
         <div class="container">
-            <h2 class="display-6 fw-bold text-center mb-5" style="color: var(--moya-primary) !important;">
-                How to Order & Process
-            </h2>
-            <div class="process-steps">
+            <h2 class="text-center mb-2">How to Order & Process</h2>
+            <p class="text-center section-subtitle">
+                Follow these simple steps to get your premium water delivered fresh to your door
+            </p>
 
-                <!-- Step 1: Sign Up / Login & Order -->
-                <div class="step">
-                    <div class="step-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-person-plus-fill" viewBox="0 0 16 16">
-                          <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
-                          <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5"/>
-                        </svg>
+            <div class="process-timeline">
+                <!-- Step 1 -->
+                <div class="timeline-step">
+                    <div class="step-number">1</div>
+                    <div class="step-connector"></div>
+                    <div class="step-content">
+                        <div class="step-header">
+                            <div class="step-icon-badge">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                                    <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5"/>
+                                </svg>
+                            </div>
+                            <h5>Create Account & Place Order</h5>
+                        </div>
+                        <p>Sign up or log in to your account. Browse our container options, select your products, and submit your order. Make sure to review and agree to our order policy before completing your request.</p>
+                        <span class="step-tag">Your Action Required</span>
                     </div>
-                    <h5>Step 1: Account & Order</h5>
-                    <p>Sign up or Login. Browse products, add items to your order, and agree to the order policy before submitting.</p>
                 </div>
 
-                <!-- Step 2: Confirmation -->
-                <div class="step">
-                    <div class="step-icon">
-                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-telephone-outbound-fill" viewBox="0 0 16 16">
-                           <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877zm10.761.135a.5.5 0 0 1 .708 0l2.5 2.5a.5.5 0 0 1 0 .708l-2.5 2.5a.5.5 0 0 1-.708-.708L14.293 4H9.5a.5.5 0 0 1 0-1h4.793l-1.647-1.646a.5.5 0 0 1 0-.708"/>
-                         </svg>
+                <!-- Step 2 -->
+                <div class="timeline-step">
+                    <div class="step-number">2</div>
+                    <div class="step-connector"></div>
+                    <div class="step-content">
+                        <div class="step-header">
+                            <div class="step-icon-badge">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877zm10.761.135a.5.5 0 0 1 .708 0l2.5 2.5a.5.5 0 0 1 0 .708l-2.5 2.5a.5.5 0 0 1-.708-.708L14.293 4H9.5a.5.5 0 0 1 0-1h4.793l-1.647-1.646a.5.5 0 0 1 0-.708"/>
+                                </svg>
+                            </div>
+                            <h5>Receive Confirmation Call</h5>
+                        </div>
+                        <p>Your order will appear as "Pending" in your profile. Our team will call you shortly to confirm your order details, delivery address, and preferred time. Once confirmed, the status updates to "Confirmed".</p>
+                        <span class="step-tag">We'll Contact You</span>
                     </div>
-                    <h5>Step 2: Admin Confirmation</h5>
-                    <p>View your 'Pending' order in your Profile. Our admin will call you to confirm details. Then, the admin updates the status to 'Confirmed'.</p>
                 </div>
 
-                <!-- Step 3: Container Pickup -->
-                <div class="step">
-                    <div class="step-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
-                           <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"/>
-                           <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"/>
-                        </svg>
+                <!-- Step 3 -->
+                <div class="timeline-step">
+                    <div class="step-number">3</div>
+                    <div class="step-connector"></div>
+                    <div class="step-content">
+                        <div class="step-header">
+                            <div class="step-icon-badge">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"/>
+                                    <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"/>
+                                </svg>
+                            </div>
+                            <h5>Container Pickup</h5>
+                        </div>
+                        <p>Our delivery rider will arrive at your location to collect your empty container(s) for refilling. After the pickup is complete, please go to your profile and update the order status to "Confirm Pickup".</p>
+                        <span class="step-tag">Your Action Required</span>
                     </div>
-                    <h5>Step 3: Container Pickup</h5>
-                    <p>Our rider collects your empty container(s). Afterwards, please go to your Profile and update the order status to 'Confirm Pickup'.</p>
                 </div>
 
-                <!-- Step 4: Refill & Delivery Prep -->
-                <div class="step">
-                    <div class="step-icon">
-                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-truck" viewBox="0 0 16 16">
-                           <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12z"/>
-                           <path d="M10 11.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m-7 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
-                         </svg>
+                <!-- Step 4 -->
+                <div class="timeline-step">
+                    <div class="step-number">4</div>
+                    <div class="step-connector"></div>
+                    <div class="step-content">
+                        <div class="step-header">
+                            <div class="step-icon-badge">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12z"/>
+                                    <path d="M10 11.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m-7 0a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                                </svg>
+                            </div>
+                            <h5>Refilling & Out for Delivery</h5>
+                        </div>
+                        <p>We'll refill your container with premium purified water at our station. Once your order is ready and our rider is heading to your location, we'll update the status to "Set Out for Delivery".</p>
+                        <span class="step-tag">We're Processing</span>
                     </div>
-                    <h5>Step 4: Refill & En Route</h5>
-                    <p>We refill your container at the station. Once the rider is heading back to you, the admin will update the status to 'Set Out for Delivery'.</p>
                 </div>
 
-                <!-- Step 5: Delivery & Payment -->
-                <div class="step">
-                    <div class="step-icon">
-                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-cash-stack" viewBox="0 0 16 16">
-                           <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
-                           <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2z"/>
-                         </svg>
+                <!-- Step 5 -->
+                <div class="timeline-step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <div class="step-header">
+                            <div class="step-icon-badge">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+                                    <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2z"/>
+                                </svg>
+                            </div>
+                            <h5>Delivery & Payment</h5>
+                        </div>
+                        <p>The rider delivers your freshly refilled container to your doorstep. Pay using Cash on Delivery (COD). After receiving your order and making payment, please update the status to "Confirm Delivery & Payment" in your profile.</p>
+                        <span class="step-tag">Your Action Required</span>
                     </div>
-                    <h5>Step 5: Delivery & Payment</h5>
-                    <p>The rider delivers your refilled container. Please pay via Cash on Delivery (COD). Finally, go to your Profile and update the status to 'Confirm Delivery & Payment'.</p>
                 </div>
+            </div>
 
-            </div> <!-- End process-steps -->
-        </div> <!-- End container -->
+            <!-- Optional: Add a helpful note -->
+            <div class="text-center mt-5">
+                <div class="alert alert-info d-inline-block" style="max-width: 600px; border-left: 4px solid var(--moya-primary);">
+                    <strong>💡 Pro Tip:</strong> Keep your profile updated throughout the process for accurate tracking and faster service!
+                </div>
+            </div>
+        </div>
     </section>
-    <!-- ===============================
-         End How to Order Section
-         =============================== -->
 
     <section id="promo-banner" class="text-center py-3" style="background: linear-gradient(to right, #4fc3f7, #29b6f6); color: white; letter-spacing: 0.5px; font-size: 1.2rem; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);">
         <div class="container">
