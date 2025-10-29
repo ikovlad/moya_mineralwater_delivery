@@ -6,22 +6,6 @@ require_once "config.php";
 $email = $password = "";
 $login_err = ""; 
 
-<<<<<<< HEAD
-
-if (!function_exists('sanitize_input')) {
-    function sanitize_input($conn, $data) {
-        return htmlspecialchars(mysqli_real_escape_string($conn, trim($data)));
-    }
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    $email = sanitize_input($conn, $_POST["email"] ?? '');
-    $password = $_POST["password"] ?? '';
-
-    if (empty($email) || empty($password)) {
-        $login_err = "Email and password are required.";
-=======
 if (!function_exists('sanitize_input')) {
     function sanitize_input($conn, $data) {
         return htmlspecialchars(mysqli_real_escape_string($conn, trim($data)));
@@ -38,7 +22,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $login_err = "Email and password are required.";
     } elseif (!$terms_accepted) {
         $login_err = "You must accept the Terms & Conditions and Data Privacy Act to proceed.";
->>>>>>> 93ac7ac (Added all)
     } else {
         $sql = "SELECT id, full_name, password_hash FROM admins WHERE email = ?";
         
@@ -239,8 +222,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             transform: translateY(0);
         }
         
-<<<<<<< HEAD
-=======
         .btn-primary:disabled {
             opacity: 0.5;
             cursor: not-allowed;
@@ -252,7 +233,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             box-shadow: none;
         }
         
->>>>>>> 93ac7ac (Added all)
         .forgot-password { 
             text-align: right;
             margin-top: 0.75rem;
@@ -303,12 +283,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-left: 3px solid #1e40af;
         }
         
-<<<<<<< HEAD
-        /* Loading state for button */
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-=======
         /* Terms & Conditions Checkbox Styling */
         .terms-section {
             background-color: #f8fafc;
@@ -416,7 +390,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .modal-footer {
             border-top: 1px solid var(--border-color);
             padding: 1rem 1.5rem;
->>>>>>> 93ac7ac (Added all)
         }
         
         /* Responsive adjustments */
@@ -428,8 +401,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             .login-card-header h1 {
                 font-size: 1.5rem;
             }
-<<<<<<< HEAD
-=======
             
             .terms-section {
                 padding: 0.875rem;
@@ -438,7 +409,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             .form-check-label {
                 font-size: 0.8rem;
             }
->>>>>>> 93ac7ac (Added all)
         }
     </style>
 </head>
@@ -473,38 +443,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             ?>
 
-<<<<<<< HEAD
-            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" novalidate>
-=======
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" id="loginForm" novalidate>
->>>>>>> 93ac7ac (Added all)
                 
                 <div class="mb-4">
                     <label for="email" class="form-label">Email Address</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-envelope"></i></span>
                         <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" placeholder="admin@moya.com" required>
-<<<<<<< HEAD
-                    </div>
-                </div>
-
-                <div class="mb-2">
-                    <label for="password" class="form-label">Password</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
-                    </div>
-                </div>
-
-                <div class="forgot-password">
-                    <a href="admin_forgot_password.php">
-                        <i class="bi bi-question-circle-fill"></i> Forgot Password?
-                    </a>
-                </div>
-
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-primary">
-=======
                     </div>
                 </div>
 
@@ -537,17 +482,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="d-grid">
                     <button type="submit" class="btn btn-primary" id="loginButton" disabled>
->>>>>>> 93ac7ac (Added all)
                         <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
                     </button>
                 </div>
                 
             </form>
-<<<<<<< HEAD
-        </div>
-    </div>
-
-=======
         </div>
     </div>
 
@@ -724,6 +663,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         });
     </script>
 
->>>>>>> 93ac7ac (Added all)
 </body>
 </html>
