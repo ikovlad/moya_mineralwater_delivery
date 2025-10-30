@@ -360,6 +360,62 @@
             margin-top: 0.5rem;
         }
 
+        .password-input-wrapper {
+            position: relative;
+            border: 2px solid #e2e8f0;
+            border-radius: 0.625rem;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .password-input-wrapper:focus-within {
+            border-color: #008080;
+            box-shadow: 0 0 0 0.2rem rgba(0, 128, 128, 0.15);
+        }
+
+        .password-input-wrapper .input-group-text {
+            background-color: transparent;
+            border: none;
+            color: #8895a7;
+            padding: 0.875rem 1rem;
+        }
+
+        .password-input-wrapper .form-control {
+            border: none;
+            padding: 0.875rem 3.5rem 0.875rem 0.5rem;
+            /* Extra padding on right for button */
+            font-size: 0.95rem;
+            background-color: #f8fafc;
+        }
+
+        .password-input-wrapper .form-control:focus {
+            box-shadow: none;
+            background-color: #f8fafc;
+        }
+
+        .password-toggle-btn {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #64748b;
+            padding: 0.5rem 0.875rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: color 0.2s ease;
+        }
+
+        .password-toggle-btn:hover {
+            color: #008080;
+        }
+
+        .password-toggle-btn i {
+            font-size: 1.1rem;
+            pointer-events: none;
+        }
+
         /* Responsive adjustments for arrows */
         @media (max-width: 768px) {
             #how-to-order h2 {
@@ -388,6 +444,19 @@
 
             .step-content p {
                 font-size: 0.95rem;
+            }
+
+            /* Fix: Hide validation check icon from password fields with toggle button */
+            .input-group.position-relative .form-control:valid,
+            .input-group.position-relative .form-control.is-valid {
+                background-image: none !important;
+                padding-right: 3rem !important;
+            }
+
+            .input-group.position-relative .form-control:invalid,
+            .input-group.position-relative .form-control.is-invalid {
+                background-image: none !important;
+                padding-right: 3rem !important;
             }
         }
     </style>
@@ -795,23 +864,23 @@
                             <button class="nav-link active" id="login-tab" data-bs-toggle="tab"
                                 data-bs-target="#login-pane" type="button" role="tab"
                                 style="border: none; border-radius: 0.625rem; padding: 0.875rem 1.75rem; font-weight: 600; font-size: 1rem; transition: all 0.3s ease;">
-                                <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                                <i class="bi me-2"></i>Login
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="signup-tab" data-bs-toggle="tab" data-bs-target="#signup-pane"
                                 type="button" role="tab"
                                 style="border: none; border-radius: 0.625rem; padding: 0.875rem 1.75rem; font-weight: 600; font-size: 1rem; transition: all 0.3s ease;">
-                                <i class="bi bi-person-plus me-2"></i>Sign Up
+                                <i class="bi me-2"></i>Sign Up
                             </button>
                         </li>
                     </ul>
 
                     <!-- Tab Content -->
                     <div class="tab-content">
-                        <!-- LOGIN TAB -->
+                        <!-- LOGIN TAB - NOW INCLUDES TERMS CHECKBOX -->
                         <div class="tab-pane fade show active" id="login-pane" role="tabpanel">
-                            <form action="login.php" method="POST" id="loginForm">
+                            <form action="login.php" method="POST" class="needs-validation" id="loginForm" novalidate>
                                 <div class="mb-4">
                                     <label for="loginEmail" class="form-label"
                                         style="font-weight: 600; font-size: 0.95rem; color: #34495e; margin-bottom: 0.75rem;">
@@ -842,7 +911,7 @@
                                         </span>
                                         <input type="password" class="form-control" id="loginPassword" name="password"
                                             placeholder="Enter your password" required
-                                            style="border: none; padding: 0.875rem 3rem 0.875rem 0.5rem; font-size: 0.95rem; background-color: #f8fafc;">
+                                            style="border: none; padding: 0.875rem 3rem 0.875rem 0.5rem; font-size: 0.95rem; background-color: #f8fafc; background-image: none !important;">
                                         <button type="button"
                                             class="btn btn-link position-absolute end-0 top-50 translate-middle-y"
                                             style="color: #64748b; z-index: 10; padding: 0.5rem 1rem;"
@@ -852,7 +921,7 @@
                                     </div>
                                 </div>
 
-                                <div class="d-flex justify-content-between align-items-center mb-4"
+                                <div class="d-flex justify-content-between align-items-center mb-3"
                                     style="margin-top: 1rem;">
                                     <div class="form-check d-flex align-items-center">
                                         <input class="form-check-input" type="checkbox" id="rememberMe"
@@ -868,8 +937,33 @@
                                     </a>
                                 </div>
 
-                                <button type="submit" class="btn btn-lg w-100 mb-3"
-                                    style="background: linear-gradient(135deg, #008080 0%, #006666 100%); border: none; color: white; padding: 1rem; font-weight: 600; font-size: 1rem; border-radius: 0.75rem; transition: all 0.3s ease;">
+                                <!-- Terms Section for LOGIN -->
+                                <div
+                                    style="background-color: #f8fafc; border: 2px solid #e2e8f0; border-radius: 0.75rem; padding: 1.25rem; margin-bottom: 1.5rem;">
+                                    <div class="form-check"
+                                        style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                                        <input class="form-check-input" type="checkbox" id="loginTerms" required
+                                            style="width: 1.25rem; height: 1.25rem; border: 2px solid #cbd5e1; margin-top: 0.125rem; cursor: pointer; flex-shrink: 0;">
+                                        <label class="form-check-label" for="loginTerms"
+                                            style="font-size: 0.9rem; color: #334155; line-height: 1.7; cursor: pointer;">
+                                            I have read and agree to the
+                                            <a href="#" class="terms-link" data-bs-toggle="modal"
+                                                data-bs-target="#userTermsModal" onclick="event.preventDefault();"
+                                                style="color: #008080; font-weight: 600; text-decoration: none;">
+                                                Terms & Conditions
+                                            </a>
+                                            and
+                                            <a href="#" class="terms-link" data-bs-toggle="modal"
+                                                data-bs-target="#userPrivacyModal" onclick="event.preventDefault();"
+                                                style="color: #008080; font-weight: 600; text-decoration: none;">
+                                                Data Privacy Act
+                                            </a>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-lg w-100 mb-3" id="loginButton" disabled
+                                    style="background: linear-gradient(135deg, #008080 0%, #006666 100%); border: none; color: white; padding: 1rem; font-weight: 600; font-size: 1rem; border-radius: 0.75rem; transition: all 0.3s ease; opacity: 0.5; cursor: not-allowed;">
                                     <i class="bi bi-box-arrow-in-right me-2"></i>Log In
                                 </button>
 
@@ -883,7 +977,7 @@
                             </form>
                         </div>
 
-                        <!-- SIGNUP TAB -->
+                        <!-- SIGNUP TAB - INCLUDES terms checkbox and Create Account button -->
                         <div class="tab-pane fade" id="signup-pane" role="tabpanel">
                             <form action="signup.php" method="POST" class="needs-validation" id="signupForm" novalidate>
                                 <div class="row g-4">
@@ -943,35 +1037,40 @@
                                         <div class="invalid-feedback" style="font-size: 0.8125rem; margin-top: 0.5rem;">
                                             Enter a valid email address.</div>
                                     </div>
-
                                     <div class="col-md-6">
                                         <label for="signupPassword" class="form-label"
                                             style="font-weight: 600; font-size: 0.95rem; color: #34495e; margin-bottom: 0.75rem;">
                                             Password
                                         </label>
-                                        <div class="input-group position-relative"
-                                            style="border: 2px solid #e2e8f0; border-radius: 0.625rem; overflow: hidden;">
-                                            <span class="input-group-text"
-                                                style="background-color: transparent; border: none; color: #8895a7; padding: 0.875rem 1rem;">
-                                                <i class="bi bi-lock" style="font-size: 1.1rem;"></i>
-                                            </span>
-                                            <input type="password" class="form-control" id="signupPassword"
-                                                name="password" minlength="8"
-                                                pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$"
-                                                placeholder="Create a password" required
-                                                style="border: none; padding: 0.875rem 3rem 0.875rem 0.5rem; font-size: 0.95rem; background-color: #f8fafc;">
-                                            <button type="button"
-                                                class="btn btn-link position-absolute end-0 top-50 translate-middle-y"
-                                                style="color: #64748b; z-index: 10; padding: 0.5rem 1rem;"
-                                                onclick="togglePassword('signupPassword', this)">
-                                                <i class="bi bi-eye" style="font-size: 1.1rem;"></i>
-                                            </button>
+                                        <div
+                                            style="position: relative; border: 2px solid #e2e8f0; border-radius: 0.625rem; overflow: hidden; transition: all 0.2s ease;">
+                                            <div class="input-group" style="border: none;">
+                                                <span class="input-group-text"
+                                                    style="background-color: transparent; border: none; color: #8895a7; padding: 0.875rem 1rem;">
+                                                    <i class="bi bi-lock" style="font-size: 1.1rem;"></i>
+                                                </span>
+                                                <input type="password" class="form-control" id="signupPassword"
+                                                    name="password" minlength="8"
+                                                    pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$"
+                                                    placeholder="Create a password" required
+                                                    style="border: none; padding: 0.875rem 3.5rem 0.875rem 0.5rem; font-size: 0.95rem; background-color: #f8fafc; background-image: none !important;">
+                                                <button type="button"
+                                                    style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); background: none; border: none; color: #64748b; padding: 0.5rem 0.875rem; cursor: pointer; z-index: 10; transition: color 0.2s ease;"
+                                                    onclick="togglePassword('signupPassword', this)"
+                                                    onmouseover="this.style.color='#008080'"
+                                                    onmouseout="this.style.color='#64748b'">
+                                                    <i class="bi bi-eye"
+                                                        style="font-size: 1.1rem; pointer-events: none;"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                         <div class="invalid-feedback" style="font-size: 0.8125rem; margin-top: 0.5rem;">
-                                            8+ chars with at least one letter and number.</div>
+                                            8+ chars with at least one letter and number.
+                                        </div>
                                         <small class="text-muted"
-                                            style="font-size: 0.8125rem; display: block; margin-top: 0.375rem; color: #64748b;">Must
-                                            contain at least 8 characters</small>
+                                            style="font-size: 0.8125rem; display: block; margin-top: 0.375rem; color: #64748b;">
+                                            Must contain at least 8 characters
+                                        </small>
                                     </div>
 
                                     <div class="col-12">
@@ -1053,7 +1152,7 @@
                                     style="background-color: #f8fafc; border: 2px solid #e2e8f0; border-radius: 0.75rem; padding: 1.25rem; margin-top: 1.75rem;">
                                     <div class="form-check"
                                         style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                                        <input class="form-check-input" type="checkbox" id="signupTerms"
+                                        <input class="form-check-input" type="checkbox" id="signupTerms" required
                                             style="width: 1.25rem; height: 1.25rem; border: 2px solid #cbd5e1; margin-top: 0.125rem; cursor: pointer; flex-shrink: 0;">
                                         <label class="form-check-label" for="signupTerms"
                                             style="font-size: 0.9rem; color: #334155; line-height: 1.7; cursor: pointer;">
@@ -1070,6 +1169,9 @@
                                                 Data Privacy Act
                                             </a>
                                         </label>
+                                    </div>
+                                    <div class="invalid-feedback" style="font-size: 0.8125rem; margin-top: 0.5rem;">
+                                        You must agree to the terms and conditions to create an account.
                                     </div>
                                 </div>
 
@@ -1325,13 +1427,32 @@
             }
         }
 
-        // Terms Checkbox Handler - with proper button styling
+        // Terms Checkbox Handlers for BOTH login and signup
         document.addEventListener('DOMContentLoaded', function () {
-            const termsCheckbox = document.getElementById('signupTerms');
+            // LOGIN TERMS CHECKBOX HANDLER
+            const loginTermsCheckbox = document.getElementById('loginTerms');
+            const loginButton = document.getElementById('loginButton');
+
+            if (loginTermsCheckbox && loginButton) {
+                loginTermsCheckbox.addEventListener('change', function () {
+                    if (this.checked) {
+                        loginButton.disabled = false;
+                        loginButton.style.opacity = '1';
+                        loginButton.style.cursor = 'pointer';
+                    } else {
+                        loginButton.disabled = true;
+                        loginButton.style.opacity = '0.5';
+                        loginButton.style.cursor = 'not-allowed';
+                    }
+                });
+            }
+
+            // SIGNUP TERMS CHECKBOX HANDLER
+            const signupTermsCheckbox = document.getElementById('signupTerms');
             const signupButton = document.getElementById('signupButton');
 
-            if (termsCheckbox && signupButton) {
-                termsCheckbox.addEventListener('change', function () {
+            if (signupTermsCheckbox && signupButton) {
+                signupTermsCheckbox.addEventListener('change', function () {
                     if (this.checked) {
                         signupButton.disabled = false;
                         signupButton.style.opacity = '1';
@@ -1344,11 +1465,22 @@
                 });
             }
 
-            // Form validation
+            // Form validation for LOGIN
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', function (e) {
+                    if (!loginTermsCheckbox.checked) {
+                        e.preventDefault();
+                        alert('You must accept the Terms & Conditions and Data Privacy Act to log in.');
+                    }
+                });
+            }
+
+            // Form validation for SIGNUP
             const signupForm = document.getElementById('signupForm');
             if (signupForm) {
                 signupForm.addEventListener('submit', function (e) {
-                    if (!termsCheckbox.checked) {
+                    if (!signupTermsCheckbox.checked) {
                         e.preventDefault();
                         alert('You must accept the Terms & Conditions and Data Privacy Act to proceed.');
                     }
@@ -1398,6 +1530,54 @@
             });
         })();
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Check if user was redirected after successful signup
+            if (window.location.hash === '#login-success') {
+                // Open the auth modal
+                const authModal = new bootstrap.Modal(document.getElementById('authModal'));
+                authModal.show();
+
+                // Switch to login tab
+                const loginTab = document.getElementById('login-tab');
+                const loginTabTrigger = new bootstrap.Tab(loginTab);
+                loginTabTrigger.show();
+
+                // Show success message after modal is shown
+                setTimeout(function () {
+                    const loginPane = document.getElementById('login-pane');
+                    const loginForm = loginPane.querySelector('form');
+
+                    // Create success alert
+                    const successAlert = document.createElement('div');
+                    successAlert.className = 'alert alert-success alert-dismissible fade show';
+                    successAlert.setAttribute('role', 'alert');
+                    successAlert.style.marginBottom = '1.5rem';
+                    successAlert.style.fontSize = '1.1rem';
+                    successAlert.innerHTML = `
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        <strong>Success!</strong> Your account has been created successfully! Please log in with your credentials.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    `;
+
+                    // Insert at the top of login form
+                    loginForm.insertBefore(successAlert, loginForm.firstChild);
+
+                    // Auto-dismiss after 10 seconds
+                    setTimeout(function () {
+                        if (successAlert.parentElement) {
+                            successAlert.remove();
+                        }
+                    }, 10000);
+                }, 600);
+
+                // Clean up URL hash
+                history.replaceState(null, null, window.location.pathname);
+            }
+        });
+    </script>
+
 
 </body>
 
