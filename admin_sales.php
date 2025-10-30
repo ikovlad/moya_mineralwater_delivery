@@ -458,19 +458,19 @@ function generate_sales_pagination_links($current_page, $total_pages, $date_filt
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item <?php echo $date_filter == 'all' ? 'active' : ''; ?>" href="?filter=all&search=<?php echo urlencode($search); ?>&status=<?php echo urlencode($status_filter); ?>">
-                        <i class="bi bi-infinity me-2"></i>All Time
+                        <i class="bi me-2"></i>All Time
                     </a></li>
                     <li><a class="dropdown-item <?php echo $date_filter == 'today' ? 'active' : ''; ?>" href="?filter=today&search=<?php echo urlencode($search); ?>&status=<?php echo urlencode($status_filter); ?>">
-                        <i class="bi bi-calendar-day me-2"></i>Today
+                        <i class="bi me-2"></i>Today
                     </a></li>
                     <li><a class="dropdown-item <?php echo $date_filter == '7days' ? 'active' : ''; ?>" href="?filter=7days&search=<?php echo urlencode($search); ?>&status=<?php echo urlencode($status_filter); ?>">
-                        <i class="bi bi-calendar-week me-2"></i>Last 7 Days
+                        <i class="bi me-2"></i>Last 7 Days
                     </a></li>
                     <li><a class="dropdown-item <?php echo $date_filter == 'lastweek' ? 'active' : ''; ?>" href="?filter=lastweek&search=<?php echo urlencode($search); ?>&status=<?php echo urlencode($status_filter); ?>">
-                        <i class="bi bi-calendar3 me-2"></i>Last Week
+                        <i class="bi me-2"></i>Last Week
                     </a></li>
                     <li><a class="dropdown-item <?php echo $date_filter == 'lastmonth' ? 'active' : ''; ?>" href="?filter=lastmonth&search=<?php echo urlencode($search); ?>&status=<?php echo urlencode($status_filter); ?>">
-                        <i class="bi bi-calendar-month me-2"></i>Last Month
+                        <i class="bi me-2"></i>Last Month
                     </a></li>
                 </ul>
             </div>

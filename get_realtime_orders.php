@@ -11,8 +11,6 @@ $sql = "SELECT o.id, u.full_name, o.total_amount, o.status, o.order_date
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
-<<<<<<< HEAD
-<<<<<<< HEAD
     echo '<table class="table table-striped">';
     echo '<thead><tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>';
     echo '<tbody>';
@@ -28,32 +26,6 @@ if ($result->num_rows > 0) {
     echo '</tbody></table>';
 } else {
     echo '<p class="text-center">No new orders at the moment.</p>';
-=======
-=======
-    echo '<table class="table table-striped">';
-    echo '<thead><tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>';
-    echo '<tbody>';
->>>>>>> 93ac7ac (Added all)
-    while($row = $result->fetch_assoc()) {
-        echo '<tr>';
-        echo '<td>#' . $row['id'] . '</td>';
-        echo '<td>' . htmlspecialchars($row['full_name']) . '</td>';
-        echo '<td>₱' . number_format($row['total_amount'], 2) . '</td>';
-        echo '<td><span class="badge bg-warning text-dark">' . htmlspecialchars($row['status']) . '</span></td>';
-        echo '<td>' . date('M d, Y h:i A', strtotime($row['order_date'])) . '</td>';
-        echo '</tr>';
-    }
-    echo '</tbody></table>';
-} else {
-<<<<<<< HEAD
-    echo '<div class="empty-state">';
-    echo '  <i class="bi bi-inbox"></i>';
-    echo '  <p>No incoming orders at the moment.</p>';
-    echo '</div>';
->>>>>>> 81caf45 (try)
-=======
-    echo '<p class="text-center">No new orders at the moment.</p>';
->>>>>>> 93ac7ac (Added all)
 }
 
 $conn->close();

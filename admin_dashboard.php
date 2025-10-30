@@ -78,11 +78,7 @@ $top_customers_result = $conn->query($top_customers_query);
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">₱<?php echo number_format($today_sales, 2); ?></div>
                             </div>
                             <div class="col-auto">
-<<<<<<< HEAD
-                                <i class="bi bi-calendar-day fs-2 text-gray-300"></i>
-=======
                                 <i class="bi bi-calendar fs-2 text-gray-300"></i>
->>>>>>> 81caf45 (try)
                             </div>
                         </div>
                     </div>
@@ -100,11 +96,7 @@ $top_customers_result = $conn->query($top_customers_query);
                                 <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">₱<?php echo number_format($monthly_sales, 2); ?></div>
                             </div>
                             <div class="col-auto">
-<<<<<<< HEAD
-                                <i class="bi bi-calendar-month fs-2 text-gray-300"></i>
-=======
                                 <i class="bi bi-calendar fs-2 text-gray-300"></i>
->>>>>>> 81caf45 (try)
                             </div>
                         </div>
                     </div>

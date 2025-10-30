@@ -18,40 +18,21 @@ $param_types = "";
 
 // Search filter (Order ID, Name, Phone)
 if (!empty($search)) {
-<<<<<<< HEAD
-    // Check if search term is numeric to possibly search by ID
-    $id_search_clause = is_numeric($search) ? "o.id = ?" : "1=0"; // 1=0 ensures it doesn't match if not numeric
-    
-    $where_clauses[] = "($id_search_clause OR u.full_name LIKE ? OR u.phone_number LIKE ?)";
-    
-    if (is_numeric($search)) {
-        $params[] = (int)$search; // Add ID param first if numeric
-=======
     $id_search_clause = is_numeric($search) ? "o.id = ?" : "1=0";
     
     $where_clauses[] = "($id_search_clause OR u.full_name LIKE ? OR u.phone_number LIKE ?)";
     
     if (is_numeric($search)) {
         $params[] = (int)$search;
->>>>>>> 81caf45 (try)
         $param_types .= "i";
     }
     
     $search_term_like = "%{$search}%";
-<<<<<<< HEAD
-    $params[] = $search_term_like; // Name param
-    $params[] = $search_term_like; // Phone param
-    $param_types .= "ss";
-}
-
-
-=======
     $params[] = $search_term_like;
     $params[] = $search_term_like;
     $param_types .= "ss";
 }
 
->>>>>>> 81caf45 (try)
 // Status filter
 if (!empty($status_filter)) {
     $where_clauses[] = "o.status = ?";
@@ -89,22 +70,6 @@ $orders_query = "
             WHEN 'Confirmed' THEN 2
             WHEN 'Picked Up' THEN 3
             WHEN 'On the Way' THEN 4
-<<<<<<< HEAD
-            WHEN 'Completed' THEN 6  /* Moved Completed down */
-            WHEN 'Cancelled' THEN 7  /* Moved Cancelled down */
-            ELSE 5                   /* Other statuses */
-        END, o.order_date DESC
-    LIMIT ? OFFSET ?"; // Add LIMIT and OFFSET
-
-// Add LIMIT and OFFSET params for the main query
-$params[] = $records_per_page;
-$params[] = $offset;
-$param_types .= "ii"; // Add types for LIMIT and OFFSET
-
-$stmt_orders = $conn->prepare($orders_query);
-if (!$stmt_orders) {
-    die("Prepare failed: (" . $conn->errno . ") " . $conn->error); // Error handling
-=======
             WHEN 'Completed' THEN 6
             WHEN 'Cancelled' THEN 7
             ELSE 5
@@ -118,7 +83,6 @@ $param_types .= "ii";
 $stmt_orders = $conn->prepare($orders_query);
 if (!$stmt_orders) {
     die("Prepare failed: (" . $conn->errno . ") " . $conn->error);
->>>>>>> 81caf45 (try)
 }
 if (!empty($params)) {
     $stmt_orders->bind_param($param_types, ...$params);
@@ -129,64 +93,19 @@ $orders_result = $stmt_orders->get_result();
 // Possible order statuses for the filter dropdown
 $possible_statuses = ['Pending', 'Confirmed', 'Picked Up', 'On the Way', 'Completed', 'Cancelled'];
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-// Check for success/error messages from session (if needed, e.g., from update_order_status.php)
-$alert_message = '';
-if (isset($_SESSION['alert_message'])) {
-    $alert_type = $_SESSION['alert_type'] ?? 'info';
-    $alert_message = '<div class="alert alert-' . $alert_type . ' alert-dismissible fade show" role="alert">
-        ' . htmlspecialchars($_SESSION['alert_message']) . '
-=======
-// Get status counts for stats
-$status_counts = [];
-foreach ($possible_statuses as $status) {
-    $count_query = "SELECT COUNT(*) as count FROM orders WHERE status = ?";
-    $stmt = $conn->prepare($count_query);
-    $stmt->bind_param("s", $status);
-    $stmt->execute();
-    $result = $stmt->get_result()->fetch_assoc();
-    $status_counts[$status] = $result['count'];
-    $stmt->close();
-}
-
-=======
->>>>>>> 93ac7ac (Added all)
 // Check for success/error messages from session
 $alert_message = '';
 if (isset($_SESSION['alert_message'])) {
     $alert_type = $_SESSION['alert_type'] ?? 'info';
-<<<<<<< HEAD
-    $icon_map = [
-        'success' => 'check-circle-fill',
-        'danger' => 'exclamation-triangle-fill',
-        'warning' => 'exclamation-circle-fill',
-        'info' => 'info-circle-fill'
-    ];
-    $icon = $icon_map[$alert_type] ?? 'info-circle-fill';
-    
-    $alert_message = '<div class="alert alert-' . $alert_type . ' alert-dismissible fade show alert-modern" role="alert">
-        <i class="bi bi-' . $icon . ' me-2"></i>' . htmlspecialchars($_SESSION['alert_message']) . '
->>>>>>> 81caf45 (try)
-=======
     $alert_message = '<div class="alert alert-' . $alert_type . ' alert-dismissible fade show" role="alert">
         ' . htmlspecialchars($_SESSION['alert_message']) . '
->>>>>>> 93ac7ac (Added all)
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>';
     unset($_SESSION['alert_message']);
     unset($_SESSION['alert_type']);
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-// Function to generate pagination links (keeping filters)
-=======
-// Function to generate pagination links with numbers
->>>>>>> 81caf45 (try)
-=======
 // Enhanced pagination function
->>>>>>> 93ac7ac (Added all)
 function generate_order_pagination_links($current_page, $total_pages, $search_value, $status_value) {
     $links = '';
     $base_url = "admin_orders.php";
@@ -195,25 +114,14 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
     if (!empty($status_value)) $query_params['status'] = $status_value;
     
     // Calculate page range
-    $range = 2; // Number of pages to show on each side of current page
+    $range = 2;
     $start_page = max(1, $current_page - $range);
     $end_page = min($total_pages, $current_page + $range);
     
-    // Previous Button with arrow and text
+    // Previous Button
     if ($current_page > 1) {
-<<<<<<< HEAD
-        $prev_page = $current_page - 1;
-        $query_params['page'] = $prev_page;
-<<<<<<< HEAD
-        $links .= '<li class="page-item"><a class="page-link" href="' . $base_url . '?' . http_build_query($query_params) . '">Previous</a></li>';
-    } else {
-        $links .= '<li class="page-item disabled"><span class="page-link">Previous</span></li>';
-=======
-        $links .= '<li class="page-item"><a class="page-link page-link-arrow" href="' . $base_url . '?' . http_build_query($query_params) . '"><i class="bi bi-chevron-left"></i> Previous</a></li>';
-=======
         $query_params['page'] = $current_page - 1;
         $links .= '<li class="page-item"><a class="page-link" href="' . $base_url . '?' . http_build_query($query_params) . '"><i class="bi bi-chevron-left"></i> Previous</a></li>';
->>>>>>> 93ac7ac (Added all)
     } else {
         $links .= '<li class="page-item disabled"><span class="page-link"><i class="bi bi-chevron-left"></i> Previous</span></li>';
     }
@@ -243,59 +151,20 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
             $links .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
         }
         $query_params['page'] = $total_pages;
-<<<<<<< HEAD
-        $links .= '<li class="page-item"><a class="page-link page-number" href="' . $base_url . '?' . http_build_query($query_params) . '">' . $total_pages . '</a></li>';
->>>>>>> 81caf45 (try)
-=======
         $links .= '<li class="page-item"><a class="page-link" href="' . $base_url . '?' . http_build_query($query_params) . '">' . $total_pages . '</a></li>';
->>>>>>> 93ac7ac (Added all)
     }
 
-    // Next Button with text and arrow
+    // Next Button
     if ($current_page < $total_pages) {
-<<<<<<< HEAD
-        $next_page = $current_page + 1;
-        $query_params['page'] = $next_page;
-<<<<<<< HEAD
-        $links .= '<li class="page-item"><a class="page-link" href="' . $base_url . '?' . http_build_query($query_params) . '">Next</a></li>';
-    } else {
-        $links .= '<li class="page-item disabled"><span class="page-link">Next</span></li>';
-=======
-        $links .= '<li class="page-item"><a class="page-link page-link-arrow" href="' . $base_url . '?' . http_build_query($query_params) . '">Next <i class="bi bi-chevron-right"></i></a></li>';
-    } else {
-        $links .= '<li class="page-item disabled"><span class="page-link page-link-arrow">Next <i class="bi bi-chevron-right"></i></span></li>';
->>>>>>> 81caf45 (try)
-=======
         $query_params['page'] = $current_page + 1;
         $links .= '<li class="page-item"><a class="page-link" href="' . $base_url . '?' . http_build_query($query_params) . '">Next <i class="bi bi-chevron-right"></i></a></li>';
     } else {
         $links .= '<li class="page-item disabled"><span class="page-link">Next <i class="bi bi-chevron-right"></i></span></li>';
->>>>>>> 93ac7ac (Added all)
     }
 
     return $links;
 }
 ?>
-<<<<<<< HEAD
-<div class="container-fluid">
-    <h1 class="page-header">Order Management</h1>
-    
-    <?php echo $alert_message; // Display session messages if any ?>
-
-    <div class="card">
-        <div class="card-header">
-            All Orders (Page <?php echo $page; ?> of <?php echo $total_pages; ?>)
-        </div>
-        <div class="card-body">
-            <form method="GET" action="admin_orders.php" class="mb-4">
-                <div class="row g-2">
-                    <div class="col-md-5">
-                        <input type="text" name="search" class="form-control" placeholder="Search by Order ID, Name, or Phone..." value="<?php echo htmlspecialchars($search); ?>">
-                    </div>
-                    <div class="col-md-4">
-                        <select name="status" class="form-select">
-                            <option value="">-- Filter by Status --</option>
-=======
 
 <style>
 /* Enhanced Professional Styling */
@@ -391,7 +260,7 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
     text-transform: uppercase;
 }
 
-/* Enhanced Pagination - Centered like image */
+/* Enhanced Pagination */
 .pagination {
     margin: 0;
     gap: 0.5rem;
@@ -414,7 +283,6 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
     background-color: white;
 }
 
-/* Specific styling for Previous/Next buttons */
 .page-item:first-child .page-link,
 .page-item:last-child .page-link {
     min-width: auto;
@@ -446,18 +314,6 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
 
 .page-link i {
     font-size: 0.75rem;
-}
-
-/* Pagination Info */
-.pagination-info {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 1.5rem;
-    padding-top: 1rem;
-    border-top: 1px solid #e2e8f0;
-    color: #64748b;
-    font-size: 0.875rem;
 }
 
 /* Button Enhancements */
@@ -511,6 +367,41 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
     font-size: 3rem;
     color: #cbd5e1;
     margin-bottom: 1rem;
+}
+
+/* Modal Enhancements */
+.modal-content {
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.modal-header {
+    border-bottom: 2px solid #fee2e2;
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border-radius: 1rem 1rem 0 0;
+    padding: 1.5rem;
+}
+
+.modal-body {
+    padding: 2rem 1.5rem;
+}
+
+.modal-footer {
+    border-top: 2px solid #e5e7eb;
+    padding: 1rem 1.5rem;
+}
+
+.warning-icon {
+    font-size: 4rem;
+    color: #dc2626;
+    margin-bottom: 1rem;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
 }
 
 /* Responsive adjustments */
@@ -583,7 +474,6 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
                                 class="form-select" 
                                 onchange="document.getElementById('filterForm').submit()">
                             <option value="">All Statuses</option>
->>>>>>> 81caf45 (try)
                             <?php foreach ($possible_statuses as $stat): ?>
                                 <option value="<?php echo $stat; ?>" <?php echo ($status_filter == $stat) ? 'selected' : ''; ?>>
                                     <?php echo $stat; ?>
@@ -591,56 +481,17 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
                             <?php endforeach; ?>
                         </select>
                     </div>
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    <div class="col-md-3 d-flex">
-                        <button class="btn btn-primary flex-grow-1 me-2" type="submit"><i class="bi bi-funnel-fill"></i> Apply Filters</button>
-                        <?php if(!empty($search) || !empty($status_filter)): ?>
-                            <a href="admin_orders.php" class="btn btn-secondary"><i class="bi bi-x-lg"></i> Clear</a>
-=======
-                    <div class="col-md-2">
-                        <button class="btn btn-primary w-100" type="submit">
-                            <i class="bi bi-search me-1"></i>Search
-                        </button>
-                    </div>
-                    <div class="col-md-3">
-=======
                     <div class="col-md-2 d-flex align-items-end">
->>>>>>> 93ac7ac (Added all)
                         <?php if(!empty($search) || !empty($status_filter)): ?>
                             <a href="admin_orders.php" class="btn btn-secondary w-100" title="Clear all filters">
                                 <i class="bi bi-x-lg me-1"></i> Clear
                             </a>
-<<<<<<< HEAD
-                        <?php else: ?>
-                            <span class="text-muted small">Showing all <?php echo $total_records; ?> orders</span>
->>>>>>> 81caf45 (try)
-=======
->>>>>>> 93ac7ac (Added all)
                         <?php endif; ?>
                     </div>
                 </div>
             </form>
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>ID</th>
-                            <th>Customer</th>
-                            <th>Contact</th>
-                            <th>Address</th>
-                            <th>Date</th>
-                            <th>Total</th>
-                            <th>Status</th>
-                            <th>Admin Action</th>
-=======
-            <!-- Orders Table -->
-=======
             <!-- Table -->
->>>>>>> 93ac7ac (Added all)
             <div class="table-responsive">
                 <table class="table table-hover align-middle">
                     <thead>
@@ -652,66 +503,12 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
                             <th>Date</th>
                             <th>Total</th>
                             <th>Status</th>
-<<<<<<< HEAD
-                            <th>Actions</th>
->>>>>>> 81caf45 (try)
-=======
                             <th>Action</th>
->>>>>>> 93ac7ac (Added all)
                         </tr>
                     </thead>
                     <tbody>
                         <?php if ($orders_result->num_rows > 0): ?>
-<<<<<<< HEAD
-<<<<<<< HEAD
                             <?php while($order = $orders_result->fetch_assoc()): ?>
-                            <tr>
-                                <td>#<?php echo $order['id']; ?></td>
-                                <td><?php echo htmlspecialchars($order['full_name']); ?></td>
-                                <td><?php echo htmlspecialchars($order['phone_number']); ?></td>
-                                <td><?php echo htmlspecialchars($order['address_detail'] . ', ' . $order['address_barangay']); ?></td>
-                                <td><?php echo date('M d, Y h:i A', strtotime($order['order_date'])); ?></td>
-                                <td>₱<?php echo number_format($order['total_amount'], 2); ?></td>
-                                <td>
-                                    <?php
-                                        $status = htmlspecialchars($order['status']);
-                                        $badge_class = '';
-                                        switch ($status) {
-                                            case 'Pending': $badge_class = 'bg-warning text-dark'; break;
-                                            case 'Confirmed': $badge_class = 'bg-info text-dark'; break;
-                                            case 'Picked Up': $badge_class = 'bg-secondary'; break; // Changed style
-                                            case 'On the Way': $badge_class = 'bg-primary'; break;
-                                            case 'Completed': $badge_class = 'bg-success'; break;
-                                            case 'Cancelled': $badge_class = 'bg-danger'; break;
-                                            default: $badge_class = 'bg-light text-dark';
-                                        }
-                                    ?>
-                                    <span class="badge <?php echo $badge_class; ?> p-2"><?php echo $status; ?></span>
-=======
-                            <?php while($order = $orders_result->fetch_assoc()): 
-                                $status = htmlspecialchars($order['status']);
-                                $status_class_map = [
-                                    'Pending' => 'status-pending',
-                                    'Confirmed' => 'status-confirmed',
-                                    'Picked Up' => 'status-picked-up',
-                                    'On the Way' => 'status-on-the-way',
-                                    'Completed' => 'status-completed',
-                                    'Cancelled' => 'status-cancelled'
-                                ];
-                                $status_icon_map = [
-                                    'Pending' => 'clock-history',
-                                    'Confirmed' => 'check-circle',
-                                    'Picked Up' => 'box',
-                                    'On the Way' => 'truck',
-                                    'Completed' => 'check-circle-fill',
-                                    'Cancelled' => 'x-circle-fill'
-                                ];
-                                $status_class = $status_class_map[$status] ?? '';
-                                $status_icon = $status_icon_map[$status] ?? 'circle';
-                            ?>
-=======
-                            <?php while($order = $orders_result->fetch_assoc()): ?>
->>>>>>> 93ac7ac (Added all)
                             <tr>
                                 <td><strong>#<?php echo $order['id']; ?></strong></td>
                                 <td><?php echo htmlspecialchars($order['full_name']); ?></td>
@@ -724,13 +521,6 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
                                     <small><?php echo htmlspecialchars($order['address_detail'] . ', ' . $order['address_barangay']); ?></small>
                                 </td>
                                 <td>
-<<<<<<< HEAD
-                                    <span class="status-badge-modern <?php echo $status_class; ?>">
-                                        <i class="bi bi-<?php echo $status_icon; ?>"></i>
-                                        <?php echo $status; ?>
-                                    </span>
->>>>>>> 81caf45 (try)
-=======
                                     <small><?php echo date('M d, Y', strtotime($order['order_date'])); ?></small>
                                     <br>
                                     <small class="text-muted"><?php echo date('h:i A', strtotime($order['order_date'])); ?></small>
@@ -751,7 +541,6 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
                                         }
                                     ?>
                                     <span class="badge <?php echo $badge_class; ?>"><?php echo $status; ?></span>
->>>>>>> 93ac7ac (Added all)
                                 </td>
                                 <td>
                                     <?php
@@ -760,45 +549,12 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
                                     ?>
 
                                     <?php if ($is_final_state): ?>
-<<<<<<< HEAD
-<<<<<<< HEAD
-                                        <span class="text-muted fst-italic">No action needed</span>
-                                    <?php else: ?>
-                                        <select class="form-select form-select-sm"
-                                                onchange="updateOrderStatus(<?php echo $order['id']; ?>, this.value)">
-
-                                            <option value="<?php echo $current_status; ?>" selected disabled hidden><?php echo $current_status; ?> (Change?)</option>
-
-                                            <?php if ($current_status == 'Pending'): ?>
-                                                <option value="Confirmed">Confirm Order</option>
-                                            <?php elseif ($current_status == 'Confirmed'): ?>
-                                                <option value="Confirmed" disabled>Waiting for User Pickup...</option>
-                                            <?php elseif ($current_status == 'Picked Up'): ?>
-                                                <option value="On the Way">Set Out for Delivery</option>
-                                            <?php elseif ($current_status == 'On the Way'): ?>
-                                                <option value="On the Way" disabled>Waiting for User Completion...</option>
-                                            <?php endif; ?>
-                                            
-                                            <?php // Allow cancellation unless already completed/cancelled
-                                                  if (!$is_final_state): ?>
-                                                <option value="Cancelled">Cancel Order</option>
-                                            <?php endif; ?>
-                                        </select>
-                                        <?php // Clarify waiting states
-                                              if (in_array($current_status, ['Confirmed', 'On the Way'])): ?>
-                                            <small class="text-muted d-block mt-1">Waiting for user</small>
-=======
-                                        <span class="action-final">
-                                            <i class="bi bi-check-circle-fill"></i>
-                                            Finalized
-=======
                                         <span class="text-muted fst-italic small">
                                             <i class="bi bi-check-circle me-1"></i>Finalized
->>>>>>> 93ac7ac (Added all)
                                         </span>
                                     <?php else: ?>
                                         <select class="form-select form-select-sm"
-                                                onchange="updateOrderStatus(<?php echo $order['id']; ?>, this.value)">
+                                                onchange="handleStatusChange(<?php echo $order['id']; ?>, '<?php echo htmlspecialchars($order['full_name']); ?>', <?php echo $order['total_amount']; ?>, this.value, this)">
 
                                             <option value="<?php echo $current_status; ?>" selected disabled hidden>
                                                 <?php echo $current_status; ?> ▼
@@ -822,7 +578,6 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
                                             <small class="text-muted d-block mt-1">
                                                 <i class="bi bi-clock-history me-1"></i>User action needed
                                             </small>
->>>>>>> 81caf45 (try)
                                         <?php endif; ?>
                                     <?php endif; ?>
                                 </td>
@@ -830,21 +585,8 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
                             <?php endwhile; ?>
                         <?php else: ?>
                             <tr>
-<<<<<<< HEAD
-<<<<<<< HEAD
-                                <td colspan="8" class="text-center text-muted p-4">
-                                    <?php if(!empty($search) || !empty($status_filter)): ?>
-                                        No orders found matching your filters.
-                                    <?php else: ?>
-                                        No orders found.
-                                    <?php endif; ?>
-=======
-                                <td colspan="7">
-                                    <div class="empty-state-modern">
-=======
                                 <td colspan="8">
                                     <div class="empty-state">
->>>>>>> 93ac7ac (Added all)
                                         <i class="bi bi-inbox"></i>
                                         <p class="text-muted mb-0">
                                             <?php if(!empty($search) || !empty($status_filter)): ?>
@@ -854,7 +596,6 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
                                             <?php endif; ?>
                                         </p>
                                     </div>
->>>>>>> 81caf45 (try)
                                 </td>
                             </tr>
                         <?php endif; ?>
@@ -862,21 +603,7 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
                 </table>
             </div>
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-             <?php if ($total_pages > 1): ?>
-                <nav aria-label="Order navigation">
-                    <ul class="pagination justify-content-center">
-=======
-            <?php if ($total_pages > 1): ?>
-                <nav aria-label="Order navigation">
-                    <ul class="pagination pagination-modern justify-content-center">
->>>>>>> 81caf45 (try)
-                        <?php echo generate_order_pagination_links($page, $total_pages, $search, $status_filter); ?>
-                    </ul>
-                </nav>
-=======
-            <!-- Pagination - Centered like the image -->
+            <!-- Pagination -->
             <?php if ($total_pages > 1): ?>
                 <div class="d-flex justify-content-center mt-4 pt-3 border-top">
                     <nav aria-label="Order pagination">
@@ -899,59 +626,127 @@ function generate_order_pagination_links($current_page, $total_pages, $search_va
                         Showing all <?php echo $total_records; ?> orders
                     </small>
                 </div>
->>>>>>> 93ac7ac (Added all)
             <?php endif; ?>
 
-<<<<<<< HEAD
-        </div> </div> </div> <script>
-function updateOrderStatus(orderId, newStatus) {
-    if (newStatus === 'Cancelled') {
-        if (!confirm('Are you sure you want to cancel Order #' + orderId + '? This cannot be undone.')) {
-            // Find the select element and reset its value if cancellation is aborted
-            let selectElement = event.target; // Get the select element that triggered the change
-            selectElement.value = selectElement.options[0].value; // Reset to the hidden default option
-            return; // Stop the function
-        }
-    }
+        </div>
+    </div>
+</div>
 
-=======
+<!-- Cancel Order Confirmation Modal -->
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold text-danger" id="cancelModalLabel">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    Cancel Order Confirmation
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="warning-icon">
+                    <i class="bi bi-exclamation-circle-fill"></i>
+                </div>
+                <h3 class="mb-3">Are you sure?</h3>
+                <div class="alert alert-danger mb-3">
+                    <p class="mb-2"><strong>Order Details:</strong></p>
+                    <p class="mb-1">Order ID: <strong>#<span id="cancelOrderId"></span></strong></p>
+                    <p class="mb-1">Customer: <strong><span id="cancelCustomerName"></span></strong></p>
+                    <p class="mb-0">Total: <strong>₱<span id="cancelOrderTotal"></span></strong></p>
+                </div>
+                <p class="text-muted mb-0">
+                    <i class="bi bi-info-circle me-1"></i>
+                    <strong>Warning:</strong> This action cannot be undone. The customer will be notified, and the order will be permanently marked as cancelled.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi me-1"></i>Keep Order
+                </button>
+                <button type="button" class="btn btn-danger" id="confirmCancelBtn">
+                    <i class="bi me-1"></i>Cancel Order
+                </button>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-// Auto-search with debounce for accurate results
+// Auto-search with debounce
 let searchTimeout;
 const searchInput = document.getElementById('searchInput');
 
 if (searchInput) {
     searchInput.addEventListener('input', function() {
-        // Clear the previous timeout
         clearTimeout(searchTimeout);
-        
-        // Set a new timeout to submit after user stops typing (500ms delay)
         searchTimeout = setTimeout(function() {
             document.getElementById('filterForm').submit();
-        }, 500); // Wait 500ms after user stops typing
+        }, 500);
     });
 }
 
-function updateOrderStatus(orderId, newStatus) {
-    if (newStatus === 'Cancelled') {
-        if (!confirm('⚠️ Are you sure you want to cancel Order #' + orderId + '?\n\nThis action cannot be undone.')) {
-            let selectElement = event.target;
-            selectElement.value = selectElement.options[0].value;
-            return;
-        }
-    }
+// Global variables for cancel confirmation
+let pendingOrderId = null;
+let pendingNewStatus = null;
+let pendingSelectElement = null;
 
+function handleStatusChange(orderId, customerName, orderTotal, newStatus, selectElement) {
+    if (newStatus === 'Cancelled') {
+        // Show confirmation modal for cancellation
+        pendingOrderId = orderId;
+        pendingNewStatus = newStatus;
+        pendingSelectElement = selectElement;
+        
+        // Populate modal with order details
+        document.getElementById('cancelOrderId').textContent = orderId;
+        document.getElementById('cancelCustomerName').textContent = customerName;
+        document.getElementById('cancelOrderTotal').textContent = orderTotal.toFixed(2);
+        
+        // Show the modal
+        const cancelModal = new bootstrap.Modal(document.getElementById('cancelModal'));
+        cancelModal.show();
+        
+        // Reset select to original value
+        selectElement.value = selectElement.options[0].value;
+    } else {
+        // For non-cancel status changes, proceed directly
+        updateOrderStatus(orderId, newStatus, selectElement);
+    }
+}
+
+// Handle confirmation button click
+document.getElementById('confirmCancelBtn').addEventListener('click', function() {
+    if (pendingOrderId && pendingNewStatus && pendingSelectElement) {
+        // Close the modal
+        const cancelModal = bootstrap.Modal.getInstance(document.getElementById('cancelModal'));
+        cancelModal.hide();
+        
+        // Proceed with the update
+        updateOrderStatus(pendingOrderId, pendingNewStatus, pendingSelectElement);
+        
+        // Clear pending variables
+        pendingOrderId = null;
+        pendingNewStatus = null;
+        pendingSelectElement = null;
+    }
+});
+
+// Reset pending variables when modal is closed without confirmation
+document.getElementById('cancelModal').addEventListener('hidden.bs.modal', function() {
+    if (pendingSelectElement) {
+        pendingSelectElement.value = pendingSelectElement.options[0].value;
+    }
+    pendingOrderId = null;
+    pendingNewStatus = null;
+    pendingSelectElement = null;
+});
+
+function updateOrderStatus(orderId, newStatus, selectElement) {
     // Show loading state
-    const selectElement = event.target;
     const originalHTML = selectElement.innerHTML;
     selectElement.disabled = true;
     selectElement.innerHTML = '<option>Updating...</option>';
 
->>>>>>> 81caf45 (try)
     fetch('update_order_status.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -960,38 +755,15 @@ function updateOrderStatus(orderId, newStatus) {
     .then(response => response.json())
     .then(data => {
         if(data.success) {
-<<<<<<< HEAD
-            // Instead of full reload, maybe just update UI elements if needed,
-            // but reload is simpler for now to reflect changes everywhere.
-            location.reload(); 
-        } else {
-            alert('Failed to update status: ' + (data.message || 'Unknown error'));
-             // Optionally reload even on failure to reset the dropdown
-             // location.reload(); 
-=======
             location.reload();
         } else {
             alert('❌ Failed to update status: ' + (data.message || 'Unknown error'));
             selectElement.disabled = false;
-<<<<<<< HEAD
-            selectElement.style.opacity = '1';
->>>>>>> 81caf45 (try)
-=======
             selectElement.innerHTML = originalHTML;
->>>>>>> 93ac7ac (Added all)
         }
     })
     .catch(error => {
         console.error('Error:', error);
-<<<<<<< HEAD
-        alert('An error occurred while trying to update the status.');
-        // location.reload(); // Optionally reload on network error
-    });
-}
-</script>
-<?php 
-$stmt_orders->close(); // Close the prepared statement
-=======
         alert('❌ An error occurred while updating the status.');
         selectElement.disabled = false;
         selectElement.innerHTML = originalHTML;
@@ -1001,6 +773,5 @@ $stmt_orders->close(); // Close the prepared statement
 
 <?php 
 $stmt_orders->close();
->>>>>>> 81caf45 (try)
 include 'admin_footer.php'; 
 ?>
